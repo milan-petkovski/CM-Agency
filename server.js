@@ -6,7 +6,12 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 3000; // Render dodeljuje PORT
 
-app.use(cors());
+app.use(cors({
+  origin: "*", // Možeš da postaviš specifični domen umesto '*' ako je potrebno
+  methods: ["GET", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type"]
+}));
+
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {

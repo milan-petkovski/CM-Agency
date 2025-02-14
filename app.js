@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://cmagency.onrender.com";  // Zameni sa tvojim Render URL-om
 
 // Provera da li je korisnik već prijavljen
 document.addEventListener("DOMContentLoaded", () => {
