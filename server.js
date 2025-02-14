@@ -4,10 +4,14 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Render dodeljuje PORT
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.get("/", (req, res) => {
+    res.send("Server radi na Render-u!");
+});
 
 const users = [
     { username: "milan", password: "lozinka123" },
@@ -84,5 +88,5 @@ app.delete("/delete/:item", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server radi na http://localhost:${PORT}`);
+    console.log(`Server radi na portu ${PORT}`);
 });
