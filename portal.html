@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CM Agency - Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Source+Sans+Pro:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <a href="#" class="logo"><img src="images/logo.png">CM Agency</a>
+        <button onclick="logout()" id="logout">Odjavi se</button>
+    </div>    
+
+    <div class="container">
+        <div id="login-box">
+            <h2>Prijava</h2>
+            <input type="text" id="username" placeholder="Korisničko ime">
+            <input type="password" id="password" placeholder="Lozinka">
+            <button onclick="login()">Prijavi se</button>
+        </div>
+
+        <div id="content" class="hidden">
+            <h2>Dodaj leads</h2>
+            <input type="text" id="textInput" placeholder="Unesi najjednostavije naziv">
+            <button onclick="addItem()">Dodaj</button>
+
+            <h2>Lista</h2>
+            <button onclick="downloadList()">Preuzmi listu</button>
+            <ul id="list"></ul>
+        </div>
+    </div>
+
+<script src="app.js"></script>
+</body>
+</html>
+
+
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: linear-gradient(135deg, #1c1c1c, #383838);
+}
+.container {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    padding: 0 20px 10px 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+h2 {
+    margin: 20px 0 10px;
+    color: #fff;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    color: #fff;
+    background-color: #272727;
+    border-radius: 10px;
+}
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #e40f0f;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+button:hover {
+    background-color: #af0b0b;
+}
+#logout {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.3s;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+#logout:hover {
+    color: #e40f0f;
+}
+.hidden {
+    display: none;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+ul li {
+    background-color: #272727;
+    color: white;
+    border: 1px solid #c9c9c93b;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    text-align: center;
+}
+.delete-btn:hover {
+    background-color: darkred;
+}
+#login-box {
+    width: 100%;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.logo {
+    margin-left: 30px;
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+}
+#logout {
+    font-size: 14px;
+}
+
+#logout:hover {
+    color: #e40f0f;
+}
+</style>
