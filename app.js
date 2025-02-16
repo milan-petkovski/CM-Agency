@@ -106,9 +106,8 @@ function loadItems() {
 
 function updateList(items) {
     const list = document.getElementById("list");
-    list.innerHTML = ""; // Očistiti prethodni sadržaj liste
+    list.innerHTML = "";
 
-    // Dodavanje novih elemenata na vrh
     items.reverse().forEach(i => {
         const li = document.createElement("li");
         li.textContent = i.count > 1 ? `${i.name} (x${i.count})` : i.name;
@@ -119,23 +118,40 @@ function updateList(items) {
         deleteButton.classList.add("delete-btn");
 
         // Dodavanje funkcionalnosti za brisanje
-        deleteButton.addEventListener("click", () => {
+        deleteButton.addEventListener("click", (e) => {
+            e.stopPropagation();  // Sprečava precrtavanje prilikom klika na X
             deleteItem(i.name);
         });
+
+        // Omogućavanje precrtavanja na klik na stavku
+        li.addEventListener("click", () => {
+            li.classList.toggle("line-through");  // Dodaj ili ukloni klasu
+        });
+        
 
         li.appendChild(deleteButton);
         list.appendChild(li);
     });
 }
 
+
+
 function deleteItem(itemName) {
-    fetch(`${API_URL}/delete/${itemName}`, {
+    // Enkodiraj ime stavke da bi bilo bezbedno za URL
+    const encodedItemName = encodeURIComponent(itemName);
+
+    fetch(`${API_URL}/delete/${encodedItemName}`, {
         method: "DELETE"
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            updateList(data.items); // Osvežavanje liste
+            updateList(data.items);
+        } else {
+            console.log('Greška prilikom brisanja:', data.message);
         }
+    })
+    .catch(error => {
+        console.error('Greška u zahtevima:', error);
     });
 }
