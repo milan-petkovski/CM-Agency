@@ -27,10 +27,10 @@
 
         <div id="content" class="hidden">
             <h2>Dodaj leads</h2>
-            <input type="text" id="textInput" placeholder="Unesi najjednostavije naziv">
+            <input type="text" id="textInput" placeholder="Unesi naziv ili link">
             <button onclick="addItem()">Dodaj</button>
 
-            <h2>Lista</h2>
+            <h2 id="lista">Lista</h2>
             <p>Pretrazi listu pomocu CTRL + F</p>
             <button onclick="downloadList()">Preuzmi listu</button>
             <ul id="list"></ul>
@@ -70,8 +70,11 @@ body {
     position: relative;
 }
 h2 {
-    margin: 20px 0 2px;
+    margin: 20px 0 20px;
     color: #fff;
+}
+#lista{
+    margin: 20px 0 2px;
 }
 p{
     color: #fff;

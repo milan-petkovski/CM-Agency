@@ -1,4 +1,4 @@
-const API_URL = "https://cmagency.onrender.com";  // Zameni sa tvojim Render URL-om
+const API_URL = "https://cmagency.onrender.com";
 
 // Provera da li je korisnik već prijavljen
 document.addEventListener("DOMContentLoaded", () => {
@@ -44,7 +44,7 @@ function autoLogin(username, password) {
             showContent();
             loadItems();
         } else {
-            logout(); // Ako ne uspe, briše podatke
+            logout();
         }
     });
 }
@@ -74,7 +74,7 @@ function addItem() {
     .then(data => {
         if (data.success) {
             updateList(data.items);
-            document.getElementById("textInput").value = ""; // Obriši input
+            document.getElementById("textInput").value = "";
         }
     });
 }
@@ -84,7 +84,7 @@ function downloadList() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            const itemsText = data.items.map(i => i.name).join("\n"); // Samo naziv
+            const itemsText = data.items.map(i => i.name).join("\n");
             const blob = new Blob([itemsText], { type: "text/plain" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
@@ -119,15 +119,16 @@ function updateList(items) {
 
         // Dodavanje funkcionalnosti za brisanje
         deleteButton.addEventListener("click", (e) => {
-            e.stopPropagation();  // Sprečava precrtavanje prilikom klika na X
+            e.stopPropagation();
             deleteItem(i.name);
         });
 
         // Omogućavanje precrtavanja na klik na stavku
-        li.addEventListener("click", () => {
-            li.classList.toggle("line-through");  // Dodaj ili ukloni klasu
+        li.addEventListener("click", (e) => {
+            if (e.target !== deleteButton) {
+                li.classList.toggle("line-through");
+            }
         });
-        
 
         li.appendChild(deleteButton);
         list.appendChild(li);
@@ -135,9 +136,7 @@ function updateList(items) {
 }
 
 
-
 function deleteItem(itemName) {
-    // Enkodiraj ime stavke da bi bilo bezbedno za URL
     const encodedItemName = encodeURIComponent(itemName);
 
     fetch(`${API_URL}/delete/${encodedItemName}`, {
