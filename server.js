@@ -5,7 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Render dodeljuje PORT
+const PORT = process.env.PORT || 3000;
 
 app.use(cors({
   origin: "*", // Možeš da postaviš specifični domen umesto '*' ako je potrebno
@@ -16,7 +16,7 @@ app.use(cors({
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-    res.send("Server radi na Render-u!");
+    res.send("Server je aktivan!");
 });
 
 const users = [

@@ -53,17 +53,26 @@ function logout() {
     localStorage.removeItem("username");
     localStorage.removeItem("password");
     document.getElementById("content").classList.add("hidden");
-    document.getElementById("login-box").classList.remove("hidden");
+    document.getElementById("login").classList.remove("hidden");
 }
 
 function showContent() {
-    document.getElementById("login-box").classList.add("hidden");
+    document.getElementById("login").classList.add("hidden");
     document.getElementById("content").classList.remove("hidden");
 }
 
 function addItem() {
     const textInput = document.getElementById("textInput").value;
     if (!textInput) return;
+
+    // Check if the input is a URL and remove the protocol, www., and trailing slashes
+    const urlPattern = /^(https?:\/\/)?(www\.)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+    let displayText = textInput;
+
+    if (urlPattern.test(textInput)) {
+        const url = new URL(textInput);
+        displayText = url.hostname.replace(/^www\./, '') + url.pathname.replace(/\/+$/, '');
+    }
 
     fetch(`${API_URL}/add`, {
         method: "POST",
@@ -110,20 +119,33 @@ function updateList(items) {
 
     items.reverse().forEach(i => {
         const li = document.createElement("li");
-        li.textContent = i.count > 1 ? `${i.name} (x${i.count})` : i.name;
 
-        // Kreiranje dugmeta za brisanje
+        // Check if the item is a URL
+        const urlPattern = /^(https?:\/\/)?(www\.)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+        if (urlPattern.test(i.name)) {
+            const url = new URL(i.name);
+            const displayText = url.hostname.replace(/^www\./, '') + url.pathname.replace(/\/+$/, '');
+            const link = document.createElement("a");
+            link.href = i.name;
+            link.textContent = displayText;
+            link.target = "_blank"; // Open in new tab
+            li.appendChild(link);
+        } else {
+            li.textContent = i.count > 1 ? `${i.name} (x${i.count})` : i.name;
+        }
+
+        // Create delete button
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "X";
-        deleteButton.classList.add("delete-btn");
+        deleteButton.classList.add("delete");
 
-        // Dodavanje funkcionalnosti za brisanje
+        // Add delete functionality
         deleteButton.addEventListener("click", (e) => {
             e.stopPropagation();
             deleteItem(i.name);
         });
 
-        // Omogućavanje precrtavanja na klik na stavku
+        // Enable strikethrough on click
         li.addEventListener("click", (e) => {
             if (e.target !== deleteButton) {
                 li.classList.toggle("line-through");
@@ -134,7 +156,6 @@ function updateList(items) {
         list.appendChild(li);
     });
 }
-
 
 function deleteItem(itemName) {
     const encodedItemName = encodeURIComponent(itemName);

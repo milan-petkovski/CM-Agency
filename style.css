@@ -870,3 +870,100 @@ header ul li a {
   .footer-brand { grid-column: auto; }
 
 }
+
+/* ----------- PORTAL ----------- */
+.portal {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  padding: 0 20px 10px 20px;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+}
+.portal h2 {
+  margin: 20px 0 20px;
+  color: #fff;
+}
+.portal p {
+  color: #fff;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+.portal a {
+  color: white;
+}
+.portal button {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background-color: #e40f0f;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.portal button:hover {
+  background-color: #af0b0b;
+}
+.portal input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  color: #fff;
+  background-color: #272727;
+  border-radius: 10px;
+}
+.portal #lista {
+  margin: 20px 0 2px;
+}
+.portal .hidden {
+  display: none;
+}
+.portal ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.portal ul li {
+  background-color: #272727;
+  color: white;
+  border: 1px solid #c9c9c93b;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  word-wrap: break-word;
+  white-space: normal;
+  cursor: pointer;
+}
+.portal .line-through {
+  text-decoration: line-through;
+  text-decoration-color: black;
+  text-decoration-thickness: 4px;
+}
+.portal .delete {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  text-align: center;
+  margin-left: 10px;
+}
+.portal .delete:hover {
+  background-color: darkred;
+}
