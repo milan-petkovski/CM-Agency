@@ -47,7 +47,7 @@ app.get("/items", (req, res) => {
 });
 
 app.post("/add", (req, res) => {
-    const { item } = req.body;
+    const { item, category } = req.body;
     if (!item) return res.status(400).json({ success: false, message: "Item ne može biti prazan" });
 
     let items = loadItems();
@@ -56,7 +56,7 @@ app.post("/add", (req, res) => {
     if (existingItem) {
         existingItem.count += 1;
     } else {
-        items.push({ name: item, count: 1 });
+        items.push({ name: item, count: 1, category });
     }
 
     fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
