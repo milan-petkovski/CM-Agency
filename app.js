@@ -80,31 +80,25 @@ function cleanURL(url){
  }
  return url;
 }
-function addItem() {
-    const textInput = document.getElementById("textInput").value.trim();
-    const categoryInput = document.getElementById("categoryInput").value.trim();
-    if (!textInput || !categoryInput) return;
-
-    const cleanedTextInput = cleanURL(textInput);
-    const newItem = { name: cleanedTextInput, count: 1, category: categoryInput };
-
-    console.log("Dodavanje stavke:", cleanedTextInput, "Kategorija:", categoryInput);
-    fetch(`${API_URL}/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ item: cleanedTextInput, category: categoryInput })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            items.push(newItem);  // Dodaj novu stavku u listu
-            updateList(items);  // Ažuriraj prikaz sa novim stavkama
-            document.getElementById("textInput").value = "";
-            document.getElementById("categoryInput").value = "";
-            console.log("Stavka dodata uspešno:", data.items);
-        }
-    })
-    .catch(error => console.error("Greška pri dodavanju stavke:", error));
+function addItem(){
+ const textInput=document.getElementById("textInput").value.trim();
+ const categoryInput=document.getElementById("categoryInput").value.trim();
+ if(!textInput||!categoryInput)return;
+ const cleanedTextInput=cleanURL(textInput);
+ fetch(`${API_URL}/add`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({item:cleanedTextInput,category:categoryInput})
+ })
+ .then(response=>response.json())
+ .then(data=>{
+  if(data.success){
+   updateList(data.items);
+   document.getElementById("textInput").value="";
+   document.getElementById("categoryInput").value="";
+  }
+ })
+ .catch(error=>console.error("Greška pri dodavanju stavki:",error));
 }
 
 function downloadList(){
@@ -119,17 +113,29 @@ function downloadList(){
 }
 function filterItems() {
     const filterCategoryInput = document.getElementById("filterCategoryInput").value.trim();
-    if (!filterCategoryInput) return;
-
-    console.log("Filtriranje stavki po kategoriji:", filterCategoryInput);
-    
-    // Filtriraj stavke iz aktuelne liste stavki
-    const filteredItems = items.filter(item => {
-        return item.category && item.category.trim() === filterCategoryInput;
-    });
-
-    console.log("Filtrirane stavke:", filteredItems);
-    updateList(filteredItems);
+    if (!filterCategoryInput) {
+        loadItems();
+        return;
+    }
+    fetch(`${API_URL}/items`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const filteredItems = data.items.filter(item => {
+                    return item.category && item.category.trim() === filterCategoryInput;
+                });
+                if (filteredItems.length === 0) {
+                    // Ako nema filtriranih stavki, prikazujemo grešku
+                    alert('Nema stavki u ovoj kategoriji.');
+                    updateList(data.items); // Prikazujemo sve stavke kao alternativu
+                } else {
+                    updateList(filteredItems);
+                }
+            }
+        })
+        .catch(error => {
+            console.error("Greška pri učitavanju stavki:", error);
+        });
 }
 
 function updateList(items){
