@@ -897,6 +897,7 @@ header ul li a {
 }
 .portal a {
   color: white;
+  font-size: 12px;
   transition: 0.3s;
 }
 .portal a:hover{
@@ -912,6 +913,7 @@ header ul li a {
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s;
+  margin-top: 10px;
 }
 .portal button:hover{
   background-color: #af0b0b;
@@ -942,6 +944,7 @@ header ul li a {
   background-color: #272727;
   color: white;
   border: 1px solid #c9c9c93b;
+  font-size: 12px;
   padding: 8px;
   margin: 5px 0;
   border-radius: 5px;

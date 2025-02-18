@@ -36,9 +36,15 @@
 
         <h2>Dodaj leads</h2>
         <input type="text" id="textInput" placeholder="Unesi naziv ili link">
+        <input list="categoryList" id="categoryInput" placeholder="Unesi ili izaberi kategoriju">
+        <datalist id="categoryList"></datalist>
         <button onclick="addItem()">Dodaj</button>
+
         <h2 id="lista">Lista</h2>
         <p>Pretrazi listu pomocu CTRL + F</p>
+        <input list="filterCategoryList" id="filterCategoryInput" placeholder="Filtriraj po kategoriji">
+        <datalist id="filterCategoryList"></datalist>
+        <button onclick="filterItems()">Filtriraj</button>
         <button onclick="downloadList()">Preuzmi listu</button>
         <ul id="list"></ul>
     </div>
