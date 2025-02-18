@@ -10,7 +10,9 @@ const filePath = "items.json";
 
 app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
 app.use(bodyParser.json());
-
+app.get("/", (req, res) => {
+    res.send("Server radi!");
+});
 // Učitavanje postojećih podataka sa obradom grešaka
 function loadItems() {
     try {
