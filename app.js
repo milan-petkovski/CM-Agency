@@ -1,15 +1,5 @@
 const API_URL = "https://cmagency.onrender.com";
 
-// Provera da li je korisnik već prijavljen
-document.addEventListener("DOMContentLoaded", () => {
-    const username = localStorage.getItem("username");
-    const password = localStorage.getItem("password");
-
-    if (username && password) {
-        autoLogin(username, password);
-    }
-});
-
 function login() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
@@ -53,11 +43,11 @@ function logout() {
     localStorage.removeItem("username");
     localStorage.removeItem("password");
     document.getElementById("content").classList.add("hidden");
-    document.getElementById("login").classList.remove("hidden");
+    document.getElementById("log").classList.remove("hidden");
 }
 
 function showContent() {
-    document.getElementById("login").classList.add("hidden");
+    document.getElementById("log").classList.add("hidden");
     document.getElementById("content").classList.remove("hidden");
 }
 

@@ -9,37 +9,20 @@
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Source+Sans+Pro:wght@600;700&display=swap">
 </head>
 <body>
 
 <header class="header" data-header>
     <div class="container">
-    <div class="overlay" data-overlay></div>
         <a href="index.html"class="logo"><img src="images/logo.png">CM Agency</a>
         <nav class="navbar" data-navbar>
-            <div class="navbar-top">
-                <a href="index.html" class="logo"><img src="images/logo.png">CM Agency</a>
-                <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
-                <ion-icon name="close-outline"></ion-icon>
-                </button>
-            </div>
-            <ul>
-                <li><a href="index.html" data-navbar-link>Pocetna</a></li>
-                <li><a href="https://notion.so/Lista-Kategorija-Ads-library-198fedd833bf80e98f37e65565fbcc2e?pvs=4" target="_blank" data-navbar-link>Kategorije</a></li>
-                <li><a href="https://facebook.com/ads/library" target="_blank">Ads library</a></li>
-                <li><a href="https://cmagency.onrender.com" target="_blank">Server provera</a></li>
-                <li><a href="" class="btn" id="logout" onclick="logout()" data-navbar-link>Odjavi se</a></li>
-            </ul>
+            <ul><li><a href="" class="btn" id="logout" onclick="logout()" data-navbar-link>Odjavi se</a></li></ul>
         </nav>
-        <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
-            <ion-icon name="menu-outline"></ion-icon>
-        </button>
     </div>
 </header>
 
 <section class="portal">
-    <div id="login">
+    <div id="log">
         <h2>Prijava</h2>
         <input type="text" id="username" placeholder="Korisničko ime">
         <input type="password" id="password" placeholder="Lozinka">
@@ -47,6 +30,10 @@
     </div>
 
     <div id="content" class="hidden">
+        <a href="https://tinyurl.com/listanotion" target="_blank">Kategorije</a> |
+        <a href="https://facebook.com/ads/library" target="_blank">Ads library</a> |
+        <a href="https://cmagency.onrender.com" target="_blank">Server provera</a>
+
         <h2>Dodaj leads</h2>
         <input type="text" id="textInput" placeholder="Unesi naziv ili link">
         <button onclick="addItem()">Dodaj</button>

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
 *{
   margin: 0;
   padding: 0;
@@ -879,6 +880,7 @@ header ul li a {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  color: #fff;
   padding: 0 20px 10px 20px;
   border-radius: 10px;
   text-align: center;
@@ -895,6 +897,10 @@ header ul li a {
 }
 .portal a {
   color: white;
+  transition: 0.3s;
+}
+.portal a:hover{
+  color: #e40f0f;
 }
 .portal button {
   width: 100%;
@@ -907,7 +913,7 @@ header ul li a {
   cursor: pointer;
   transition: background 0.3s;
 }
-.portal button:hover {
+.portal button:hover{
   background-color: #af0b0b;
 }
 .portal input {
@@ -966,4 +972,8 @@ header ul li a {
 }
 .portal .delete:hover {
   background-color: darkred;
+}
+.portal #filterCategoryInput{
+  margin-top: 5px;
+  padding: 5px 8px;
 }
