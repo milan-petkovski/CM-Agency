@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 const filePath = "items.json";
 
-app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
+app.use(cors({ origin: "vercel.app", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
     res.send("Server radi!");
@@ -82,7 +82,7 @@ app.delete("/delete/:item", (req, res) => {
 
 app.get("/download", (req, res) => {
     let items = loadItems();
-    let text = items.map(i => `${i.name}: ${i.count}`).join("\n");
+    let text = items.map(i => `${i.name}`).join("\n");
 
     res.setHeader("Content-Disposition", "attachment; filename=lista.txt");
     res.setHeader("Content-Type", "text/plain");
