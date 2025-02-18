@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 const filePath = "items.json";
 
-app.use(cors({ origin: "cmagency.onrender.com", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
+app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
     res.send("Server radi!");
