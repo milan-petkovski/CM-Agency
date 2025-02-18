@@ -913,7 +913,6 @@ header ul li a {
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s;
-  margin-top: 10px;
 }
 .portal button:hover{
   background-color: #af0b0b;
@@ -961,6 +960,9 @@ header ul li a {
   text-decoration-thickness: 4px;
 }
 .portal .delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: red;
   color: white;
   border: none;
