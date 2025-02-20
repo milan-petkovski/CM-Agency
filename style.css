@@ -886,51 +886,51 @@ header ul li a {
   text-align: center;
   position: relative;
 }
+.portal #log h2{
+  margin: 20px 0 15px;
+}
 .portal h2 {
-  margin: 20px 0 20px;
-  color: #fff;
+  margin: 10px 0 5px;
 }
-.portal p {
-  color: #fff;
-  font-size: 12px;
-  margin-bottom: 15px;
-}
-.portal #counter{
-  margin-bottom: 0;
-}
+.portal p,
 .portal a {
-  color: white;
   font-size: 12px;
-  transition: 0.3s;
+  color: white;
 }
-.portal a:hover{
+.portal a:hover {
   color: #e40f0f;
 }
 .portal button {
   width: 100%;
   padding: 8px 10px;
-  border: none;
-  background-color: #e40f0f;
+  background-color: var(--crvena);
   color: white;
   font-size: 16px;
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s;
 }
-.portal button:hover{
+.portal button:hover {
   background-color: #af0b0b;
+}
+.portal #btn2 {
+  padding: 5px 8px;
+  margin-bottom: 2%;
+}
+.portal #btn3 {
+  display: inline-block;
+  width: 49%;
+  margin-top: 2%;
+  padding: 5px 8px;
 }
 .portal input {
   width: 100%;
   padding: 8px 10px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
-  color: #fff;
   background-color: #272727;
   border-radius: 10px;
-}
-.portal #lista {
-  margin: 20px 0 2px;
+  color: #fff;
 }
 .portal .hidden {
   display: none;
@@ -938,7 +938,6 @@ header ul li a {
 .portal ul {
   list-style: none;
   padding: 0;
-  margin-top: 10px;
   max-height: 200px;
   overflow-y: auto;
 }
@@ -954,7 +953,6 @@ header ul li a {
   justify-content: space-between;
   align-items: center;
   word-wrap: break-word;
-  white-space: normal;
   cursor: pointer;
 }
 .portal .line-through {
@@ -976,12 +974,30 @@ header ul li a {
   cursor: pointer;
   padding: 0;
   text-align: center;
-  margin-left: 10px;
 }
 .portal .delete:hover {
   background-color: darkred;
 }
-.portal #filterCategoryInput{
+.portal #filterCategoryInput {
   margin-top: 5px;
   padding: 5px 8px;
+}
+@media (max-width: 480px) {
+  .portal {
+    max-height: 70vh;
+    overflow-y: hidden;
+    width: 90%;
+    padding: 0 10px;
+  }
+  .portal h2 {
+    font-size: 20px;
+  }
+  .portal input,
+  .portal button {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+  .portal a {
+    font-size: 10px;
+  }
 }

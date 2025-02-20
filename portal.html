@@ -42,14 +42,17 @@
 
         <h2 id="lista">Lista</h2>
         <p id="counter">Ukupno stavki: 0</p>
-        <p>Pretrazi listu pomocu CTRL + F</p>
         <input list="filterCategoryList" id="filterCategoryInput" placeholder="Filtriraj po kategoriji">
         <datalist id="filterCategoryList"></datalist>
-        <button onclick="filterItems()" style="margin-bottom: 10px">Filtriraj</button>
-        <button onclick="downloadList()">Preuzmi listu</button>
-        <ul id="list"></ul>
+        <button id="btn2" onclick="filterItems()">Filtriraj</button>
+        <ul id="list">
+            <div id="loadingMessage"></div>
+        </ul>
+        <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
+        <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
     </div>
 </section>
+
 
 </body>
 </html>
