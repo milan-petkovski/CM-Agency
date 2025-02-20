@@ -26,7 +26,7 @@ app.use(cors({
     },
     methods: ["GET", "POST", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
+    credentials: true // Uveri se da je ovo postavljeno na true
 }));
 
 app.use(express.json());
@@ -60,10 +60,13 @@ app.post("/login", (req, res) => {
     }
     
     const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+
+    // Postavi kolačić sa tokenom
     res.cookie("auth_token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Postavi `secure: true` samo u produkciji
-        sameSite: "None"
+        secure: process.env.NODE_ENV === "production",  // Koristi secure u produkciji
+        sameSite: "None", // Moramo postaviti None za cross-origin kolačiće
+        maxAge: 60 * 60 * 1000  // Postavi kolačiću 1 sat isteka
     });
     res.json({ success: true });
 });
@@ -72,7 +75,7 @@ app.post("/login", (req, res) => {
 app.post("/logout", (req, res) => {
     res.clearCookie("auth_token", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Postavi `secure: true` samo u produkciji
+        secure: process.env.NODE_ENV === "production", // Koristi secure u produkciji
         sameSite: "None"
     });
     res.json({ success: true, message: "Uspešno ste se odjavili" });
