@@ -12,7 +12,8 @@ const SECRET_KEY = process.env.SECRET_KEY || "tajni_kljuc";
 // CORS podešavanja
 const allowedOrigins = [
     "https://cm-agency.vercel.app",
-    "https://cmagency.onrender.com"
+    "https://cmagency.onrender.com",
+    "http://127.0.0.1:5500"
 ];
 
 app.use(cors({
@@ -61,7 +62,7 @@ app.post("/login", (req, res) => {
     const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
     res.cookie("auth_token", token, {
         httpOnly: true,
-        secure: true, // HTTPS je obavezan
+        secure: process.env.NODE_ENV === "production", // Postavi `secure: true` samo u produkciji
         sameSite: "None"
     });
     res.json({ success: true });
@@ -71,7 +72,7 @@ app.post("/login", (req, res) => {
 app.post("/logout", (req, res) => {
     res.clearCookie("auth_token", {
         httpOnly: true,
-        secure: true, 
+        secure: process.env.NODE_ENV === "production", // Postavi `secure: true` samo u produkciji
         sameSite: "None"
     });
     res.json({ success: true, message: "Uspešno ste se odjavili" });
