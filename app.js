@@ -1,23 +1,20 @@
 const API_URL = "https://cmagency.onrender.com";
+let token = localStorage.getItem("token");
 
 document.addEventListener("DOMContentLoaded", checkAuth);
 
 function checkAuth() {
-    const user = localStorage.getItem("user");
     const loginSection = document.getElementById("log");
     const contentSection = document.getElementById("content");
-    const logoutButton = document.getElementById("logout");
 
-    if (user) {
+    if (token) {
         loginSection.classList.add("hidden");
         contentSection.classList.remove("hidden");
-        logoutButton.style.display = "block";
         loadItems();
         loadCategories();
     } else {
         loginSection.classList.remove("hidden");
         contentSection.classList.add("hidden");
-        logoutButton.style.display = "none";
     }
 }
 
@@ -38,7 +35,8 @@ function login() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            localStorage.setItem("user", username);
+            token = data.token;
+            localStorage.setItem("token", token);
             checkAuth();
         } else {
             alert(data.message || "Pogrešno korisničko ime ili lozinka");
@@ -48,7 +46,8 @@ function login() {
 }
 
 function logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    token = null;
     checkAuth();
 }
 
@@ -60,67 +59,23 @@ function loadCategories() {
             const filterCategoryList = document.getElementById("filterCategoryList");
             categoryList.innerHTML = filterCategoryList.innerHTML = "";
 
-            // Prvo podeliti kategorije u one sa stavkama i one bez
-            const categoriesWithItems = [];
-            const categoriesWithoutItems = [];
-
-            // Napraviti API poziv za sve stavke, pa ih podeliti po kategorijama
-            fetch(`${API_URL}/items`)
-                .then(response => response.json())
-                .then(itemData => {
-                    if (itemData.success) {
-                        const allItems = itemData.items;
-                        
-                        // Podeliti stavke po kategorijama
-                        const categoryItemsMap = {};
-                        allItems.forEach(item => {
-                            if (!categoryItemsMap[item.category]) {
-                                categoryItemsMap[item.category] = [];
-                            }
-                            categoryItemsMap[item.category].push(item);
-                        });
-
-                        // Podeliti kategorije sa stavkama i one bez
-                        data.forEach(category => {
-                            const itemCount = categoryItemsMap[category] ? categoryItemsMap[category].length : 0;
-                            if (itemCount > 0) {
-                                categoriesWithItems.push({ category, itemCount });
-                            } else {
-                                categoriesWithoutItems.push(category);
-                            }
-                        });
-
-                        // Sortiranje kategorija po broju stavki
-                        categoriesWithItems.sort((a, b) => b.itemCount - a.itemCount);
-
-                        // Prikazivanje kategorija sa stavkama na vrhu
-                        categoriesWithItems.forEach(({ category, itemCount }) => {
-                            const option = document.createElement("option");
-                            option.value = category;
-                            option.textContent = `${itemCount} stavki`;
-                            categoryList.appendChild(option);
-                            filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-                        });
-
-                        // Prikazivanje kategorija bez stavki na dnu
-                        categoriesWithoutItems.forEach(category => {
-                            const option = document.createElement("option");
-                            option.value = category;
-                            categoryList.appendChild(option);
-                            filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-                        });
-                    }
-                })
-                .catch(error => console.error("Greška pri učitavanju stavki:", error));
+            data.forEach(category => {
+                const option = document.createElement("option");
+                option.value = category;
+                categoryList.appendChild(option);
+                filterCategoryList.appendChild(option.cloneNode(true));
+            });
         })
         .catch(error => console.error("Greška pri učitavanju kategorija:", error));
 }
 
 function loadItems() {
-    fetch(`${API_URL}/items`)
-        .then(response => response.json())
-        .then(data => { if (data.success) updateList(data.items); })
-        .catch(error => console.error("Greška pri učitavanju stavki:", error));
+    fetch(`${API_URL}/items`, {
+        headers: { "Authorization": `Bearer ${token}` }
+    })
+    .then(response => response.json())
+    .then(data => { if (data.success) updateList(data.items); })
+    .catch(error => console.error("Greška pri učitavanju stavki:", error));
 }
 
 function cleanURL(url) {
@@ -135,21 +90,24 @@ function addItem() {
         alert("Unesite naziv stavke i kategoriju.");
         return;
     }
-    
+
     fetch(`${API_URL}/add`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ item: cleanURL(textInput), category: categoryInput })
+        headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ item: textInput, category: categoryInput })
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                updateList(data.items);
-                document.getElementById("textInput").value = "";
-                document.getElementById("categoryInput").value = "";
-            }
-        })
-        .catch(error => console.error("Greška pri dodavanju stavki:", error));
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateList(data.items);
+            document.getElementById("textInput").value = "";
+            document.getElementById("categoryInput").value = "";
+        }
+    })
+    .catch(error => console.error("Greška pri dodavanju stavki:", error));
 }
 
 function updateList(items) {
