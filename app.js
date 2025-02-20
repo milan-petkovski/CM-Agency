@@ -3,22 +3,20 @@ const API_URL = "https://cmagency.onrender.com";
 document.addEventListener("DOMContentLoaded", checkAuth);
 
 function checkAuth() {
-    const user = localStorage.getItem("user");
-    const loginSection = document.getElementById("log");
-    const contentSection = document.getElementById("content");
-    const logoutButton = document.getElementById("logout");
-
-    if (user) {
-        loginSection.classList.add("hidden");
-        contentSection.classList.remove("hidden");
-        logoutButton.style.display = "block";
-        loadItems();
-        loadCategories();
-    } else {
-        loginSection.classList.remove("hidden");
-        contentSection.classList.add("hidden");
-        logoutButton.style.display = "none";
-    }
+    fetch(`${API_URL}/check-auth`, {
+        method: "GET",
+        credentials: "include"  // Važno za slanje kolačića
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById("log").classList.add("hidden");
+            document.getElementById("content").classList.remove("hidden");
+        } else {
+            document.getElementById("log").classList.remove("hidden");
+            document.getElementById("content").classList.add("hidden");
+        }
+    })
+    .catch(error => console.error("Greška pri proveri autentifikacije:", error));
 }
 
 function login() {
@@ -30,8 +28,23 @@ function login() {
         return;
     }
 
-    localStorage.setItem("user", username);
-    checkAuth();
+    fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Neuspešna prijava.");
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            checkAuth();
+        } else {
+            alert("Pogrešno korisničko ime ili lozinka.");
+        }
+    })
+    .catch(error => console.error("Greška pri prijavi:", error));
 }
 
 function logout() {

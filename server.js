@@ -1,92 +1,92 @@
 const express = require("express");
-const fs = require("fs");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 10000;
-const filePath = "items.json";
+const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY || "tajni_kljuc";
 
-app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
-app.use(bodyParser.json());
-app.get("/", (req, res) => {
-    res.send("Server radi!");
-});
-// Učitavanje postojećih podataka sa obradom grešaka
-function loadItems() {
-    try {
-        if (!fs.existsSync(filePath)) {
-            fs.writeFileSync(filePath, JSON.stringify([]));
+// CORS podešavanja
+const allowedOrigins = [
+    "https://cm-agency.vercel.app",
+    "https://cmagency.onrender.com"
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Origin nije dozvoljen od strane CORS-a"));
         }
-        return JSON.parse(fs.readFileSync(filePath, "utf8"));
-    } catch (error) {
-        console.error("Greška pri učitavanju items.json:", error);
-        return [];
-    }
-}
+    },
+    methods: ["GET", "POST", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
 
+app.use(express.json());
+app.use(cookieParser());
+
+// Fiktivna baza korisnika
 const users = [
     { username: "milan", password: bcrypt.hashSync("123", 10) },
     { username: "luka", password: bcrypt.hashSync("lozinka123", 10) },
     { username: "marija", password: bcrypt.hashSync("lozinka123", 10) }
 ];
 
+// Middleware za proveru autentifikacije
+const authMiddleware = (req, res, next) => {
+    const token = req.cookies.auth_token;
+    if (!token) return res.status(401).json({ success: false, message: "Unauthorized" });
+
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) return res.status(403).json({ success: false, message: "Forbidden" });
+        req.user = user;
+        next();
+    });
+};
+
+// Login endpoint
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
     const user = users.find(u => u.username === username);
-    if (user && bcrypt.compareSync(password, user.password)) {
-        res.json({ success: true });
-    } else {
-        res.status(401).json({ success: false, message: "Pogrešno korisničko ime ili lozinka" });
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+        return res.status(401).json({ success: false, message: "Pogrešno korisničko ime ili lozinka" });
     }
+    
+    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+    res.cookie("auth_token", token, {
+        httpOnly: true,
+        secure: true, // HTTPS je obavezan
+        sameSite: "None"
+    });
+    res.json({ success: true });
 });
 
-app.get("/items", (req, res) => {
-    res.json({ success: true, items: loadItems() });
+// Logout endpoint
+app.post("/logout", (req, res) => {
+    res.clearCookie("auth_token", {
+        httpOnly: true,
+        secure: true, 
+        sameSite: "None"
+    });
+    res.json({ success: true, message: "Uspešno ste se odjavili" });
 });
 
-app.post("/add", (req, res) => {
-    const { item, category } = req.body;
-    if (!item) return res.status(400).json({ success: false, message: "Item ne može biti prazan" });
-
-    let items = loadItems();
-    const existingItem = items.find(i => i.name === item);
-
-    if (existingItem) {
-        existingItem.count += 1;
-    } else {
-        items.push({ name: item, count: 1, category });
-    }
-
-    fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
-    res.json({ success: true, items });
+// Endpoint za proveru autentifikacije
+app.get("/check-auth", authMiddleware, (req, res) => {
+    res.json({ success: true, user: req.user });
 });
 
-app.delete("/delete/:item", (req, res) => {
-    const itemName = decodeURIComponent(req.params.item);
-    let items = loadItems();
-
-    const itemIndex = items.findIndex(i => i.name === itemName);
-    if (itemIndex !== -1) {
-        if (items[itemIndex].count > 1) {
-            items[itemIndex].count -= 1;
-        } else {
-            items.splice(itemIndex, 1);
-        }
-    }
-
-    fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
-    res.json({ success: true, items });
+// Zaštićeni endpoint za stavke
+app.get("/items", authMiddleware, (req, res) => {
+    res.json({ success: true, items: ["Item 1", "Item 2", "Item 3"] });
 });
 
-app.get("/download", (req, res) => {
-    let items = loadItems();
-    let text = items.map(i => `${i.name}`).join("\n");
-
-    res.setHeader("Content-Disposition", "attachment; filename=lista.txt");
-    res.setHeader("Content-Type", "text/plain");
-    res.send(text);
+app.listen(PORT, () => {
+    console.log(`Server pokrenut na portu ${PORT}`);
 });
-
-app.listen(PORT, () => console.log(`Server radi na portu ${PORT}`));
