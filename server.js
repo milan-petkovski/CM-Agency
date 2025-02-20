@@ -10,6 +10,22 @@ const cookieParser = require("cookie-parser");
 const { body, validationResult } = require("express-validator");
 
 const app = express();
+const allowedOrigins = ["https://cm-agency.vercel.app", "https://cmagency.onrender.com", "https://127.0.0.1:5500"];
+
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, CSRF-Token");
+    res.header("Access-Control-Allow-Credentials", "true");
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 const PORT = process.env.PORT || 10000;
 const SECRET_KEY = "tvoja_tajna_kljuc";
 const filePath = "items.json";
