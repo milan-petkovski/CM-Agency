@@ -31,6 +31,7 @@ function login() {
     fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",  // Dodato za slanje kolačića
         body: JSON.stringify({ username, password })
     })
     .then(response => {
@@ -48,8 +49,17 @@ function login() {
 }
 
 function logout() {
-    localStorage.removeItem("user");
-    checkAuth();
+    fetch(`${API_URL}/logout`, {
+        method: "POST",
+        credentials: "include"  // Dodato za slanje kolačića
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById("log").classList.remove("hidden");
+            document.getElementById("content").classList.add("hidden");
+        }
+    })
+    .catch(error => console.error("Greška pri odjavi:", error));
 }
 
 function loadCategories() {
