@@ -1,74 +1,42 @@
 const API_URL = "https://cmagency.onrender.com";
 
-document.addEventListener("DOMContentLoaded", () => {
-    fetch(`${API_URL}/get-csrf-token`, { credentials: "include" })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("csrfToken").value = data.csrfToken;
-            checkAuth();
-        });
-});
+document.addEventListener("DOMContentLoaded", checkAuth);
 
 function checkAuth() {
+    const user = localStorage.getItem("user");
     const loginSection = document.getElementById("log");
     const contentSection = document.getElementById("content");
     const logoutButton = document.getElementById("logout");
 
-    fetch(`${API_URL}/check-auth`, { credentials: "include" })
-        .then(response => response.json())
-        .then(data => {
-            if (data.isAuthenticated) {
-                loginSection.classList.add("hidden");
-                contentSection.classList.remove("hidden");
-                logoutButton.style.display = "block";
-                loadItems();
-                loadCategories();
-            } else {
-                loginSection.classList.remove("hidden");
-                contentSection.classList.add("hidden");
-                logoutButton.style.display = "none";
-            }
-        })
-        .catch(err => console.error("Greška pri proveri autentifikacije:", err));
+    if (user) {
+        loginSection.classList.add("hidden");
+        contentSection.classList.remove("hidden");
+        logoutButton.style.display = "block";
+        loadItems();
+        loadCategories();
+    } else {
+        loginSection.classList.remove("hidden");
+        contentSection.classList.add("hidden");
+        logoutButton.style.display = "none";
+    }
 }
 
 function login() {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
-    const csrfToken = document.getElementById("csrfToken").value;
 
     if (!username || !password) {
         alert("Unesite korisničko ime i lozinku.");
         return;
     }
 
-    fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "CSRF-Token": csrfToken
-        },
-        body: JSON.stringify({ username, password }),
-        credentials: "include"
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) checkAuth();
-        else alert("Pogrešno korisničko ime ili lozinka.");
-    })
-    .catch(err => console.error("Greška prilikom prijave:", err));
+    localStorage.setItem("user", username);
+    checkAuth();
 }
 
 function logout() {
-    fetch(`${API_URL}/logout`, {
-        method: "POST",
-        credentials: "include"
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) checkAuth();
-    })
-    .catch(err => console.error("Greška prilikom odjave:", err));
+    localStorage.removeItem("user");
+    checkAuth();
 }
 
 function loadCategories() {
@@ -90,11 +58,9 @@ function loadCategories() {
 }
 
 function loadItems() {
-    fetch(`${API_URL}/items`, { credentials: "include" })
+    fetch(`${API_URL}/items`)
         .then(response => response.json())
-        .then(data => {
-            if (data.success) updateList(data.items);
-        })
+        .then(data => { if (data.success) updateList(data.items); })
         .catch(error => console.error("Greška pri učitavanju stavki:", error));
 }
 
@@ -106,28 +72,22 @@ function cleanURL(url) {
 function addItem() {
     const textInput = document.getElementById("textInput").value.trim();
     const categoryInput = document.getElementById("categoryInput").value.trim();
-    const csrfToken = document.getElementById("csrfToken").value;
-
     if (!textInput || !categoryInput) return;
     
     fetch(`${API_URL}/add`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "CSRF-Token": csrfToken
-        },
-        body: JSON.stringify({ item: cleanURL(textInput), category: categoryInput }),
-        credentials: "include"
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ item: cleanURL(textInput), category: categoryInput })
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            updateList(data.items);
-            document.getElementById("textInput").value = "";
-            document.getElementById("categoryInput").value = "";
-        }
-    })
-    .catch(error => console.error("Greška pri dodavanju stavki:", error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateList(data.items);
+                document.getElementById("textInput").value = "";
+                document.getElementById("categoryInput").value = "";
+            }
+        })
+        .catch(error => console.error("Greška pri dodavanju stavki:", error));
 }
 
 function updateList(items) {
@@ -164,37 +124,37 @@ function updateList(items) {
         li.appendChild(deleteButton);
         list.appendChild(li);
     });
+    const counter = document.getElementById("counter");
+    counter.textContent = `Ukupno stavki: ${items.length}`;
 }
 
-function deleteItem(itemName) {
-    fetch(`${API_URL}/delete/${encodeURIComponent(itemName)}`, { 
-        method: "DELETE", 
-        credentials: "include" 
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) updateList(data.items);
-    })
-    .catch(error => console.error("Greška pri brisanju stavki:", error));
+function filterItems() {
+    const filterCategoryInput = document.getElementById("filterCategoryInput").value.trim();
+    fetch(`${API_URL}/items`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const filteredItems = filterCategoryInput ? data.items.filter(item => item.category === filterCategoryInput) : data.items;
+                if (!filteredItems.length) alert("Nema stavki u ovoj kategoriji.");
+                updateList(filteredItems);
+            }
+        })
+        .catch(error => console.error("Greška pri učitavanju stavki:", error));
 }
 
 function downloadList() {
-    fetch(`${API_URL}/download`, {
-        method: "GET",
-        credentials: "include"
-    })
-    .then(response => {
-        if (response.ok) return response.blob();
-        else throw new Error("Greška prilikom preuzimanja liste.");
-    })
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "lista.txt";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-    })
-    .catch(err => console.error("Greška prilikom preuzimanja liste:", err));
+    fetch(`${API_URL}/download`)
+        .then(response => response.blob())
+        .then(blob => {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "lista.txt";
+            a.click();
+        });
+}
+
+function deleteItem(itemName) {
+    fetch(`${API_URL}/delete/${encodeURIComponent(itemName)}`, { method: "DELETE" })
+        .then(response => response.json())
+        .then(data => { if (data.success) updateList(data.items); });
 }

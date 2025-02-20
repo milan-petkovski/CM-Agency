@@ -895,6 +895,9 @@ header ul li a {
   font-size: 12px;
   margin-bottom: 15px;
 }
+.portal #counter{
+  margin-bottom: 0;
+}
 .portal a {
   color: white;
   font-size: 12px;

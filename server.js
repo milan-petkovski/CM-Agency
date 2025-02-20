@@ -3,46 +3,16 @@ const fs = require("fs");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const helmet = require("helmet");
-const csrf = require("csurf");
-const cookieParser = require("cookie-parser");
-const { body, validationResult } = require("express-validator");
 
 const app = express();
-const allowedOrigins = ["https://cm-agency.vercel.app", "https://cmagency.onrender.com", "https://127.0.0.1:5500"];
-
-app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-    }
-    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, CSRF-Token");
-    res.header("Access-Control-Allow-Credentials", "true");
-    if (req.method === "OPTIONS") {
-        return res.sendStatus(200);
-    }
-    next();
-});
-
 const PORT = process.env.PORT || 10000;
-const SECRET_KEY = "tvoja_tajna_kljuc";
 const filePath = "items.json";
 
-app.use(helmet());
-app.use(cookieParser());
+app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
 app.use(bodyParser.json());
-app.use(cors({
-    origin: ["https://tvoj-domen.com"],
-    methods: ["GET", "POST", "DELETE"],
-    allowedHeaders: ["Content-Type", "CSRF-Token"],
-    credentials: true
-}));
-
-const csrfProtection = csrf({ cookie: true });
-app.use(csrfProtection);
-
+app.get("/", (req, res) => {
+    res.send("Server radi!");
+});
 // Učitavanje postojećih podataka sa obradom grešaka
 function loadItems() {
     try {
@@ -62,81 +32,38 @@ const users = [
     { username: "marija", password: bcrypt.hashSync("lozinka123", 10) }
 ];
 
-// Kreiranje JWT tokena
-const generateToken = (user) => {
-    return jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: "1h" });
-};
-
-// Middleware za autentifikaciju
-const authenticateToken = (req, res, next) => {
-    const token = req.cookies.token;
-    if (!token) return res.sendStatus(401);
-
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    });
-};
-
-// Login ruta sa JWT
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
     const user = users.find(u => u.username === username);
     if (user && bcrypt.compareSync(password, user.password)) {
-        const token = generateToken(user);
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production"
-        }).json({ success: true });
+        res.json({ success: true });
     } else {
         res.status(401).json({ success: false, message: "Pogrešno korisničko ime ili lozinka" });
     }
 });
 
-// Logout ruta
-app.post("/logout", (req, res) => {
-    res.clearCookie("token").json({ success: true });
-});
-
-// Dohvatanje CSRF tokena
-app.get("/get-csrf-token", (req, res) => {
-    res.json({ csrfToken: req.csrfToken() });
-});
-
-// Dohvatanje stavki (samo za autorizovane korisnike)
-app.get("/items", authenticateToken, (req, res) => {
+app.get("/items", (req, res) => {
     res.json({ success: true, items: loadItems() });
 });
 
-// Dodavanje stavki sa validacijom
-app.post("/add", 
-    authenticateToken,
-    body("item").isURL().withMessage("Neispravan URL"),
-    body("category").isAlphanumeric().withMessage("Neispravna kategorija"),
-    (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+app.post("/add", (req, res) => {
+    const { item, category } = req.body;
+    if (!item) return res.status(400).json({ success: false, message: "Item ne može biti prazan" });
 
-        const { item, category } = req.body;
-        let items = loadItems();
-        const existingItem = items.find(i => i.name === item);
+    let items = loadItems();
+    const existingItem = items.find(i => i.name === item);
 
-        if (existingItem) {
-            existingItem.count += 1;
-        } else {
-            items.push({ name: item, count: 1, category });
-        }
-
-        fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
-        res.json({ success: true, items });
+    if (existingItem) {
+        existingItem.count += 1;
+    } else {
+        items.push({ name: item, count: 1, category });
     }
-);
 
-// Brisanje stavki (samo za autorizovane korisnike)
-app.delete("/delete/:item", authenticateToken, (req, res) => {
+    fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
+    res.json({ success: true, items });
+});
+
+app.delete("/delete/:item", (req, res) => {
     const itemName = decodeURIComponent(req.params.item);
     let items = loadItems();
 
@@ -153,8 +80,7 @@ app.delete("/delete/:item", authenticateToken, (req, res) => {
     res.json({ success: true, items });
 });
 
-// Preuzimanje liste stavki
-app.get("/download", authenticateToken, (req, res) => {
+app.get("/download", (req, res) => {
     let items = loadItems();
     let text = items.map(i => `${i.name}`).join("\n");
 
@@ -163,5 +89,4 @@ app.get("/download", authenticateToken, (req, res) => {
     res.send(text);
 });
 
-// Pokretanje servera
 app.listen(PORT, () => console.log(`Server radi na portu ${PORT}`));
