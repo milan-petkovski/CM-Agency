@@ -97,7 +97,7 @@ function loadCategories() {
                         categoriesWithItems.forEach(({ category, itemCount }) => {
                             const option = document.createElement("option");
                             option.value = category;
-                            option.textContent = `${category} - ${itemCount} stavki`;
+                            option.textContent = `${itemCount} stavki`;
                             categoryList.appendChild(option);
                             filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
                         });
@@ -106,7 +106,6 @@ function loadCategories() {
                         categoriesWithoutItems.forEach(category => {
                             const option = document.createElement("option");
                             option.value = category;
-                            option.textContent = `${category} - 0 stavki`;
                             categoryList.appendChild(option);
                             filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
                         });

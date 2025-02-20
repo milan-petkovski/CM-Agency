@@ -62,7 +62,7 @@
   {
     "name": "---------------GOTOVO---------------",
     "count": 1,
-    "category": "Ostalo - navesti sta je"
+    "category": "Ostalo"
   },
   {
     "name": "https://instagram.com/kafici.beograd",
@@ -152,7 +152,7 @@
   {
     "name": "https://instagram.com/avucic",
     "count": 1,
-    "category": "Ostalo - navesti sta je"
+    "category": "Ostalo"
   },
   {
     "name": "https://instagram.com/kafic_bazeni_kula",
@@ -343,5 +343,10 @@
     "name": "https://instagram.com/sanjar_divcibare/",
     "count": 1,
     "category": "Restoran"
+  },
+  {
+    "name": "https://instagram.com/water.leda/",
+    "count": 1,
+    "category": "Ostalo"
   }
 ]
