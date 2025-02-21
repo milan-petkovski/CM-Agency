@@ -54,10 +54,10 @@ app.post("/add", (req, res) => {
     const existingItem = items.find(i => i.name === item);
 
     if (existingItem) {
-        existingItem.count += 1;
-    } else {
-        items.push({ name: item, count: 1, category });
+        return res.status(409).json({ success: false, message: "Stavka već postoji na listi" });
     }
+
+    items.push({ name: item, category });
 
     fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
     res.json({ success: true, items });

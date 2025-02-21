@@ -147,6 +147,8 @@ function addItem() {
                 updateList(data.items);
                 document.getElementById("textInput").value = "";
                 document.getElementById("categoryInput").value = "";
+            } else {
+                alert(data.message || "Stavka već postoji na listi.");
             }
         })
         .catch(error => console.error("Greška pri dodavanju stavki:", error));
