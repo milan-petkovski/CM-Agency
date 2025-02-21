@@ -9,16 +9,20 @@ function checkAuth() {
     const logoutButton = document.getElementById("logout");
 
     if (user) {
-        loginSection.classList.add("hidden");
-        contentSection.classList.remove("hidden");
+        toggleVisibility(loginSection, false);
+        toggleVisibility(contentSection, true);
         logoutButton.style.display = "block";
         loadItems();
         loadCategories();
     } else {
-        loginSection.classList.remove("hidden");
-        contentSection.classList.add("hidden");
+        toggleVisibility(loginSection, true);
+        toggleVisibility(contentSection, false);
         logoutButton.style.display = "none";
     }
+}
+
+function toggleVisibility(element, isVisible) {
+    element.classList.toggle("hidden", !isVisible);
 }
 
 function login() {
@@ -30,102 +34,70 @@ function login() {
         return;
     }
 
-    fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            localStorage.setItem("user", username);
-            checkAuth();
-        } else {
-            alert(data.message || "Pogrešno korisničko ime ili lozinka");
-        }
-    })
-    .catch(() => alert("Greška pri logovanju"));
+    apiRequest("/login", "POST", { username, password })
+        .then(data => {
+            if (data.success) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("user", username);
+                checkAuth();
+            } else {
+                alert(data.message || "Pogrešno korisničko ime ili lozinka");
+            }
+        });
 }
 
 function logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     checkAuth();
 }
 
 function loadCategories() {
-    fetch("kategorije.json")
-        .then(response => response.json())
-        .then(data => {
+    Promise.all([fetch("kategorije.json").then(res => res.json()), apiRequest("/items")])
+        .then(([categories, itemData]) => {
+            if (!itemData.success) return;
             const categoryList = document.getElementById("categoryList");
             const filterCategoryList = document.getElementById("filterCategoryList");
             categoryList.innerHTML = filterCategoryList.innerHTML = "";
 
-            // Prvo podeliti kategorije u one sa stavkama i one bez
+            const categoryItemsMap = itemData.items.reduce((map, item) => {
+                map[item.category] = (map[item.category] || []).concat(item);
+                return map;
+            }, {});
+
             const categoriesWithItems = [];
             const categoriesWithoutItems = [];
 
-            // Napraviti API poziv za sve stavke, pa ih podeliti po kategorijama
-            fetch(`${API_URL}/items`)
-                .then(response => response.json())
-                .then(itemData => {
-                    if (itemData.success) {
-                        const allItems = itemData.items;
-                        
-                        // Podeliti stavke po kategorijama
-                        const categoryItemsMap = {};
-                        allItems.forEach(item => {
-                            if (!categoryItemsMap[item.category]) {
-                                categoryItemsMap[item.category] = [];
-                            }
-                            categoryItemsMap[item.category].push(item);
-                        });
+            categories.forEach(category => {
+                const itemCount = categoryItemsMap[category]?.length || 0;
+                if (itemCount > 0) {
+                    categoriesWithItems.push({ category, itemCount });
+                } else {
+                    categoriesWithoutItems.push(category);
+                }
+            });
 
-                        // Podeliti kategorije sa stavkama i one bez
-                        data.forEach(category => {
-                            const itemCount = categoryItemsMap[category] ? categoryItemsMap[category].length : 0;
-                            if (itemCount > 0) {
-                                categoriesWithItems.push({ category, itemCount });
-                            } else {
-                                categoriesWithoutItems.push(category);
-                            }
-                        });
+            categoriesWithItems.sort((a, b) => b.itemCount - a.itemCount);
 
-                        // Sortiranje kategorija po broju stavki
-                        categoriesWithItems.sort((a, b) => b.itemCount - a.itemCount);
+            const fragment = document.createDocumentFragment();
+            categoriesWithItems.forEach(({ category, itemCount }) => {
+                fragment.appendChild(createOption(category, `${itemCount} stavki`));
+                filterCategoryList.appendChild(createOption(category, `${itemCount} stavki`));
+            });
+            categoriesWithoutItems.forEach(category => {
+                fragment.appendChild(createOption(category, category));
+                filterCategoryList.appendChild(createOption(category, category));
+            });
 
-                        // Prikazivanje kategorija sa stavkama na vrhu
-                        categoriesWithItems.forEach(({ category, itemCount }) => {
-                            const option = document.createElement("option");
-                            option.value = category;
-                            option.textContent = `${itemCount} stavki`;
-                            categoryList.appendChild(option);
-                            filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-                        });
-
-                        // Prikazivanje kategorija bez stavki na dnu
-                        categoriesWithoutItems.forEach(category => {
-                            const option = document.createElement("option");
-                            option.value = category;
-                            categoryList.appendChild(option);
-                            filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-                        });
-                    }
-                })
-                .catch(error => console.error("Greška pri učitavanju stavki:", error));
+            categoryList.appendChild(fragment);
         })
-        .catch(error => console.error("Greška pri učitavanju kategorija:", error));
+        .catch(error => console.error("Greška pri učitavanju kategorija ili stavki:", error));
 }
 
 function loadItems() {
-    fetch(`${API_URL}/items`)
-        .then(response => response.json())
-        .then(data => { if (data.success) updateList(data.items); })
-        .catch(error => console.error("Greška pri učitavanju stavki:", error));
-}
-
-function cleanURL(url) {
-    url = url.split("?")[0].replace(/https?:\/\/www\./, "https://").replace(/http:\/\/www\./, "http://");
-    return url.includes("instagram.com") ? url.replace(/https?:\/\/www\./, "https://") : url;
+    apiRequest("/items").then(data => {
+        if (data.success) updateList(data.items);
+    });
 }
 
 function addItem() {
@@ -135,33 +107,26 @@ function addItem() {
         alert("Unesite naziv stavke i kategoriju.");
         return;
     }
-    
-    fetch(`${API_URL}/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ item: cleanURL(textInput), category: categoryInput })
-    })
-        .then(response => response.json())
+
+    apiRequest("/add", "POST", { item: cleanURL(textInput), category: categoryInput })
         .then(data => {
             if (data.success) {
                 updateList(data.items);
                 document.getElementById("textInput").value = "";
                 document.getElementById("categoryInput").value = "";
-            } else {
-                alert(data.message || "Stavka već postoji na listi.");
             }
-        })
-        .catch(error => console.error("Greška pri dodavanju stavki:", error));
+        });
 }
 
 function updateList(items) {
     const list = document.getElementById("list");
     list.innerHTML = "";
+    const fragment = document.createDocumentFragment();
     items.reverse().forEach(i => {
         const li = document.createElement("li");
         const cleanedLink = cleanURL(i.name);
         const urlPattern = /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-        
+
         if (urlPattern.test(cleanedLink)) {
             const url = new URL(cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`);
             const link = document.createElement("a");
@@ -172,7 +137,7 @@ function updateList(items) {
         } else {
             li.textContent = i.count > 1 ? `${i.name} (x${i.count})` : i.name;
         }
-        
+
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "X";
         deleteButton.classList.add("delete");
@@ -180,87 +145,52 @@ function updateList(items) {
             e.stopPropagation();
             deleteItem(i.name);
         });
-        
-        li.addEventListener("click", e => {
-            if (e.target !== deleteButton) li.classList.toggle("line-through");
-        });
-        
+
         li.appendChild(deleteButton);
-        list.appendChild(li);
+        fragment.appendChild(li);
     });
-    const counter = document.getElementById("counter");
-    counter.textContent = `Ukupno stavki: ${items.length}`;
-}
 
-function filterItems() {
-    const filterCategoryInput = document.getElementById("filterCategoryInput").value.trim();
-    const validCategories = Array.from(document.getElementById("filterCategoryList").options).map(option => option.value);
-    const formattedCategoryInput = filterCategoryInput.charAt(0).toUpperCase() + filterCategoryInput.slice(1).toLowerCase();
-
-    if (filterCategoryInput && !validCategories.includes(formattedCategoryInput)) {
-        alert("Izabrana kategorija ne postoji.");
-        fetch(`${API_URL}/items`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateList(data.items);
-                }
-            })
-            .catch(error => console.error("Greška pri učitavanju stavki:", error));
-        return;
-    }
-
-    fetch(`${API_URL}/items`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const filteredItems = formattedCategoryInput ? data.items.filter(item => item.category === formattedCategoryInput) : data.items;
-                document.getElementById("filterCategoryInput").value = "";
-                if (!filteredItems.length) {
-                    alert("Nema stavki u ovoj kategoriji.");
-                    updateList(data.items);
-                } else {
-                    updateList(filteredItems);
-                }
-            }
-        })
-        .catch(error => console.error("Greška pri učitavanju stavki:", error));
-}
-
-function downloadList() {
-    fetch(`${API_URL}/download`)
-        .then(response => response.blob())
-        .then(blob => {
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "lista.txt";
-            a.click();
-        });
+    list.appendChild(fragment);
+    document.getElementById("counter").textContent = `Ukupno stavki: ${items.length}`;
 }
 
 function deleteItem(itemName) {
-    fetch(`${API_URL}/delete/${encodeURIComponent(itemName)}`, { method: "DELETE" })
-        .then(response => response.json())
-        .then(data => { if (data.success) updateList(data.items); });
+    apiRequest(`/delete/${encodeURIComponent(itemName)}`, "DELETE")
+        .then(data => {
+            if (data.success) updateList(data.items);
+        });
 }
 
-function searchList() {
-    const searchQuery = prompt("Unesite pojam za pretragu:");
-    if (!searchQuery) return;
+function cleanURL(url) {
+    return url.split("?")[0].replace(/https?:\/\/www\./, "https://").replace(/http:\/\/www\./, "http://");
+}
 
-    const listItems = document.querySelectorAll("#list li");
-    let visibleItemsCount = 0;
+function createOption(value, text) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = text;
+    return option;
+}
 
-    listItems.forEach(item => {
-        const itemText = item.textContent.toLowerCase();
-        if (itemText.includes(searchQuery.toLowerCase())) {
-            item.style.display = "";
-            visibleItemsCount++;
-        } else {
-            item.style.display = "none";
+function apiRequest(endpoint, method = "GET", body = null) {
+    const token = localStorage.getItem("token");
+    const options = {
+        method,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         }
-    });
+    };
 
-    const counter = document.getElementById("counter");
-    counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
+    if (body) options.body = JSON.stringify(body);
+
+    return fetch(`${API_URL}${endpoint}`, options)
+        .then(response => {
+            if (!response.ok) throw new Error(`Greška: ${response.status}`);
+            return response.json();
+        })
+        .catch(error => {
+            console.error("API greška:", error);
+            alert("Došlo je do greške. Pokušajte ponovo.");
+        });
 }
