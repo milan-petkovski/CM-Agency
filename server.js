@@ -3,8 +3,6 @@ const fs = require("fs");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const SECRET_KEY = "tvoja_tajna_kljuc";
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -38,41 +36,24 @@ const users = [
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
     const user = users.find(u => u.username === username);
-
-    if (user && bcrypt.compareSync(password, user.password)) {
-        const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" }); // Token važi 1 sat
-        res.json({ success: true, token });
-    } else {
-        res.status(401).json({ success: false, message: "Pogrešno korisničko ime ili lozinka" });
-    }
+    return user && bcrypt.compareSync(password, user.password)
+        ? res.json({ success: true })
+        : res.status(401).json({ success: false, message: "Pogrešno korisničko ime ili lozinka" });
 });
-
-// Middleware funkciju za proveru tokena
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) return res.status(401).json({ success: false, message: "Nema tokena" });
-
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.status(403).json({ success: false, message: "Nevažeći token" });
-        req.user = user;
-        next();
-    });
-}
-
 
 // Preuzimanje svih stavki
-app.get("/items", authenticateToken, (req, res) => {
-    res.json({ success: true, items: loadItems() });
-});
+app.get("/items", (req, res) => res.json({ success: true, items: loadItems() }));
 
 // Dodavanje nove stavke u items.json
-app.post("/add", authenticateToken, (req, res) => {
+app.post("/add", (req, res) => {
     const { item, category } = req.body;
     if (!item || !category) return res.status(400).json({ success: false, message: "Item i kategorija ne mogu biti prazni" });
 
     const items = loadItems();
+    if (items.some(i => i.name === item && i.category === category)) {
+        return res.status(409).json({ success: false, message: "Stavka sa tim nazivom već postoji u toj kategoriji" });
+    }
+
     items.push({ name: item, category });
     fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
     res.json({ success: true, items });
