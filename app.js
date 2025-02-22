@@ -18,6 +18,7 @@ function checkAuth() {
         loginSection.classList.remove("hidden");
         contentSection.classList.add("hidden");
         logoutButton.style.display = "none";
+        disableDevTools();
     }
 }
 
@@ -269,3 +270,25 @@ function searchList() {
     const counter = document.getElementById("counter");
     counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
 }
+
+function disableDevTools() {
+    document.onkeydown = (e) => {
+        // Onemogućava F12
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+    
+        // Onemogućava Ctrl+Shift+I i Ctrl+Shift+J
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) {
+            e.preventDefault();
+            return false;
+        }
+    
+        // Onemogućava Ctrl+U
+        if (e.ctrlKey && e.key === 'U') {
+            e.preventDefault();
+            return false;
+        }
+    };
+};
