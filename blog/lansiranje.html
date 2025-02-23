@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalji o vesti</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Početna</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="single-post">
+        <div class="post">
+            <h1 class="post-title">Lansiranje Websajta</h1>
+            <div class="post-meta">
+                <time datetime="2025-03-01">1 March, 2025</time>
+            </div>
+            <div class="post-content">
+                <img src="images/blog/launching.png" alt="Lansiranje Websajta">
+                <p>Sa modernim dizajnom i funkcionalnostima, naš veb sajt je tu da vas vodi kroz našu ponudu i pomogne vam da postignete poslovni uspeh. Ovaj sajt je rezultat meseci napornog rada i optimizacije kako bi vam pružio najbolje korisničko iskustvo...</p>
+                <p>Već od početka razvoja, fokusirali smo se na korisničke potrebe i trendove u dizajnu kako bismo kreirali jednostavan i efikasan sajt. Pored toga, uveli smo mnoge nove funkcionalnosti koje će korisnicima omogućiti lakšu navigaciju, brži pristup uslugama i bolju povezanost sa našim timom...</p>
+                <!-- Dodaj još tekstova i slika po želji -->
+            </div>
+        </div>
+
+        <div class="recommended-posts">
+            <h2>Preporučeni blogovi</h2>
+            <div class="blog-card">
+                <a href="single-post.html">
+                    <img src="images/blog/contact.png" alt="Kontaktiraj nas">
+                    <h3>Kontaktiraj nas!</h3>
+                </a>
+            </div>
+
+            <div class="blog-card">
+                <a href="single-post.html">
+                    <img src="images/blog/follow_ig.mp4" alt="Zaprati nas na Instagramu">
+                    <h3>Zaprati nas na Instagramu!</h3>
+                </a>
+            </div>
+
+            <div class="blog-card">
+                <a href="single-post.html">
+                    <img src="images/blog/follow_tt.mp4" alt="Zaprati nas na TikToku">
+                    <h3>Zaprati nas na TikToku!</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Milan Web Portal. Sva prava zadržana.</p>
+    </footer>
+</body>
+</html>
+
+
+<style>
+/* Osnovni stilovi za stranicu */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.single-post {
+    width: 80%;
+    margin: 40px auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post {
+    margin-bottom: 40px;
+}
+
+.post-title {
+    font-size: 2rem;
+    color: #333;
+}
+
+.post-meta {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.post-content {
+    margin-top: 20px;
+}
+
+.post-content img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.recommended-posts {
+    margin-top: 40px;
+}
+
+.recommended-posts h2 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.blog-card {
+    display: inline-block;
+    width: 30%;
+    margin: 10px 1%;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.blog-card img {
+    width: 100%;
+    height: auto;
+}
+
+.blog-card h3 {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #333;
+    margin-top: 10px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+</style>
+
+
+<script>
+// Ovo može biti korisno za dinamičko učitavanje blogova na stranici (ako koristiš JSON fajl sa podacima ili bazu).
+const recommendedPosts = [
+  { title: "Kontaktiraj nas!", image: "images/blog/contact.png", link: "single-post.html" },
+  { title: "Zaprati nas na Instagramu!", image: "images/blog/follow_ig.mp4", link: "single-post.html" },
+  { title: "Zaprati nas na TikToku!", image: "images/blog/follow_tt.mp4", link: "single-post.html" },
+];
+
+const recommendedSection = document.querySelector(".recommended-posts");
+
+recommendedPosts.forEach(post => {
+  const card = document.createElement('div');
+  card.classList.add('blog-card');
+
+  const link = document.createElement('a');
+  link.href = post.link;
+
+  const img = document.createElement('img');
+  img.src = post.image;
+  img.alt = post.title;
+
+  const title = document.createElement('h3');
+  title.textContent = post.title;
+
+  link.appendChild(img);
+  link.appendChild(title);
+  card.appendChild(link);
+
+  recommendedSection.appendChild(card);
+});
+
+</script>
