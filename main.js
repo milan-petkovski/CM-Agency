@@ -1,3 +1,4 @@
+//#region - SKROLL
 let currentSection = 0; // Praćenje trenutne sekcije
 
 const sections = document.querySelectorAll('section'); // Svi <section> elementi
@@ -28,8 +29,9 @@ document.querySelectorAll('.scroll-to-section-btn').forEach((button, index) => {
   });
 });
 
-////
+//#endregion
 
+//#region - BACK TO TOP
 const progressCircle = document.querySelector('#progress circle');
 const progressWrapper = document.querySelector('#back-to-top');
 const radius = progressCircle.r.baseVal.value;
@@ -52,3 +54,5 @@ window.onscroll = handleScroll;
 document.getElementById('backToTop').onclick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
+
+//#endregion
