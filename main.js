@@ -1,3 +1,25 @@
+//#region - HEADER
+window.addEventListener("scroll", function() {
+  const header = document.querySelector("header");
+  const logo = document.querySelector(".logo");
+  
+  if (window.scrollY > 50) {
+      // Ako je stranica pomerena više od 50px, postavljamo crnu pozadinu i crni tekst
+      header.classList.add("active");
+      header.classList.remove("inactive");
+      logo.classList.add("active");
+      logo.classList.remove("inactive");
+  } else {
+      // Ako nije pomereno više od 50px, postavljamo belu pozadinu i tamni tekst
+      header.classList.add("inactive");
+      header.classList.remove("active");
+      logo.classList.add("inactive");
+      logo.classList.remove("active");
+  }
+});
+
+//#endregion
+
 //#region - SKROLL
 let currentSection = 0;
 const sections = document.querySelectorAll('section');
@@ -92,22 +114,25 @@ document.querySelector('#backToTop').onclick = () => {
 };
 //#endregion
 
+//#region - SHARE
+function sharePost() {
+  const url = window.location.href;
+  const title = document.title;
+  const shareButton = event.target.closest('.share');
+  const shareCount = shareButton.querySelector('data');
 
-window.addEventListener("scroll", function() {
-  const header = document.querySelector("header");
-  const logo = document.querySelector(".logo");
-  
-  if (window.scrollY > 50) {
-      // Ako je stranica pomerena više od 50px, postavljamo crnu pozadinu i crni tekst
-      header.classList.add("active");
-      header.classList.remove("inactive");
-      logo.classList.add("active");
-      logo.classList.remove("inactive");
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      url: url
+    }).then(() => {
+      let currentValue = parseInt(shareCount.getAttribute('value'));
+      shareCount.setAttribute('value', currentValue + 1);
+      shareCount.innerText = currentValue + 1;
+    }).catch((error) => console.log('Greska u deljenju: ', error));
   } else {
-      // Ako nije pomereno više od 50px, postavljamo belu pozadinu i tamni tekst
-      header.classList.add("inactive");
-      header.classList.remove("active");
-      logo.classList.add("inactive");
-      logo.classList.remove("active");
+    alert('Deljenje nije podržano na ovom uređaju ili pretraživaču.');
   }
-});
+}
+
+//#endregion
