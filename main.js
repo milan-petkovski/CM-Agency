@@ -1,34 +1,60 @@
 //#region - SKROLL
-let currentSection = 0; // Praćenje trenutne sekcije
-
-const sections = document.querySelectorAll('section'); // Svi <section> elementi
+let currentSection = 0;
+const sections = document.querySelectorAll('section');
 const totalSections = sections.length;
+let isScrolling = false;
 
 function scrollToSection(index) {
   if (index >= 0 && index < totalSections) {
     sections[index].scrollIntoView({ behavior: 'smooth' });
-    currentSection = index; // Ažuriraj trenutnu sekciju
+    currentSection = index;
   }
 }
 
-// Detekcija skrolovanja
-window.addEventListener('wheel', (event) => {
-  if (event.deltaY > 0) {
-    // Skrolovanje dole, idemo na sledeću sekciju
-    scrollToSection(currentSection + 1);
-  } else {
-    // Skrolovanje gore, idemo na prethodnu sekciju
-    scrollToSection(currentSection - 1);
-  }
-});
+// Debouncing za skrolovanje
+function debounceScroll(callback, delay = 500) {
+  if (isScrolling) return;
+  isScrolling = true;
+  callback();
+  setTimeout(() => {
+    isScrolling = false;
+  }, delay);
+}
 
-// Detekcija na dugmiću za pomeranje sekcija (ako je potrebno)
-document.querySelectorAll('.scroll-to-section-btn').forEach((button, index) => {
-  button.addEventListener('click', () => {
-    scrollToSection(index);
+// Detekcija skrolovanja mišem
+window.addEventListener('wheel', (event) => {
+  debounceScroll(() => {
+    if (event.deltaY > 0 && currentSection < totalSections - 1) {
+      scrollToSection(currentSection + 1);
+    } else if (event.deltaY < 0 && currentSection > 0) {
+      scrollToSection(currentSection - 1);
+    }
   });
 });
 
+// Ažuriranje currentSection pri kliku na link
+document.querySelectorAll('a[href^="#"]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    const targetId = link.getAttribute('href').substring(1);
+    const targetSection = document.getElementById(targetId);
+
+    if (targetSection) {
+      event.preventDefault();
+      const index = Array.from(sections).indexOf(targetSection);
+      scrollToSection(index);
+    }
+  });
+});
+
+// Ažuriranje currentSection pri manuelnom skrolovanju
+window.addEventListener('scroll', () => {
+  sections.forEach((section, index) => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+      currentSection = index;
+    }
+  });
+});
 //#endregion
 
 //#region - BACK TO TOP
@@ -39,20 +65,49 @@ const circumference = 2 * Math.PI * radius;
 
 const updateTotalHeight = () => document.documentElement.scrollHeight - window.innerHeight;
 
-const handleScroll = () => {
+const handleScrollBackToTop = () => {
     const totalHeight = updateTotalHeight();
     const scrollPosition = window.scrollY;
     const progressPercentage = (scrollPosition / totalHeight) * circumference;
     progressCircle.style.strokeDashoffset = circumference - progressPercentage;
-    progressWrapper.style.opacity = scrollPosition > 30 ? 1 : 0;
+
+    // Ako je skrolovano više od 30px, prikazujemo dugme, inače sakrivamo
+    if (scrollPosition > 30) {
+        progressWrapper.style.opacity = 1;
+        progressWrapper.style.pointerEvents = 'auto';
+    } else {
+        progressWrapper.style.opacity = 0;
+        progressWrapper.style.pointerEvents = 'none';
+    }
 };
 
-window.addEventListener('load', handleScroll);
-window.addEventListener('resize', handleScroll);
-window.onscroll = handleScroll;
+// Dodajemo događaje za skrolovanje bez preklapanja
+window.addEventListener('load', handleScrollBackToTop);
+window.addEventListener('resize', handleScrollBackToTop);
+window.addEventListener('scroll', handleScrollBackToTop);
 
-document.getElementById('backToTop').onclick = () => {
+// Funkcija za skrolovanje na početak stranice
+document.querySelector('#backToTop').onclick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
-
 //#endregion
+
+
+window.addEventListener("scroll", function() {
+  const header = document.querySelector("header");
+  const logo = document.querySelector(".logo");
+  
+  if (window.scrollY > 50) {
+      // Ako je stranica pomerena više od 50px, postavljamo crnu pozadinu i crni tekst
+      header.classList.add("active");
+      header.classList.remove("inactive");
+      logo.classList.add("active");
+      logo.classList.remove("inactive");
+  } else {
+      // Ako nije pomereno više od 50px, postavljamo belu pozadinu i tamni tekst
+      header.classList.add("inactive");
+      header.classList.remove("active");
+      logo.classList.add("inactive");
+      logo.classList.remove("active");
+  }
+});
