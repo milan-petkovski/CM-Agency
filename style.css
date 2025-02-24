@@ -43,6 +43,7 @@ body {
   --zuta: #FFA90A;
   --siva: #e6e6e6;
   --crvena:#de201d;
+  --hover: #af0b0b;
   --plava:#1f2470;  
   --sivlj:#333333;
   --back:#000000b3;
@@ -116,7 +117,7 @@ section{
   transform: translateX(-50%);
   width: 70%;
   height: 6px;
-  background-image: linear-gradient(135deg, #de201d, #86201e);
+  background-image: var(--gradient);
   border-radius: 10px;
 }
 :is(.service-card, .features-card) .title {
@@ -160,7 +161,7 @@ header ul li a:hover {
   transform: translateY(1px);
 }
 header .btn {
-  background-image: linear-gradient(135deg, #de201d, #86201e, #000000);
+  background-image: var(--gradient2);
   background-size: 200%;
   color: var(--bela);
   padding: 10px 20px;
@@ -213,10 +214,10 @@ header.active .btn:hover{
   color: var(--bela);
 }
 .logo.active {
-  color: black;
+  color: var(--crna);
 }
 header.active ul li a {
-  color: black;
+  color: var(--crna);
 }
 header.active ul li a:hover {
   color: #00000080;
@@ -435,6 +436,64 @@ header.active ul li a:hover {
 .features .card p {
   font-size: 1.4rem;
   color: #51558a;
+}
+/*---------------USLUGE---------------*/
+.usluge{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.usluge .container{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+.usluge .card {
+  padding: 20px;
+  border-radius: 8px;
+  transition: transform 0.3s;
+  box-shadow: 0 5px 20px 1px hsla(220, 63%, 33%, 0.1);
+}
+.usluge .card:hover {
+  transform: translateY(-5px);
+}
+.usluge .card-header {
+  display: flex;
+  margin-bottom: 15px;
+}
+.usluge .card-header ion-icon {
+  color: var(--crvena);
+  padding: 8px;
+  font-weight: 800;
+  border-radius: 50%;
+  background-color: var(--siva);
+  font-size: 24px;
+  margin-right: 10px;
+}
+.usluge .card-header h2 {
+  display: flex;
+  align-items: center;
+  color: var(--crvena);
+  font-size: 20px;
+  font-weight: bold;
+}
+.usluge .card p {
+  margin-bottom: 15px;
+  color: #333;
+}
+.usluge .card a {
+  color: var(--crvena);
+  text-decoration: none;
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  transition: color 0.3s;
+}
+.usluge .card a:hover {
+  color: var(--hover);
+}
+.usluge .card a ion-icon {
+  margin-left: 5px;
 }
 
 /*---------------RADOVI---------------*/
@@ -937,7 +996,7 @@ form{
 }
 #back-to-top {
   position: fixed;
-  color: #af0b0b;
+  color: var(--crvena);
   bottom: 20px;
   right: 20px;
   width: 60px;
@@ -959,6 +1018,7 @@ form{
   top: 0;
   left: 0;
   transform: rotate(-90deg);
+  pointer-events: none;
 }
 #progress circle {
   stroke: var(--crvena);
@@ -980,7 +1040,6 @@ form{
   cursor: pointer;
   outline: none;
 }
-
 /* ----------- PORTAL ----------- */
 /* ----------- PORTAL ----------- */
 /* ----------- PORTAL ----------- */
@@ -1024,7 +1083,7 @@ form{
   transition: background 0.3s;
 }
 .portal button:hover {
-  background-color: #af0b0b;
+  background-color: var(--hover);
 }
 .portal #btn2 {
   padding: 5px 8px;

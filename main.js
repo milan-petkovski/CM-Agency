@@ -290,7 +290,7 @@ nextBtn.addEventListener('click', () => {
 setInterval(() => {
   currentTestimonialIndex = (currentTestimonialIndex === testimonials.length - 1) ? 0 : currentTestimonialIndex + 1;
   showTestimonial(currentTestimonialIndex);
-}, 500000); // Change every 5 seconds
+}, 10000);
 
 //#endregion
 

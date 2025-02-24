@@ -17,10 +17,10 @@
     <a href="#" class="logo"><img src="images/logo.png" alt="Logo">CM Agency</a>
     <ul>
         <li><a href="#about">O nama</a></li>
-        <li><a href="#services">Usluge</a></li>
+        <li><a href="#usluge">Usluge</a></li>
         <li><a href="#radovi">Radovi</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>        
         <li><a href="#portfolio">Portfolio</a></li>
-        <li><a href="#contact">Kontakt</a></li>
         <li><a href="portal.html" class="btn">Prijavi se <ion-icon name="log-in-outline"></ion-icon></a></li>
     </ul>
 </header>
@@ -56,55 +56,69 @@
             <ul>
                 <li><h1>2+</h1><p>Zadovoljnih<br>klijenta</p></li>
                 <li><h1>5+</h1><p>Pokrenutih<br>projekata</p></li>
-                <li><h1>1+</h1><p>Godina<br>iskustva</p></li>
+                <li><h1>2+</h1><p>Godina<br>iskustva</p></li>
             </ul>
         </div>
     </div>
 </section>
 
-<section class="features" id="features">
-    <h2 class="naslov underline">Our Features</h2>
+<section class="usluge" id="usluge">
+    <h2 class="naslov underline">Usluge</h2>
     <div class="container">
 
-    <div class="list">
         <div class="card">
-            <ion-icon name="bulb-outline"></ion-icon>
-            <div class="content">
-                <h3>24/7 Support</h3>
-                <p>We are always here for you, no matter the time. Our team is available to provide support whenever you need it.</p>
+            <div class="card-header">
+                <ion-icon name="videocam-outline"></ion-icon>
+                <h2>SHORT FORM PRODUKCIJA</h2>
             </div>
+            <p>Upotrebljavamo naše talente i scenariste da kreiramo video sadržaj koji angažuje i postiže rezultate.</p>
+            <a href="#contact">Prava usluga za mene <ion-icon name="arrow-forward-outline"></ion-icon></a>
         </div>
 
         <div class="card">
-            <ion-icon name="color-palette-outline"></ion-icon>
-            <div class="content">
-                <h3>Creative Design</h3>
-                <p>We create innovative and visually appealing designs that will capture the attention of your target audience.</p>
+            <div class="card-header">
+                <ion-icon name="earth-outline"></ion-icon>
+                <h2>IZRADA VEB-SAJTOVA</h2>
             </div>
-        </div>
-    </div>
-
-    <div class="banner">
-      <img src="images/features.png" class="w-100 animation">
-    </div>
-
-    <div class="list">
-        <div class="card">
-            <ion-icon name="code-slash-outline"></ion-icon>
-            <div class="content">
-                <h3>Professional Development</h3>
-                <p>Our team of developers creates modern and functional digital platforms that deliver results.</p>
-            </div>
+            <p>Od dizajna do razvoja, stvaramo web stranice koje su atraktivne, funkcionalne i prilagođene mobilnim uređajima.</p>
+            <a href="#contact">Prava usluga za mene <ion-icon name="arrow-forward-outline"></ion-icon></a>
         </div>
 
         <div class="card">
-            <ion-icon name="rocket-outline"></ion-icon>
-            <div class="content">
-                <h3>Fast Start</h3>
-                <p>Our agency ensures a quick launch of campaigns, so you can start seeing results immediately.</p>
+            <div class="card-header">
+                <ion-icon name="film-outline"></ion-icon>
+                <h2>EDITOVANJE VIDEO ZAPISA</h2>
             </div>
+            <p>Naši iskusni montažeri podižu vaš video sadržaj na viši nivo uz pomoć efekata, muzike i profesionalnog finiša.</p>
+            <a href="#contact">Prava usluga za mene <ion-icon name="arrow-forward-outline"></ion-icon></a>
         </div>
-    </div>
+
+        <div class="card">
+            <div class="card-header">
+                <ion-icon name="people-outline"></ion-icon>
+                <h2>VOĐENJE DRUŠTVENIH MREŽA</h2>
+            </div>
+            <p>Preuzimamo kontrolu nad vašim društvenim mrežama, stvaramo privlačan sadržaj i povećavamo vašu bazu pratilaca.</p>
+            <a href="#contact">Prava usluga za mene <ion-icon name="arrow-forward-outline"></ion-icon></a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <ion-icon name="camera-outline"></ion-icon>
+                <h2>PROFESIONALNO FOTOGRAFISANJE I SNIMANJE</h2>
+            </div>
+            <p>Naši profesionalni fotografi i snimatelji stvaraju fotografije i video zapise za sve vaše potrebe.</p>
+            <a href="#contact">Prava usluga za mene <ion-icon name="arrow-forward-outline"></ion-icon></a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <ion-icon name="stats-chart-outline"></ion-icon>
+                <h2>BUSINESS MANAGER</h2>
+            </div>
+            <p>Kreiranje i optimizacija kampanja za bolje rezultate i praćenje performansi i analiza podataka.</p>
+            <a href="#contact">Prava usluga za mene <ion-icon name="arrow-forward-outline"></ion-icon></a>
+        </div>
 
     </div>
 </section>
@@ -115,8 +129,10 @@
     <div class="video-container">
 
         <div class="video-card">
-            <span class="video-title">Maskote lazarevac</span>
-            <video src="images/radovi/maskote.mp4" muted loop autoplay playsinline></video>
+            <span class="video-title">@maskote_lazarevac</span>
+            <a href="https://instagram.com/reel/DFXT-Dqs1rf" target="_blank">
+                <video src="images/radovi/maskote.mp4" muted loop autoplay playsinline></video>
+            </a> 
             <button class="pause-btn" onclick="togglePlay(this)">
                 <ion-icon name="pause-outline"></ion-icon>
             </button>
@@ -126,8 +142,10 @@
         </div>
 
         <div class="video-card">
-            <span class="video-title">CM Agency</span>
-            <video src="images/radovi/agency.mp4" muted loop autoplay playsinline></video>
+            <span class="video-title">@cmagency.marketing</span>
+            <a href="https://instagram.com/reel/DFQh-Oqts6F" target="_blank">
+                <video src="images/radovi/agency.mp4" muted loop autoplay playsinline></video>
+            </a>
             <button class="pause-btn" onclick="togglePlay(this)">
                 <ion-icon name="pause-outline"></ion-icon>
             </button>
@@ -137,8 +155,10 @@
         </div>
 
         <div class="video-card">
-            <span class="video-title">Tutz</span>
+            <span class="video-title">@lukaxcvetkovic</span>
+            <a href="https://instagram.com/reel/C3lFASENYXZ" target="_blank">
             <video src="images/radovi/windows.mp4" muted loop autoplay playsinline></video>
+            </a>
             <button class="pause-btn" onclick="togglePlay(this)">
                 <ion-icon name="pause-outline"></ion-icon>
             </button>
@@ -148,8 +168,10 @@
         </div>
 
         <div class="video-card">
-            <span class="video-title">Tutz</span>
+            <span class="video-title">@lukaxcvetkovic</span>
+            <a href="https://instagram.com/reel/C3DW0c9tzpS" target="_blank">
             <video src="images/radovi/brix.mp4" muted loop autoplay playsinline></video>
+            </a>
             <button class="pause-btn" onclick="togglePlay(this)">
                 <ion-icon name="pause-outline"></ion-icon>
             </button>
@@ -224,6 +246,53 @@
     <button class="testimonial-nav-right" id="nextTestimonial">
         <ion-icon name="chevron-forward-outline"></ion-icon>
     </button>
+    </div>
+</section>
+
+<section class="features" id="features">
+    <h2 class="naslov underline">Our Features</h2>
+    <div class="container">
+
+    <div class="list">
+        <div class="card">
+            <ion-icon name="bulb-outline"></ion-icon>
+            <div class="content">
+                <h3>24/7 Support</h3>
+                <p>We are always here for you, no matter the time. Our team is available to provide support whenever you need it.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <ion-icon name="color-palette-outline"></ion-icon>
+            <div class="content">
+                <h3>Creative Design</h3>
+                <p>We create innovative and visually appealing designs that will capture the attention of your target audience.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="banner">
+      <img src="images/features.png" class="w-100 animation">
+    </div>
+
+    <div class="list">
+        <div class="card">
+            <ion-icon name="code-slash-outline"></ion-icon>
+            <div class="content">
+                <h3>Professional Development</h3>
+                <p>Our team of developers creates modern and functional digital platforms that deliver results.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <ion-icon name="rocket-outline"></ion-icon>
+            <div class="content">
+                <h3>Fast Start</h3>
+                <p>Our agency ensures a quick launch of campaigns, so you can start seeing results immediately.</p>
+            </div>
+        </div>
+    </div>
+
     </div>
 </section>
 
@@ -321,7 +390,7 @@
     <a href="postovi.html"><button class="btn" id="view">Pogledaj više</button></a>
 </section>
 
-<section class="contact-form" id="contact">
+<section class="contact-form" id="kontakt">
     <h2 class="naslov underline">Kontaktiraj nas</h2>
     <div class="container">
 
@@ -394,12 +463,13 @@
         </div>
 
         <div class="column">
-            <h4>Home page</h4>
+            <h4>Osnovni linkovi</h4>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#blog">Blog</a></li>
+                <li><a href="#about">O nama</a></li>
+                <li><a href="#usluge">Usluge</a></li>
+                <li><a href="#radovi">Radovi</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>        
+                <li><a href="#portfolio">Portfolio</a></li>
             </ul>
         </div>
 
