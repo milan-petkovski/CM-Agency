@@ -271,5 +271,10 @@ setInterval(() => {
   showTestimonial(currentTestimonialIndex);
 }, 500000); // Change every 5 seconds
 
-
 //#endregion
+
+function toggleMute(btn) {
+  const video = btn.previousElementSibling;
+  video.muted = !video.muted;
+  btn.querySelector('.icon').textContent = video.muted ? "🔇" : "🔊";
+}
