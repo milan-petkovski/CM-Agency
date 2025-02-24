@@ -202,7 +202,7 @@ header .btn:is(:hover, :focus) {
 }
 /* Header aktivan */
 header.active {
-  transition-delay: 1s;
+  transition-delay: 0.3s;
   background: var(--pozadina);
   padding: 10px 150px 10px 150px;
 }
@@ -454,33 +454,30 @@ header.active ul li a:hover {
   gap: 30px;
   flex-wrap: wrap;
 }
-
 .video-card {
   position: relative;
   width: 320px;
   border-radius: 20px;
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 20px 1px hsla(220, 63%, 33%, 0.4);
   cursor: pointer;
 }
-
 .video-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 25px 35px rgba(0, 0, 0, 0.3);
-}
+  transform: scale(1.03);
+  box-shadow: 0 5px 20px 1px hsla(220, 63%, 33%, 0.7);
 
+}
 .video-card video {
   width: 100%;
   border-radius: 20px;
   display: block;
 }
-
 .video-title {
   position: absolute;
   top: 15px;
   left: 15px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   color: #ffffff;
   padding: 5px 15px;
   border-radius: 50px;
@@ -489,11 +486,10 @@ header.active ul li a:hover {
   font-weight: 500;
 }
 
-.mute-btn {
+.pause-btn, .mute-btn {
   position: absolute;
   bottom: 15px;
-  right: 15px;
-  background: #1C1C1C;
+  background: rgba(0, 0, 0, 0.4);
   color: #ffffff;
   border: none;
   border-radius: 50%;
@@ -506,27 +502,22 @@ header.active ul li a:hover {
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
   transition: background 0.3s;
 }
-
-.mute-btn:hover {
+.pause-btn {
+  left: 15px;
+}
+.mute-btn {
+  right: 15px;
+}
+.pause-btn:hover, .mute-btn:hover {
   background: #333333;
 }
-
-.mute-btn .icon {
-  font-size: 1.2em;
+.pause-btn ion-icon, .mute-btn ion-icon {
+  font-size: 1.5em;
   transition: transform 0.3s;
 }
-
-.mute-btn:hover .icon {
+.pause-btn:hover ion-icon, .mute-btn:hover ion-icon {
   transform: scale(1.2);
 }
-
-@media (max-width: 768px) {
-  .video-card {
-      width: 100%;
-  }
-}
-
-
 
 /*------------TESTIMONIALS------------*/
 .testimonial {

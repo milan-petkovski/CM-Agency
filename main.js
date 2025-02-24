@@ -18,6 +18,27 @@ window.addEventListener("scroll", function() {
   }
 });
 
+// Dodaj početnu proveru prilikom učitavanja stranice
+window.addEventListener("load", function() {
+  const header = document.querySelector("header");
+  const logo = document.querySelector(".logo");
+
+  if (window.scrollY > 50) {
+      // Ako je stranica već pomerena pri učitavanju, postavljamo crnu pozadinu i crni tekst
+      header.classList.add("active");
+      header.classList.remove("inactive");
+      logo.classList.add("active");
+      logo.classList.remove("inactive");
+  } else {
+      // Inače ostavljamo početno stanje sa belom pozadinom
+      header.classList.add("inactive");
+      header.classList.remove("active");
+      logo.classList.add("inactive");
+      logo.classList.remove("active");
+  }
+});
+
+
 //#endregion
 
 //#region - SKROLL
@@ -273,8 +294,28 @@ setInterval(() => {
 
 //#endregion
 
-function toggleMute(btn) {
-  const video = btn.previousElementSibling;
-  video.muted = !video.muted;
-  btn.querySelector('.icon').textContent = video.muted ? "🔇" : "🔊";
+//#region - RADOVI
+function togglePlay(btn) {
+  const video = btn.closest('.video-card').querySelector('video');
+  const icon = btn.querySelector('ion-icon');
+  if (video.paused) {
+      video.play();
+      icon.setAttribute('name', 'pause-outline');  // Zamenjujemo ikonu u pause
+  } else {
+      video.pause();
+      icon.setAttribute('name', 'play-outline');   // Zamenjujemo ikonu u play
+  }
 }
+
+function toggleMute(btn) {
+  const video = btn.closest('.video-card').querySelector('video');
+  const icon = btn.querySelector('ion-icon');
+  video.muted = !video.muted;
+  if (video.muted) {
+      icon.setAttribute('name', 'volume-mute-outline');  // Zamenjujemo ikonu u mute
+  } else {
+      icon.setAttribute('name', 'volume-high-outline');  // Zamenjujemo ikonu u unmute
+  }
+}
+
+//#endregion

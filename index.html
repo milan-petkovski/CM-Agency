@@ -18,7 +18,7 @@
     <ul>
         <li><a href="#about">O nama</a></li>
         <li><a href="#services">Usluge</a></li>
-        <li><a href="#works">Radovi</a></li>
+        <li><a href="#radovi">Radovi</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#contact">Kontakt</a></li>
         <li><a href="portal.html" class="btn">Prijavi se <ion-icon name="log-in-outline"></ion-icon></a></li>
@@ -113,38 +113,53 @@
     <h2 class="naslov underline">Naši radovi</h2>
 
     <div class="video-container">
+
         <div class="video-card">
-            <span class="video-title">Klijent 1</span>
+            <span class="video-title">Maskote lazarevac</span>
             <video src="images/radovi/maskote.mp4" muted loop autoplay playsinline></video>
+            <button class="pause-btn" onclick="togglePlay(this)">
+                <ion-icon name="pause-outline"></ion-icon>
+            </button>
             <button class="mute-btn" onclick="toggleMute(this)">
-                <span class="icon">🔇</span>
+                <ion-icon name="volume-mute-outline"></ion-icon>
             </button>
         </div>
+
         <div class="video-card">
-            <span class="video-title">Klijent 2</span>
+            <span class="video-title">CM Agency</span>
             <video src="images/radovi/agency.mp4" muted loop autoplay playsinline></video>
+            <button class="pause-btn" onclick="togglePlay(this)">
+                <ion-icon name="pause-outline"></ion-icon>
+            </button>
             <button class="mute-btn" onclick="toggleMute(this)">
-                <span class="icon">🔇</span>
+                <ion-icon name="volume-mute-outline"></ion-icon>
             </button>
         </div>
+
         <div class="video-card">
-            <span class="video-title">Klijent 3</span>
+            <span class="video-title">Tutz</span>
             <video src="images/radovi/windows.mp4" muted loop autoplay playsinline></video>
+            <button class="pause-btn" onclick="togglePlay(this)">
+                <ion-icon name="pause-outline"></ion-icon>
+            </button>
             <button class="mute-btn" onclick="toggleMute(this)">
-                <span class="icon">🔇</span>
+                <ion-icon name="volume-mute-outline"></ion-icon>
             </button>
         </div>
+
         <div class="video-card">
-            <span class="video-title">Klijent 4</span>
+            <span class="video-title">Tutz</span>
             <video src="images/radovi/mudja.mp4" muted loop autoplay playsinline></video>
+            <button class="pause-btn" onclick="togglePlay(this)">
+                <ion-icon name="pause-outline"></ion-icon>
+            </button>
             <button class="mute-btn" onclick="toggleMute(this)">
-                <span class="icon">🔇</span>
+                <ion-icon name="volume-mute-outline"></ion-icon>
             </button>
         </div>
+
     </div>
 </section>
-
-
 
 <section class="testimonial" id="testimonial">
     <h2 class="naslov underline">Reči klijenata</h2>
