@@ -118,17 +118,11 @@ document.querySelector('#backToTop').onclick = () => {
 function sharePost() {
   const url = window.location.href;
   const title = document.title;
-  const shareButton = event.target.closest('.share');
-  const shareCount = shareButton.querySelector('data');
 
   if (navigator.share) {
     navigator.share({
       title: title,
       url: url
-    }).then(() => {
-      let currentValue = parseInt(shareCount.getAttribute('value'));
-      shareCount.setAttribute('value', currentValue + 1);
-      shareCount.innerText = currentValue + 1;
     }).catch((error) => console.log('Greska u deljenju: ', error));
   } else {
     alert('Deljenje nije podržano na ovom uređaju ili pretraživaču.');
