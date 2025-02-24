@@ -441,7 +441,6 @@ header.active ul li a:hover {
 .radovi {
   display: flex;
   flex-direction: column;
-  padding: 60px 20px;
   background-color: #F4F3F2;
   text-align: center;
 }
@@ -452,25 +451,23 @@ header.active ul li a:hover {
   display: flex;
   justify-content: center;
   gap: 30px;
-  flex-wrap: wrap;
 }
 .video-card {
   position: relative;
-  width: 320px;
-  border-radius: 20px;
+  width: 278px;
+  border-radius: 12px;
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 5px 20px 1px hsla(220, 63%, 33%, 0.4);
   cursor: pointer;
 }
 .video-card:hover {
   transform: scale(1.03);
-  box-shadow: 0 5px 20px 1px hsla(220, 63%, 33%, 0.7);
+  box-shadow: 0 5px 20px 1px hsla(220, 63%, 33%, 0.5);
 
 }
 .video-card video {
   width: 100%;
-  border-radius: 20px;
+  border-radius: 12px;
   display: block;
 }
 .video-title {
