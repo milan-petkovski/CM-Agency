@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CM Agency</title>
   <link rel="icon" type="image/x-icon" href="images/logo.png">
-  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Source+Sans+Pro:wght@600;700&display=swap" rel="stylesheet">
@@ -21,6 +21,7 @@
 </header>
 
 <section class="single-post">
+    
     <div class="post">
         <h1 class="post-title"></h1>
         <div class="post-meta"><time></time></div>
@@ -28,6 +29,63 @@
             <img src="" id="post-image" alt="Slika">
             <p></p>
         </div>
+    </div>
+
+    <div class="contact-form">
+        <h1>Kontaktiraj nas</h1>
+        <form>
+            <div class="row">
+                <div class="form-group">
+                    <label for="ime">Vaše ime i prezime</label>
+                    <input type="text" id="ime" placeholder="Filip Filipovic">
+                </div>
+                <div class="form-group">
+                    <label for="naziv">Naziv kompanije</label>
+                    <input type="text" id="naziv" placeholder="Google, Youtube..">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="email">Vaša e-mail adresa</label>
+                    <input type="email" id="email" placeholder="vasa@kompanija.com">
+                </div>
+                <div class="form-group">
+                    <label for="websajt">Vaš vebsajt</label>
+                    <input type="text" id="websajt" placeholder="Ukoliko imate vebsajt, nije obavezno">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="telefon">Kontakt telefon</label>
+                    <input type="text" id="telefon" placeholder="+381 60 123 45 67">
+                </div>
+                <div class="form-group">
+                    <label for="budzet">Koji je Vaš budžet za projekat?</label>
+                    <input type="text" id="budzet" placeholder="500$, 1000$, 5000$...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Koje usluge su Vam potrebne? Možete izabrati više usluga</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="usluge"> Short Form Produkcija</label>
+                    <label><input type="radio" name="usluge"> Izrada web-sajta</label>
+                    <label><input type="radio" name="usluge"> Editovanje video zapise</label>
+                    <label><input type="radio" name="usluge"> Vođenje društvenih mreža</label>
+                    <label><input type="radio" name="usluge"> Facebook & Instagram reklamiranje</label>
+                    <label><input type="radio" name="usluge"> Profesionalno fotografisanje i snimanje</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="opis">Objasnite nam ukratko kakav Vam projekat treba i osnovne informacije</label>
+                <textarea id="opis" placeholder="Potrebno nam je reklamiranje našim proizvodima putem Facebook reklama..."></textarea>
+            </div>
+
+            <button type="submit">Pošaljite upit</button>
+        </form>
     </div>
     
     <div class="recommended">
@@ -37,6 +95,7 @@
         
         </div>
     </div>
+
 </section>
 
 <section class="footer">
@@ -94,98 +153,7 @@
     </div>
 </section>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
-
-    // Podaci o postovima
-    const posts = {
-        "1": {
-            title: "Lansiranje Websajta",
-            date: "1 March, 2025",
-            content: `
-                Sa modernim dizajnom i naprednim funkcionalnostima, naš novi veb sajt je tu da vas vodi kroz svet digitalnog marketinga i pomogne vam da postignete poslovni uspeh.
-                U CM Agency, verujemo da svaki brend ima jedinstvenu priču koja zaslužuje da bude ispričana na pravi način. Naš tim stručnjaka za digitalni marketing posvećen je kreiranju kreativnih i efektivnih rešenja koja ne samo da privlače pažnju, već i povećavaju vaš poslovni rast.
-
-                <strong>Šta nudimo?</strong>
-                Naša agencija pruža širok spektar usluga koje su prilagođene potrebama modernog poslovanja:
-                <strong>Web Sajtova:</strong> Kreiramo responzivne i vizuelno privlačne sajtove koji odražavaju suštinu vašeg brenda i pružaju vrhunsko korisničko iskustvo.
-                <strong>SEO Optimizacija:</strong> Optimizujemo vaš sajt za pretraživače kako bi vaša ciljna publika lakše pronašla vašu ponudu.
-                <strong>Društvene Mreže:</strong> Pomažemo vam da izgradite snažno prisustvo na društvenim mrežama i da kreirate sadržaj koji angažuje i povezuje sa vašim pratiocima.
-                <strong>Digitalne Kampanje:</strong> Planiramo i sprovodimo digitalne kampanje koje donose merljive rezultate i povećavaju vašu vidljivost na mreži.
-
-                <strong>Zašto izabrati baš nas?</strong>
-                U CM Agency se ponosimo našim individualnim pristupom svakom klijentu. Razumemo da su potrebe svakog brenda drugačije, zbog čega pažljivo slušamo vaše ciljeve i kreiramo strategije koje su u skladu sa vašim poslovnim ambicijama.
-
-                <strong>Naša Misija</strong>
-                Naša misija je da vam pomognemo da ostvarite pun potencijal vašeg brenda kroz inovativna digitalna rešenja i kreativne marketinške strategije. Uvek smo u toku sa najnovijim trendovima u industriji kako bismo osigurali da vaša komunikacija sa publikom bude autentična, relevantna i efektivna.
-                
-                <strong>Povežite se sa nama!</strong>
-                Spremni ste da podignete svoje poslovanje na viši nivo? Kontaktirajte nas danas! Naš tim stoji vam na raspolaganju da odgovori na sva vaša pitanja i da zajedno kreiramo uspešnu digitalnu priču vašeg brenda.
-                Dobrodošli na novo digitalno putovanje sa CM Agency!
-            `,
-            image: "images/blog/launching.png"
-        },
-        "2": {
-            title: "Kontaktiraj nas!",
-            date: "1 March, 2025",
-            content: "Imate pitanje ili želite da sarađujete? Ne oklevajte da nas kontaktirate! Naš tim je tu da vas podrži i pruži sve potrebne informacije. Čekamo vaš poziv!",
-            image: "images/blog/contact.png"
-        },
-        "3": {
-            title: "Zaprati nas na Instagramu!",
-            date: "1 March, 2025",
-            content: "Pratite nas na Instagramu i budite u toku sa najnovijim projektima, inspiracijama i promocijama. Povežite se sa nama i ne propustite ni jedan naš post!",
-            image: "images/blog/follow_ig.png"
-        },
-        "4": {
-            title: "Zaprati nas na TikToku!",
-            date: "1 March, 2025",
-            content: "Pratite nas na TikToku za kreativne video sadržaje, savete o dizajnu i marketingu, i mnogo više! Zabavite se i inspirišite uz naše najnovije klipove.",
-            image: "images/blog/follow_tt.png"
-        }
-    };
-
-    // Preporučeni postovi će biti uzeti iz objekta 'posts'
-    const recommendedPostIds = [2, 3, 4];
-
-    const postId = getQueryParam('id');
-
-    if (postId && posts[postId]) {
-        const post = posts[postId];
-        document.querySelector('.post-title').innerText = post.title;
-        document.querySelector('.post-meta time').innerText = post.date;
-        document.querySelector('.post-content p').innerText = post.content;
-
-        const postImage = document.querySelector('#post-image');
-        if (postImage) {
-            postImage.setAttribute('src', post.image);
-            postImage.setAttribute('alt', post.title);
-        }
-    } else {
-        document.querySelector('.post').innerHTML = "<p>Post nije pronađen!</p>";
-    }
-
-    // Dinamičko generisanje preporučenih postova
-    const recommendedContainer = document.querySelector('.recommended-posts');
-    recommendedPostIds.forEach((id) => {
-        const post = posts[id];
-        const card = document.createElement('div');
-        card.classList.add('blog-card');
-        card.innerHTML = `
-            <a href="postovi.html?id=${id}">
-                <img src="${post.image}" alt="${post.title}">
-                <h3>${post.title}</h3>
-            </a>
-        `;
-        recommendedContainer.appendChild(card);
-    });
-});
-
-</script>
+<script src="main.js"></script>
 
 </body>
 </html>
@@ -310,5 +278,80 @@ header .logo:hover{
     .recommended-posts {
         grid-template-columns: 1fr;
     }
+}
+.contact-form {
+    width: 100%;
+}
+.contact-form h1{
+    color: #000;
+    margin-top: 5%;
+    margin-bottom: 1%;
+}
+.row {
+    display: flex;
+    gap: 20px;
+}
+.row .form-group {
+    flex: 1;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: transparent;
+    border: 1px solid #33333333;
+    color: #333;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+.form-group textarea{
+    height: 150px;
+    resize: vertical;
+}
+.form-group label {
+    color: #000;
+    display: block;
+    font-weight: 600;
+}
+.radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 20px;
+    align-items: center;
+    justify-items: start;
+}
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 300;
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: left;
+    margin-top: 10px;
+}
+.radio-group input[type="radio"] {
+    accent-color: #de201d;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    transform: scale(1.2);
+}
+.contact-form button {
+    width: 100%;
+    background-image: linear-gradient(135deg, #de201d, #86201e, #000000);
+    background-size: 200%;
+    color: var(--bela);
+    padding: 10px 20px;
+    font-weight: 700;
+    border-radius: 5px 25px;
+    transition: 0.3s;
+}
+.contact-form button:hover {
+    color: var(--bela);
+    background-position: right;
 }
 </style>
