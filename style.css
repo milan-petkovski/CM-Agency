@@ -76,7 +76,6 @@ ion-icon {
   pointer-events: none; 
 }
 .container { 
-  padding-inline: 15px;
   max-width: 1200px; 
 }
 .h2,
@@ -205,6 +204,7 @@ header .btn:is(:hover, :focus) {
 header.active {
   transition-delay: 1s;
   background: var(--pozadina);
+  padding: 10px 150px 10px 150px;
 }
 header.active .btn {
   color: var(--bela);
@@ -437,6 +437,168 @@ header.active ul li a:hover {
   color: #51558a;
 }
 
+
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.testimonial .container {
+  background-color: #222;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.testimonial-nav-left,
+.testimonial-nav-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+  background-color: var(--crvena);
+  color: white;
+  border-radius: 50%;
+  padding: 0.5rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.testimonial-nav-left {
+  left: 0;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.testimonial-nav-right {
+  right: 0;
+  transform: translateX(50%) translateY(-50%);
+}
+
+/* Hover efekti za navigacione dugmadi */
+.testimonial-nav-left:hover {
+  transform: translateY(-50%) scale(1.1) translateX(-55%);
+}
+.testimonial-nav-right:hover {
+  transform: translateY(-50%) scale(1.1) translateX(55%);
+}
+.testimonial-slider {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.testimonial-item {
+  display: none;
+  flex-shrink: 0;
+  width: 100%;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.testimonial-item.active {
+  display: flex;
+  opacity: 1;
+  transform: scale(1.0) rotateY(0deg);
+}
+
+.testimonial-item.prev {
+  transform: translateX(-100%) scale(0.9) rotateY(20deg);
+  opacity: 0.5;
+}
+
+.testimonial-item.next {
+  transform: translateX(100%) scale(0.9) rotateY(-20deg);
+  opacity: 0.5;
+}
+
+/* Animacija za slike */
+.testimonial-image {
+  padding: 10px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.testimonial-image img {
+  border-radius: 10px;
+  transition: transform 0.5s ease;
+}
+
+/* Efekat za tekst sa dinamičnim ulaskom */
+.testimonial-item.active .testimonial-content {
+  animation: dynamicEnter 0.7s ease-out forwards;
+}
+
+@keyframes dynamicEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) rotate(-15deg);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(10px) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Animacija za prelaz između stavki */
+.testimonial-item.active {
+  animation: slideIn 1s ease-out;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.testimonial-content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex: 1;
+  padding-left: 20px;
+  color: white;
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.testimonial-logo {
+  margin-right: 10px;
+  width: 50px;
+  height: 50px;
+}
+
+.testimonial-title {
+  color: #fff;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.testimonial-text {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+
 /*----------------BLOG----------------*/
 .blog {
   display: flex;
@@ -480,12 +642,9 @@ header.active ul li a:hover {
   height: 100%;
   object-fit: cover;
   transition: 0.35s ease;
-  border-radius: 12px; /* Dodajemo border-radius da se video uklopi sa ostalim elementima */
+  border-radius: 12px;
 }
-.blog-card .banner a:is(:hover, :focus) video {
-  transform: scale(1.1);
-}
-
+.blog-card .banner a:is(:hover, :focus) video,
 .blog-card .banner a:is(:hover, :focus) img {
   transform: scale(1.1);
 }
@@ -535,7 +694,93 @@ header.active ul li a:hover {
   transform: translateY(1px);
   background-position: right;
 }
-
+/*--------------CONTACT---------------*/
+.contact-form{
+  display: flex;
+  flex-direction: column;  
+  height: 100vh;
+}
+form{
+  width: 1200px;
+}
+.contact-form h1{
+  color: #000;
+  margin-top: 5%;
+  margin-bottom: 1%;
+}
+.contact-form .row {
+  display: flex;
+  gap: 20px;
+}
+.contact-form .row .form-group {
+  flex: 1;
+}
+.contact-form .form-group {
+  margin-bottom: 20px;
+}
+.contact-form .form-group input,
+.contact-form .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid #33333333;
+  color: #333;
+  border-radius: 10px;
+  margin-top: 5px;
+  transition: 0.3s;
+}
+.contact-form .form-group input:is(:hover, :focus),
+.contact-form .form-group textarea:is(:hover, :focus){
+  outline: none;
+  border: 1px solid #86201e;
+}
+.contact-form .form-group textarea{
+  height: 150px;
+  resize: vertical;
+}
+.contact-form .form-group label {
+  color: #000;
+  display: block;
+  font-weight: 600;
+}
+.contact-form .radio-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 20px;
+  align-items: center;
+  justify-items: start;
+}
+.contact-form .radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 300;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: left;
+  margin-top: 10px;
+}
+.contact-form .radio-group input[type="radio"] {
+  accent-color: #de201d;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  transform: scale(1.2);
+}
+.contact-form button {
+  width: 100%;
+  background-image: linear-gradient(135deg, #de201d, #86201e, #000000);
+  background-size: 200%;
+  color: var(--bela);
+  padding: 10px 20px;
+  font-weight: 700;
+  border-radius: 5px 25px;
+  transition: 0.3s;
+}
+.contact-form button:hover {
+  color: var(--bela);
+  background-position: right;
+}
 /*---------------FOOTER---------------*/
 .footer {
   display: flex;
@@ -545,7 +790,7 @@ header.active ul li a:hover {
   color: #fff;
   padding: 60px 0 0 0;
 }
-.footer-top .container {
+.footer .footer-top .container {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;

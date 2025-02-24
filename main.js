@@ -239,3 +239,37 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 //#endregion
+
+//#region - TESTIMONIAL
+const prevBtn = document.getElementById('prevTestimonial');
+const nextBtn = document.getElementById('nextTestimonial');
+const testimonials = document.querySelectorAll('.testimonial-item');
+let currentTestimonialIndex = 0;
+
+function showTestimonial(index) {
+  testimonials.forEach((testimonial, i) => {
+    testimonial.classList.remove('active');
+    if (i === index) {
+      testimonial.classList.add('active');
+    }
+  });
+}
+
+prevBtn.addEventListener('click', () => {
+  currentTestimonialIndex = (currentTestimonialIndex === 0) ? testimonials.length - 1 : currentTestimonialIndex - 1;
+  showTestimonial(currentTestimonialIndex);
+});
+
+nextBtn.addEventListener('click', () => {
+  currentTestimonialIndex = (currentTestimonialIndex === testimonials.length - 1) ? 0 : currentTestimonialIndex + 1;
+  showTestimonial(currentTestimonialIndex);
+});
+
+// Auto slider for testimonials
+setInterval(() => {
+  currentTestimonialIndex = (currentTestimonialIndex === testimonials.length - 1) ? 0 : currentTestimonialIndex + 1;
+  showTestimonial(currentTestimonialIndex);
+}, 500000); // Change every 5 seconds
+
+
+//#endregion

@@ -109,6 +109,72 @@
     </div>
 </section>
 
+<section class="testimonial" id="testimonial">
+    <h2 class="naslov underline">Reči klijenata</h2>
+
+    <div class="container">
+    <button class="testimonial-nav-left" id="prevTestimonial">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
+
+    <div class="testimonial-slider">
+
+    <div class="testimonial-item active">
+        <div class="testimonial-image">
+            <img src="images/features.png" alt="Slika">
+        </div>
+
+        <div class="testimonial-content">
+            <div class="testimonial-header">
+                <img src="images/logo.png" class="testimonial-logo" alt="Logo">
+                <div><h1 class="testimonial-title">CM Agency</h1></div>
+            </div>
+            <p class="testimonial-text">
+                "Saradnja sa CM Agencijom bila je pravo otkriće. Njihov tim je odmah shvatio naše potrebe i pružio rešenja koja su podigla naše online prisustvo na potpuno novi nivo. Kreativnost, profesionalizam i stalna podrška tokom celog procesa učinili su nas sigurnima da su pravi partner za nas. Rezultati koje su doneli su bili iznad svih očekivanja, i svakako bismo ih preporučili svima koji žele ozbiljan rast"
+            </p>
+        </div>
+    </div>
+
+    <div class="testimonial-item">
+        <div class="testimonial-image">
+            <img src="images/features.png" alt="Slika">
+        </div>
+
+        <div class="testimonial-content">
+            <div class="testimonial-header">
+                <img src="images/tutz.png" class="testimonial-logo" alt="Logo">
+                <div><h1 class="testimonial-title">Tutz</h1></div>
+            </div>
+            <p class="testimonial-text">
+                "Saradnja sa CM Agencijom bila je prava odluka za moj brend. Tim je od početka shvatio šta mi je potrebno i pružio rešenja koja su podigla moj kanal na novi nivo. Njihov pristup je potpuno profesionalan, a kreativnost i pažnja koju posvećuju svakom detalju čine ih zaista posebnim. Uz njihovu pomoć, postigao sam značajan rast publike i unapredio svoj online imidž. CM Agencija je definitivno partner koji svako strimovanje treba da ima!"
+            </p>
+        </div>
+    </div>
+
+    <div class="testimonial-item">
+        <div class="testimonial-image">
+            <img src="images/features.png" alt="Image 3">
+        </div>
+
+        <div class="testimonial-content">
+            <div class="testimonial-header">
+                <img src="images/mwp.png" class="testimonial-logo" alt="Logo">
+                <div><h1 class="testimonial-title">Milan Web Portal</h1></div>
+            </div>
+            <p class="testimonial-text">
+                "Saradnja sa CM Agency bila je fantastična! Tim je brzo razumeo naše potrebe i dostavio rešenja koja su unapredila naš online nastup. Kreativnost i stručnost koje su pokazali u dizajnu i marketingu su zaista na visokom nivou. Uz njihovu pomoć, naš brand je dobio novu dimenziju, a rezultati su počeli da pristižu gotovo odmah. Preporučujemo CM Agency svakome ko traži profesionalnost, kreativnost i stvarne rezultate."
+            </p>
+        </div>
+    </div>
+
+    </div>
+
+    <button class="testimonial-nav-right" id="nextTestimonial">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+    </div>
+</section>
+
 <section class="blog" id="blog">
     <h2 class="naslov underline">Naš Blog & Novosti</h2>
     <div class="container">
@@ -203,6 +269,63 @@
     <a href="postovi.html"><button class="btn" id="view">Pogledaj više</button></a>
 </section>
 
+<section class="contact-form" id="contact">
+    <h2 class="naslov underline">Kontaktiraj nas</h2>
+    <div class="container">
+
+    <form>
+        <div class="row">
+            <div class="form-group">
+                <label for="ime">Vaše ime i prezime</label>
+                <input type="text" id="ime" placeholder="Filip Filipovic">
+            </div>
+            <div class="form-group">
+                <label for="naziv">Naziv kompanije</label>
+                <input type="text" id="naziv" placeholder="Google, Youtube..">
+            </div>
+            <div class="form-group">
+                <label for="email">Vaša e-mail adresa</label>
+                <input type="email" id="email" placeholder="vasa@kompanija.com">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label for="websajt">Vaš vebsajt</label>
+                <input type="text" id="websajt" placeholder="Ukoliko imate vebsajt, nije obavezno">
+            </div>
+            <div class="form-group">
+                <label for="telefon">Kontakt telefon</label>
+                <input type="text" id="telefon" placeholder="+381 60 123 45 67">
+            </div>
+            <div class="form-group">
+                <label for="budzet">Koji je Vaš budžet za projekat?</label>
+                <input type="text" id="budzet" placeholder="500$, 1000$, 5000$...">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Koje usluge su Vam potrebne? Možete izabrati više usluga</label>
+            <div class="radio-group">
+                <label><input type="radio" name="usluge"> Short Form Produkcija</label>
+                <label><input type="radio" name="usluge"> Izrada web-sajta</label>
+                <label><input type="radio" name="usluge"> Editovanje video zapise</label>
+                <label><input type="radio" name="usluge"> Vođenje društvenih mreža</label>
+                <label><input type="radio" name="usluge"> Facebook & Instagram reklamiranje</label>
+                <label><input type="radio" name="usluge"> Profesionalno fotografisanje i snimanje</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="opis">Objasnite nam ukratko kakav Vam projekat treba i osnovne informacije</label>
+            <textarea id="opis" placeholder="Potrebno nam je reklamiranje našim proizvodima putem Facebook reklama..."></textarea>
+        </div>
+
+        <button type="submit">Pošaljite upit</button>
+    </form>
+    </div>
+</section>
+
 <section class="footer">
     <div class="footer-top">
     <div class="container">
@@ -264,4 +387,3 @@
 <script src="main.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-

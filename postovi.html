@@ -282,23 +282,26 @@ header .logo:hover{
 .contact-form {
     width: 100%;
 }
+form{
+  width: auto;
+}
 .contact-form h1{
     color: #000;
     margin-top: 5%;
     margin-bottom: 1%;
 }
-.row {
+.contact-form .row {
     display: flex;
     gap: 20px;
 }
-.row .form-group {
+.contact-form .row .form-group {
     flex: 1;
 }
-.form-group {
+.contact-form .form-group {
     margin-bottom: 20px;
 }
-.form-group input,
-.form-group textarea {
+.contact-form .form-group input,
+.contact-form .form-group textarea {
     width: 100%;
     padding: 10px;
     background-color: transparent;
@@ -307,23 +310,23 @@ header .logo:hover{
     border-radius: 10px;
     margin-top: 5px;
 }
-.form-group textarea{
+.contact-form .form-group textarea{
     height: 150px;
     resize: vertical;
 }
-.form-group label {
+.contact-form .form-group label {
     color: #000;
     display: block;
     font-weight: 600;
 }
-.radio-group {
+.contact-form .radio-group {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px 20px;
     align-items: center;
     justify-items: start;
 }
-.radio-group label {
+.contact-form .radio-group label {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -333,14 +336,14 @@ header .logo:hover{
     text-align: left;
     margin-top: 10px;
 }
-.radio-group input[type="radio"] {
+.contact-form .radio-group input[type="radio"] {
     accent-color: #de201d;
     cursor: pointer;
     margin: 0;
     padding: 0;
     transform: scale(1.2);
 }
-.contact-form button {
+.contact-form .contact-form button {
     width: 100%;
     background-image: linear-gradient(135deg, #de201d, #86201e, #000000);
     background-size: 200%;
@@ -350,7 +353,7 @@ header .logo:hover{
     border-radius: 5px 25px;
     transition: 0.3s;
 }
-.contact-form button:hover {
+.contact-form .contact-form button:hover {
     color: var(--bela);
     background-position: right;
 }
