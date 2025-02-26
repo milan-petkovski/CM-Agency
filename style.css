@@ -10,7 +10,7 @@ html {
   scroll-behavior: smooth;
 }
 body {
-  background-color: var(--pozadina);
+  background-image: var(--pozadina);
   color: var(--text);
   font-size: 1.6rem;
   margin: 0;
@@ -35,31 +35,28 @@ body {
 :root {
   --pozadina: #F4F3F2;
   --bela: #ffffff;
-  --text: #333333;
-  --svetlo: #707070;
-  --dark: #ffffffaa;
-  --crna: #1C1C1C;  
-  --zuta: #FFA90A;
   --siva: #e6e6e6;
+  --text: #333333;
+  --text2:#919191;
+  --text3:#808080;
   --crvena:#de201d;
+  --border:#b8b8b8;
   --hover: #af0b0b;
-  --plava:#1f2470;  
-  --sivlj:#333333;
-  --back:#000000b3;  
+
   --hero: linear-gradient(135deg, #1c1c1c, #383838);
   --gradient: linear-gradient(135deg, #de201d, #86201e);
   --gradient2: linear-gradient(135deg, #de201d, #86201e, #000000);
 }
 body.dark-mode {
-  --hero: #fff;
-  --isto: #333;
-  --pozadina: #313131;
-  --text: #ffffff;
+  --pozadina: linear-gradient(135deg, #1c1c1c, #383838);
   --bela: #333333;
-  --crna: #f1f1f1;
-  --siv: #e6e6e6;
   --siva: #dfdfdf;
-  --plava: var(--siva)
+  --text: #ffffff;
+  --text2: #dfdfdf;
+  --text3: #dfdfdf;
+  --border: #686868;
+
+  --hero: #fff;
 }
 #theme-toggle {
   background: transparent;
@@ -90,7 +87,7 @@ section {
   padding-block: 60px;
 }
 .naslov {
-  color: var(--crna);
+  color: var(--text);
   font-size: 44px;
   margin-block-end: 60px;
   max-width: max-content;
@@ -147,7 +144,7 @@ header ul li a {
   transition: 0.3s;
 }
 header ul li a:hover {
-  color: var(--dark);
+  color: var(--crvena);
   transform: translateY(1px);
 }
 header .btn {
@@ -179,7 +176,7 @@ header .btn:is(:hover, :focus) {
   transition: 0.3s;
 }
 .logo:hover {
-  color: var(--dark);
+  color: #ffffffaa;
   transform: translateY(1px);
 }
 .logo img {
@@ -198,13 +195,13 @@ header.active .btn:hover{
   color: #fff;
 }
 .logo.active {
-  color: var(--crna);
+  color: var(--text);
 }
 header.active ul li a {
-  color: var(--crna);
+  color: var(--text);
 }
 header.active ul li a:hover {
-  color: #00000080;
+  color: var(--crvena);
 }
 
 /*----------------HERO-----------------*/
@@ -233,7 +230,7 @@ header.active ul li a:hover {
   animation: slideInLeft 0.5s forwards ease-out;
 }
 .hero p {
-  color: var(--zuta);
+  color: #FFA90A;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 1.8rem;
   margin-block-end: 15px;
@@ -245,7 +242,7 @@ header.active ul li a:hover {
   margin-block-end: 20px;
 }
 .hero #text {
-  color: #aaaaaa;
+  color: var(--text2);
   font-size: 1.5rem;
   margin-block-end: 30px;
 }
@@ -325,6 +322,7 @@ header.active ul li a:hover {
   transform: translateX(0);
 }
 .about p {
+  color: var(--text3);
   opacity: 0;
   animation: fadeInRight 0.8s ease-out forwards;
   font-size: 1.5rem;
@@ -340,17 +338,18 @@ header.active ul li a:hover {
   transform: translateY(20px);
   animation: fadeInUp 0.7s ease-out forwards;
   text-align: center;
+  background-color: var(--bela);
   box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
 }
 .about ul li h1 {
   font-size: 3.8rem;
   font-weight: 700;
-  color: var(--plava);
+  color: var(--crvena);
 }
 .about ul li p {
   margin-bottom: 10px;
-  color: var(--plava);
+  color: var(--text3);
 }
 .about ul li:nth-child(1) {
   animation-delay: 0.3s;
@@ -446,7 +445,7 @@ header.active ul li a:hover {
 }
 .usluge .card p {
   margin-bottom: 15px;
-  color: var(--siv);
+  color: var(--text3);
 }
 .usluge .card a {
   color: var(--crvena);
@@ -509,7 +508,7 @@ header.active ul li a:hover {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
   padding: 6px 16px;
   border-radius: 20px;
@@ -609,7 +608,7 @@ header.active ul li a:hover {
   flex-direction: column;
   flex: 1;
   padding-left: 30px;
-  color: var(--text);
+  color: var(--text2);
 }
 .testimonial-header {
   display: flex;
@@ -622,7 +621,7 @@ header.active ul li a:hover {
   height: 50px;
 }
 .testimonial-title {
-  color: var(--crna);
+  color: var(--text);
   font-weight: bold;
   font-size: 20px;
 }
@@ -653,7 +652,6 @@ header.active ul li a:hover {
   object-fit: cover;
   border-radius: 10px;
   transition: transform 0.5s ease;
-  background-color: #000; /* Podrazumevana crna pozadina ako video ne učita */
 }
 .testimonial-item.prev {
   transform: translateX(-100%) scale(0.9) rotateY(20deg);
@@ -751,6 +749,9 @@ header.active ul li a:hover {
 .blog-card .banner a:is(:hover, :focus) img {
   transform: scale(1.1);
 }
+.blog-card p{
+  color: var(--text3);
+}
 .blog-card a {
   color: var(--crvena);
   font-size: 20px;
@@ -759,7 +760,7 @@ header.active ul li a:hover {
   transition: 0.3s;
 }
 .blog-card a:is(:hover, :focus) {
-  color: #86201e;
+  color: var(--hover);
 }
 .blog-card .meta {
   display: flex;
@@ -804,7 +805,6 @@ header.active ul li a:hover {
   display: flex;
   flex-direction: column;  
   height: 100vh;
-
 }
 form{
   width: 1200px;  
@@ -812,11 +812,6 @@ form{
   box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 12px;
-}
-.contact-form h1{
-  color: #000;
-  margin-top: 5%;
-  margin-bottom: 1%;
 }
 .contact-form .row {
   display: flex;
@@ -833,7 +828,7 @@ form{
   width: 100%;
   padding: 10px;
   background-color: transparent;
-  border: 1px solid #33333333;
+  border: 1px solid var(--border);
   color: var(--text);
   border-radius: 10px;
   font-size: 14px;
@@ -855,7 +850,7 @@ form{
   resize: vertical;
 }
 .contact-form .form-group label {
-  color: var(--crna);
+  color: var(--text);
   display: block;
   font-weight: 600;
 }
@@ -876,7 +871,7 @@ form{
   margin-top: 10px;
 }
 .contact-form .radio-group input[type="checkbox"] {
-  accent-color: #de201d;
+  accent-color: var(--crvena);
   cursor: pointer;
   margin: 0;
   padding: 0;
@@ -884,7 +879,7 @@ form{
 }
 .contact-form button {
   width: 100%;
-  background-image: linear-gradient(135deg, #de201d, #86201e, #000000);
+  background-image: var(--gradient);
   background-size: 200%;
   color: #fff;
   padding: 12px 35px;
@@ -934,19 +929,18 @@ form{
 .features .card h3 {
   margin-bottom: 5px;
   font-size: 26px;
-  color: var(--plava);
+  color: var(--text);
 }
 .features .card p {
   font-size: 1.4rem;
-  color: #51558a;
+  color: var(--text2);
 }
 
 /*---------------FOOTER---------------*/
 .footer {
   display: flex;
   flex-direction: column;
-  background-color: #313131;
-  background-image: url("images/footer-bg.png");
+  background-image: url("images/footer-bg.png"), var(--hero);
   color: #fff;
   padding: 60px 0 0 0;
 }
