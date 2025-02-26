@@ -38,7 +38,6 @@ window.addEventListener("load", function() {
   }
 });
 
-
 //#endregion
 
 //#region - SKROLL
@@ -47,57 +46,46 @@ if (window.location.pathname === '/index.html' || window.location.pathname === '
   const sections = document.querySelectorAll('section');
   const totalSections = sections.length;
   let isScrolling = false;
+  let lastScrollTime = 0;
+  const debounceDelay = 800;
 
   function scrollToSection(index) {
-    if (index >= 0 && index < totalSections) {
-      sections[index].scrollIntoView({ behavior: 'smooth' });
-      currentSection = index;
-    }
+      if (index >= 0 && index < totalSections && !isScrolling) {
+          isScrolling = true;
+          sections[index].scrollIntoView({ behavior: 'smooth' });
+          currentSection = index;
+          setTimeout(() => isScrolling = false, debounceDelay);
+      }
   }
 
-  // Debouncing za skrolovanje
-  function debounceScroll(callback, delay = 500) {
-    if (isScrolling) return;
-    isScrolling = true;
-    callback();
-    setTimeout(() => {
-      isScrolling = false;
-    }, delay);
+  function debounceScroll(direction) {
+      const now = Date.now();
+      if (now - lastScrollTime < debounceDelay || isScrolling) return;
+      lastScrollTime = now;
+      direction === 'down' && currentSection < totalSections - 1 ? scrollToSection(currentSection + 1) :
+      direction === 'up' && currentSection > 0 ? scrollToSection(currentSection - 1) : null;
   }
 
-  // Detekcija skrolovanja mišem
-  window.addEventListener('wheel', (event) => {
-    debounceScroll(() => {
-      if (event.deltaY > 0 && currentSection < totalSections - 1) {
-        scrollToSection(currentSection + 1);
-      } else if (event.deltaY < 0 && currentSection > 0) {
-        scrollToSection(currentSection - 1);
-      }
-    });
-  });
+  window.addEventListener('wheel', e => { e.preventDefault(); debounceScroll(e.deltaY > 0 ? 'down' : 'up'); }, { passive: false });
+  
+  document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(link.getAttribute('href').substring(1));
+      if (target) scrollToSection(Array.from(sections).indexOf(target));
+  }));
 
-  // Ažuriranje currentSection pri kliku na link
-  document.querySelectorAll('a[href^="#"]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-      const targetId = link.getAttribute('href').substring(1);
-      const targetSection = document.getElementById(targetId);
+  const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => entry.isIntersecting && !isScrolling && (currentSection = Array.from(sections).indexOf(entry.target)));
+  }, { root: null, threshold: 0.6 });
 
-      if (targetSection) {
-        event.preventDefault();
-        const index = Array.from(sections).indexOf(targetSection);
-        scrollToSection(index);
-      }
-    });
-  });
+  sections.forEach(section => observer.observe(section));
 
-  // Ažuriranje currentSection pri manuelnom skrolovanju
-  window.addEventListener('scroll', () => {
-    sections.forEach((section, index) => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
-        currentSection = index;
-      }
-    });
+  let touchStartY = 0;
+  window.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
+  window.addEventListener('touchmove', e => {
+      const deltaY = touchStartY - e.touches[0].clientY;
+      debounceScroll(deltaY > 0 ? 'down' : 'up');
+      touchStartY = e.touches[0].clientY;
   });
 }
 
@@ -140,17 +128,9 @@ document.querySelector('#backToTop').onclick = () => {
 
 //#region - SHARE
 function sharePost() {
-  const url = window.location.href;
-  const title = document.title;
-
-  if (navigator.share) {
-    navigator.share({
-      title: title,
-      url: url
-    }).catch((error) => console.log('Greska u deljenju: ', error));
-  } else {
-    alert('Deljenje nije podržano na ovom uređaju ili pretraživaču.');
-  }
+  const shareData = { title: document.title, url: window.location.href };
+  navigator.share ? navigator.share(shareData).catch(err => console.error('Share error:', err)) :
+  alert('Deljenje nije podržano na ovom uređaju ili pretraživaču.');
 }
 
 //#endregion
@@ -224,97 +204,79 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  // Preporučeni postovi će biti uzeti iz objekta 'posts'
   const recommendedPostIds = [2, 3, 4];
-  const postId = getQueryParam('id');
+  const postId = new URLSearchParams(window.location.search).get('id');
 
   if (postId && posts[postId]) {
-    const post = posts[postId];
-    document.querySelector('.post-title').innerText = post.title;
-    document.querySelector('.post-meta time').innerText = post.date;
-    document.querySelector('.post-content p').innerText = post.content;
-
-    const postImage = document.querySelector('#post-image');
-    if (postImage) {
-      postImage.setAttribute('src', post.image);
-      postImage.setAttribute('alt', post.title);
-    }
+      const post = posts[postId];
+      document.querySelector('.post-title').textContent = post.title;
+      document.querySelector('.post-meta time').textContent = post.date;
+      document.querySelector('.post-content p').textContent = post.content;
+      const postImage = document.querySelector('#post-image');
+      if (postImage) {
+          postImage.src = post.image;
+          postImage.alt = post.title;
+      }
   } else {
-    document.querySelector('.post').innerHTML = "<p>Post nije pronađen!</p>";
+      document.querySelector('.post').innerHTML = "<p>Post nije pronađen!</p>";
   }
 
-  // Dinamičko generisanje preporučenih postova
   const recommendedContainer = document.querySelector('.recommended-posts');
-  recommendedPostIds.forEach((id) => {
-    const post = posts[id];
-    const card = document.createElement('div');
-    card.classList.add('blog-card');
-    card.innerHTML = `
-      <a href="postovi.html?id=${id}">
-      <img src="${post.image}" alt="${post.title}">
-      <h3>${post.title}</h3>
-      </a>
-      `;
-    recommendedContainer.appendChild(card);
+  recommendedPostIds.forEach(id => {
+      const post = posts[id];
+      recommendedContainer.insertAdjacentHTML('beforeend', `
+          <div class="blog-card">
+              <a href="postovi.html?id=${id}">
+                  <img src="${post.image}" alt="${post.title}">
+                  <h3>${post.title}</h3>
+              </a>
+          </div>
+      `);
   });
 });
 
 //#endregion
 
 //#region - TESTIMONIAL
-const prevBtn = document.getElementById('prevTestimonial');
-const nextBtn = document.getElementById('nextTestimonial');
 const testimonials = document.querySelectorAll('.testimonial-item');
 let currentTestimonialIndex = 0;
 
 function showTestimonial(index) {
-  testimonials.forEach((testimonial, i) => {
-    testimonial.classList.remove('active');
-    if (i === index) {
-      testimonial.classList.add('active');
-    }
-  });
+    testimonials.forEach((item, i) => item.classList.toggle('active', i === index));
 }
 
-prevBtn.addEventListener('click', () => {
-  currentTestimonialIndex = (currentTestimonialIndex === 0) ? testimonials.length - 1 : currentTestimonialIndex - 1;
-  showTestimonial(currentTestimonialIndex);
+document.getElementById('prevTestimonial')?.addEventListener('click', () => {
+    currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonials.length) % testimonials.length;
+    showTestimonial(currentTestimonialIndex);
 });
 
-nextBtn.addEventListener('click', () => {
-  currentTestimonialIndex = (currentTestimonialIndex === testimonials.length - 1) ? 0 : currentTestimonialIndex + 1;
-  showTestimonial(currentTestimonialIndex);
+document.getElementById('nextTestimonial')?.addEventListener('click', () => {
+    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+    showTestimonial(currentTestimonialIndex);
 });
 
-// Auto slider for testimonials
 setInterval(() => {
-  currentTestimonialIndex = (currentTestimonialIndex === testimonials.length - 1) ? 0 : currentTestimonialIndex + 1;
-  showTestimonial(currentTestimonialIndex);
+    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+    showTestimonial(currentTestimonialIndex);
 }, 10000);
-
-//#endregion
+// #endregion
 
 //#region - RADOVI
 function togglePlay(btn) {
-  const video = btn.closest('.video-card').querySelector('video');
+  const video = btn.closest('.video-card')?.querySelector('video');
   const icon = btn.querySelector('ion-icon');
-  if (video.paused) {
-      video.play();
-      icon.setAttribute('name', 'pause-outline');  // Zamenjujemo ikonu u pause
-  } else {
-      video.pause();
-      icon.setAttribute('name', 'play-outline');   // Zamenjujemo ikonu u play
+  if (video) {
+      video.paused ? video.play() : video.pause();
+      icon?.setAttribute('name', video.paused ? 'play-outline' : 'pause-outline');
   }
 }
 
 function toggleMute(btn) {
-  const video = btn.closest('.video-card').querySelector('video');
+  const video = btn.closest('.video-card')?.querySelector('video');
   const icon = btn.querySelector('ion-icon');
-  video.muted = !video.muted;
-  if (video.muted) {
-      icon.setAttribute('name', 'volume-mute-outline');  // Zamenjujemo ikonu u mute
-  } else {
-      icon.setAttribute('name', 'volume-high-outline');  // Zamenjujemo ikonu u unmute
+  if (video) {
+      video.muted = !video.muted;
+      icon?.setAttribute('name', video.muted ? 'volume-mute-outline' : 'volume-high-outline');
   }
 }
 
