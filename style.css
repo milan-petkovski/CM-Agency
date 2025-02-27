@@ -212,7 +212,7 @@ header.active ul li a:hover {
 .hero {
   display: grid;
   place-items: center;
-  background-image: url("images/hero-bg.png"), url("images/hero-bg-bottom.png"), var(--hero);
+  background-image: url("images/ilustaracije/hero-bg.png"), url("images/ilustaracije/hero-bg-bottom.png"), var(--hero);
   background-size: cover, contain, cover;
   background-position: center top, center bottom, center;
   background-repeat: no-repeat, no-repeat, no-repeat;  
@@ -946,7 +946,7 @@ form{
 .footer {
   display: flex;
   flex-direction: column;
-  background-image: url("images/footer-bg.png"), var(--hero);
+  background-image: url("images/ilustaracije/footer-bg.png"), var(--hero);
   color: #fff;
   padding: 60px 0 0 0;
 }
