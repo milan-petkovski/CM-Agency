@@ -4,13 +4,11 @@ window.addEventListener("scroll", function() {
   const logo = document.querySelector(".logo");
   
   if (window.scrollY > 50) {
-      // Ako je stranica pomerena više od 50px, postavljamo crnu pozadinu i crni tekst
       header.classList.add("active");
       header.classList.remove("inactive");
       logo.classList.add("active");
       logo.classList.remove("inactive");
   } else {
-      // Ako nije pomereno više od 50px, postavljamo belu pozadinu i tamni tekst
       header.classList.add("inactive");
       header.classList.remove("active");
       logo.classList.add("inactive");
@@ -24,13 +22,11 @@ window.addEventListener("load", function() {
   const logo = document.querySelector(".logo");
 
   if (window.scrollY > 50) {
-      // Ako je stranica već pomerena pri učitavanju, postavljamo crnu pozadinu i crni tekst
       header.classList.add("active");
       header.classList.remove("inactive");
       logo.classList.add("active");
       logo.classList.remove("inactive");
   } else {
-      // Inače ostavljamo početno stanje sa belom pozadinom
       header.classList.add("inactive");
       header.classList.remove("active");
       logo.classList.add("inactive");
@@ -40,53 +36,85 @@ window.addEventListener("load", function() {
 
 //#endregion
 
+//#region - HEADER RESPONSIVE
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('header ul');
+  
+    hamburger.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      // Toggle hamburger icon between menu and close
+      const icon = hamburger.querySelector('ion-icon');
+      icon.setAttribute('name', navMenu.classList.contains('active') ? 'close-outline' : 'menu-outline');
+    });
+  
+    // Close menu when clicking a link (optional)
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        hamburger.querySelector('ion-icon').setAttribute('name', 'menu-outline');
+      });
+    });
+});
+
+//#endregion
+
 //#region - SKROLL
-if (window.location.pathname === '/index.html' || window.location.pathname === '/') {
-  let currentSection = 0;
-  const sections = document.querySelectorAll('section');
-  const totalSections = sections.length;
-  let isScrolling = false;
-  let lastScrollTime = 0;
-  const debounceDelay = 800;
+if (window.innerWidth > 768) {
+  if (window.location.pathname === '/index.html' || window.location.pathname === '/') {
+    let currentSection = 0;
+    const sections = document.querySelectorAll('section');
+    const totalSections = sections.length;
+    let isScrolling = false;
+    let lastScrollTime = 0;
+    const debounceDelay = 800;
 
-  function scrollToSection(index) {
+    function scrollToSection(index) {
       if (index >= 0 && index < totalSections && !isScrolling) {
-          isScrolling = true;
-          sections[index].scrollIntoView({ behavior: 'smooth' });
-          currentSection = index;
-          setTimeout(() => isScrolling = false, debounceDelay);
+        isScrolling = true;
+        sections[index].scrollIntoView({ behavior: 'smooth' });
+        currentSection = index;
+        setTimeout(() => isScrolling = false, debounceDelay);
       }
-  }
+    }
 
-  function debounceScroll(direction) {
+    function debounceScroll(direction) {
       const now = Date.now();
       if (now - lastScrollTime < debounceDelay || isScrolling) return;
       lastScrollTime = now;
       direction === 'down' && currentSection < totalSections - 1 ? scrollToSection(currentSection + 1) :
       direction === 'up' && currentSection > 0 ? scrollToSection(currentSection - 1) : null;
-  }
+    }
 
-  window.addEventListener('wheel', e => { e.preventDefault(); debounceScroll(e.deltaY > 0 ? 'down' : 'up'); }, { passive: false });
-  
-  document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', e => {
+    // Wheel scrolling (desktop only)
+    window.addEventListener('wheel', e => { 
+      e.preventDefault(); 
+      debounceScroll(e.deltaY > 0 ? 'down' : 'up'); 
+    }, { passive: false });
+
+    // Smooth scrolling for anchor links (desktop only)
+    document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', e => {
       e.preventDefault();
       const target = document.getElementById(link.getAttribute('href').substring(1));
       if (target) scrollToSection(Array.from(sections).indexOf(target));
-  }));
+    }));
 
-  const observer = new IntersectionObserver(entries => {
+    // Intersection Observer to track current section (desktop only)
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => entry.isIntersecting && !isScrolling && (currentSection = Array.from(sections).indexOf(entry.target)));
-  }, { root: null, threshold: 0.6 });
+    }, { root: null, threshold: 0.6 });
 
-  sections.forEach(section => observer.observe(section));
+    sections.forEach(section => observer.observe(section));
 
-  let touchStartY = 0;
-  window.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
-  window.addEventListener('touchmove', e => {
+    // Touch scrolling (desktop only, though rare)
+    let touchStartY = 0;
+    window.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
+    window.addEventListener('touchmove', e => {
       const deltaY = touchStartY - e.touches[0].clientY;
       debounceScroll(deltaY > 0 ? 'down' : 'up');
       touchStartY = e.touches[0].clientY;
-  });
+    });
+  }
 }
 
 //#endregion
