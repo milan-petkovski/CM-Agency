@@ -39,9 +39,11 @@ body {
   --text: #333333;
   --text2:#919191;
   --text3:#808080;
+  --text4: #a0a0a0;
   --crvena:#de201d;
   --border:#b8b8b8;
   --hover: #af0b0b;
+  --neda: transparent;
 
   --hero: linear-gradient(135deg, #1c1c1c, #383838);
   --gradient: linear-gradient(135deg, #de201d, #86201e);
@@ -54,7 +56,9 @@ body.dark-mode {
   --text: #ffffff;
   --text2: #dfdfdf;
   --text3: #dfdfdf;
+  --text4: #a0a0a0;
   --border: #686868;
+  --neda: #1c1c1c;
 
   --hero: #fff;
 }
@@ -242,7 +246,7 @@ header.active ul li a:hover {
   margin-block-end: 20px;
 }
 .hero #text {
-  color: var(--text2);
+  color: var(--text4);
   font-size: 1.5rem;
   margin-block-end: 30px;
 }
@@ -408,6 +412,7 @@ header.active ul li a:hover {
 .usluge .card {
   padding: 20px;
   border-radius: 12px;
+  background-color: var(--neda);
   box-shadow: 0 6px 25px 2px rgba(100, 100, 100, 0.1);
   transition: transform 0.4s, box-shadow 0.4s;
   opacity: 0;
@@ -556,7 +561,7 @@ header.active ul li a:hover {
   padding: 50px 0;
 }
 .testimonial .container {
-  background-color: var(--pozadina);
+  background-color: var(--neda);
   box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.1);
   padding: 20px;
   display: flex;
@@ -699,107 +704,6 @@ header.active ul li a:hover {
   }
 }
 
-/*----------------BLOG----------------*/
-.blog {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  padding: 50px 0;
-}
-.blog .content{
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-}
-.blog-list {
-  display: grid;
-  gap: 15px;
-  grid-template-columns: 1fr 1fr;
-}
-.blog-card {
-  display: grid;
-  justify-content: space-between;
-  grid-template-columns: 0.75fr 1fr;
-  background-color: var(--pozadina);
-  gap: 20px;
-  padding: 20px;
-  box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-}
-.blog .banner img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.blog-card .banner {
-  border-radius: 12px;
-  overflow: hidden;
-}
-.blog-card .banner img {
-  transition: 0.35s ease;
-}
-.blog-card .banner video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: 0.35s ease;
-  border-radius: 12px;
-}
-.blog-card .banner a:is(:hover, :focus) video,
-.blog-card .banner a:is(:hover, :focus) img {
-  transform: scale(1.1);
-}
-.blog-card p{
-  color: var(--text3);
-}
-.blog-card a {
-  color: var(--crvena);
-  font-size: 20px;
-  font-weight: 800;
-  line-height: 1.2;
-  transition: 0.3s;
-}
-.blog-card a:is(:hover, :focus) {
-  color: var(--hover);
-}
-.blog-card .meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  font-size: 1.5rem;
-  color: var(--text);
-  font-weight: 500;
-  padding-bottom: 10px;
-}
-.blog-card .meta ion-icon {
-  color: var(--crvena);
-  font-size: 22px;
-  --ionicon-stroke-width: 35px;
-}
-.publish-date,
-.share {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: transparent;
-}
-.blog #view{
-  background-image: var(--gradient2);
-  background-size: 200%;
-  color: #fff;
-  margin: 2% auto;
-  font-weight: 700;
-  padding: 12px 35px;
-  box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  transition: 0.3s;
-}
-.blog #view:is(:hover, :focus) { 
-  color: #fff;
-  transform: translateY(1px);
-  background-position: right;
-}
 /*--------------CONTACT---------------*/
 .contact-form{
   display: flex;
@@ -808,7 +712,7 @@ header.active ul li a:hover {
 }
 form{
   width: 1200px;  
-  background-color: var(--pozadina);
+  background-color: var(--neda);
   box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 12px;
@@ -889,6 +793,108 @@ form{
 }
 .contact-form button:hover {
   color: #fff;
+  background-position: right;
+}
+
+/*----------------BLOG----------------*/
+.blog {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 50px 0;
+}
+.blog .content{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.blog-list {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: 1fr 1fr;
+}
+.blog-card {
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: 0.75fr 1fr;
+  background-color: var(--neda);
+  gap: 20px;
+  padding: 20px;
+  box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+.blog .banner img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.blog-card .banner {
+  border-radius: 12px;
+  overflow: hidden;
+}
+.blog-card .banner img {
+  transition: 0.35s ease;
+}
+.blog-card .banner video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.35s ease;
+  border-radius: 12px;
+}
+.blog-card .banner a:is(:hover, :focus) video,
+.blog-card .banner a:is(:hover, :focus) img {
+  transform: scale(1.1);
+}
+.blog-card p{
+  color: var(--text3);
+}
+.blog-card a {
+  color: var(--crvena);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+  transition: 0.3s;
+}
+.blog-card a:is(:hover, :focus) {
+  color: var(--hover);
+}
+.blog-card .meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  font-size: 1.5rem;
+  color: var(--text);
+  font-weight: 500;
+  padding-bottom: 10px;
+}
+.blog-card .meta ion-icon {
+  color: var(--crvena);
+  font-size: 22px;
+  --ionicon-stroke-width: 35px;
+}
+.publish-date,
+.share {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+}
+.blog #view{
+  background-image: var(--gradient2);
+  background-size: 200%;
+  color: #fff;
+  margin: 2% auto;
+  font-weight: 700;
+  padding: 12px 35px;
+  box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  transition: 0.3s;
+}
+.blog #view:is(:hover, :focus) { 
+  color: #fff;
+  transform: translateY(1px);
   background-position: right;
 }
 
