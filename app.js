@@ -271,6 +271,46 @@ function searchList() {
     counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
 }
 
+function showCategories() {
+    const contentSection = document.getElementById("content");
+    const categoryView = document.getElementById("kategorije");
+    const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
+
+    // Sakrij glavni sadržaj uključujući elemente sa klasom "gore"
+    mainContent.forEach(element => element.classList.add("hidden"));
+    
+    // Prikazivanje samo kategorija
+    categoryView.classList.remove("hidden");
+
+    // Učitaj kategorije
+    fetch("kategorije.json")
+        .then(response => response.json())
+        .then(data => {
+            const categoryOnlyList = document.getElementById("klist");
+            categoryOnlyList.innerHTML = "";
+
+            data.forEach(category => {
+                const li = document.createElement("li");
+                li.textContent = category;
+                categoryOnlyList.appendChild(li);
+            });
+        })
+        .catch(error => console.error("Greška pri učitavanju kategorija:", error));
+}
+
+function backToMain() {
+    const contentSection = document.getElementById("content");
+    const categoryView = document.getElementById("kategorije");
+    // Dodaj klasu "gore" u selektor elemenata koji se vraćaju
+    const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
+
+    // Prikazivanje glavnog sadržaja uključujući elemente sa klasom "gore"
+    mainContent.forEach(element => element.classList.remove("hidden"));
+    
+    // Sakrij kategorije
+    categoryView.classList.add("hidden");
+}
+
 function disableDevTools() {
     document.onkeydown = (e) => {
         // Onemogućava F12

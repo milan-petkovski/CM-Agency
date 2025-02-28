@@ -27,7 +27,7 @@ body {
 }
 ::-webkit-scrollbar {
   width: 6px;
-  background-color: var(--bela);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 30px;
@@ -1530,22 +1530,25 @@ form{
   border-radius: 15px;
   text-align: center;
 }
-.portal #log h2{
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 600;
-}
 .portal h2 {
-  margin: 10px 0 5px;
+  margin: 10px 0 5px 0;
 }
-.portal p,
-.portal a {
+.portal #lista{
+  margin-bottom: 0px;
+}
+.portal #log h2{
+  margin-bottom: 10px;
+}
+.portal p, .portal .gore a{
+  font-size: 13px;
+  color: var(--border);
+}
+.portal a{
   font-size: 12px;
-  color: white;
-  transition: 0.3s;
+  color: var(--bela);
 }
-.portal a:hover {
-  color: #e40f0f;
+.portal a:hover{
+  color: var(--crvena);
 }
 .portal button {
   width: 100%;
@@ -1594,40 +1597,52 @@ form{
   padding: 0;
   max-height: 190px;
   overflow-y: auto;
+  padding: 0 3px 0 0;
 }
 .portal ul li {
   background: #2a2a2a;
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 6px 8px;
-  margin: 5px 0;
+  font-size: 13px;
+  margin-bottom: 5px;
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: background 0.3s ease;
 }
+.portal ul li:hover {
+  background: #3a3a3a;
+}
 .portal .delete {
   display: flex;
   justify-content: center;
   align-items: center;
   background: #e40f0f;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   font-size: 14px;
-  transition: background 0.3s ease;
+  transition: 0.3s;
 }
 .portal .delete:hover {
+  transform: scale(1);
   background: #b80c0c;
 }
 .portal #filterCategoryInput {
   margin-top: 5px;
 }
+.portal #kategorije ul#klist {
+  max-height: 505px;
+}
 @media (max-width: 480px) {
   .portal {
     overflow-y: hidden;
     width: 90%;
-    padding: 0 10px 10px 10px;
+    padding: 5px 10px 10px 10px;
+  }
+  .portal .gore a{
+    font-size: 10px;
   }
   .portal h2 {
     font-size: 20px;
