@@ -17,7 +17,6 @@ app.get("/", (req, res) => {
     const serverInfo = {
         status: "Server radi!",
         timestamp: new Date().toISOString(),
-        version: APP_VERSION,
         itemsCount: items.length,
         uptime: (process.uptime() / 60).toFixed(2) + " minuta", // Pretvorili smo sekunde u minute
         memoryUsage: (process.memoryUsage().rss / 1024 / 1024).toFixed(2) + " MB",
