@@ -36,47 +36,8 @@ app.get("/", (req, res) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CM Agency Server Status</title>
+    <title></title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1c1c1c, #383838);
-            color: #fff;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container {
-            max-width: 600px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-        }
-        h1 {
-            font-family: 'Source Sans Pro', sans-serif;
-            font-size: 2.4rem;
-            color: #de201d;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: linear-gradient(to bottom, #de201d 50%, transparent 50%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            text-shadow: 2px 2px 0 #ffffff, 3px 3px 0 #de201d;
-        }
         .info {
             margin-bottom: 15px;
             font-size: 1.4rem;
@@ -135,22 +96,19 @@ app.get("/", (req, res) => {
 </head>
 <body>
     <div class="container">
-        <h1>CM Agency Server Status</h1>
-        <div class="info"><strong>Status:</strong> ${serverInfo.status}</div>
-        <div class="info"><strong>Vreme:</strong> ${new Date(serverInfo.timestamp).toLocaleString()}</div>
-        <div class="info"><strong>Verzija:</strong> ${serverInfo.version}</div>
-        <div class="info"><strong>Broj stavki:</strong> ${serverInfo.itemsCount}</div>
-        <div class="info"><strong>Vreme rada:</strong> ${serverInfo.uptime}</div>
-        <div class="info"><strong>Memorijska upotreba:</strong> ${serverInfo.memoryUsage}</div>
-        <div class="info"><strong>Port:</strong> ${serverInfo.serverPort}</div>
+        <div class="info"><strong>Status:</strong>${serverInfo.status}</div>
+        <div class="info"><strong>Vreme:</strong>${new Date(serverInfo.timestamp).toLocaleString()}</div>
+        <div class="info"><strong>Broj stavki:</strong>${serverInfo.itemsCount}</div>
+        <div class="info"><strong>Vreme rada:</strong>${serverInfo.uptime}</div>
+        <div class="info"><strong>Port:</strong>${serverInfo.serverPort}</div>
         <div class="endpoints">
             <h2>Dostupni endpointovi</h2>
             <ul>
-                <li>${serverInfo.endpoints.login}</li>
-                <li>${serverInfo.endpoints.items}</li>
-                <li>${serverInfo.endpoints.add}</li>
-                <li>${serverInfo.endpoints.delete}</li>
-                <li>${serverInfo.endpoints.download}</li>
+                <li> ${serverInfo.endpoints.login}</li>
+                <li> ${serverInfo.endpoints.items}</li>
+                <li> ${serverInfo.endpoints.add}</li>
+                <li> ${serverInfo.endpoints.delete}</li>
+                <li> ${serverInfo.endpoints.download}</li>
             </ul>
         </div>
     </div>
