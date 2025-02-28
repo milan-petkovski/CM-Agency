@@ -18,14 +18,14 @@ app.get("/", (req, res) => {
         status: "Server radi!",
         timestamp: new Date().toISOString(),
         itemsCount: items.length,
-        uptime: (process.uptime() / 60).toFixed(2) + " minuta", // Pretvorili smo sekunde u minute
+        uptime: process.uptime().toFixed(2) + " sekundi",
         memoryUsage: (process.memoryUsage().rss / 1024 / 1024).toFixed(2) + " MB",
         endpoints: {
-            login: "/login (POST) - Prijava korisnika",
-            items: "/items (GET) - Preuzimanje svih stavki",
-            add: "/add (POST) - Dodavanje nove stavke",
-            delete: "/delete/:item (DELETE) - Brisanje stavke",
-            download: "/download (GET) - Preuzimanje liste kao tekstualnog fajla"
+            login: " /login (POST) - Prijava korisnika",
+            items: " /items (GET) - Preuzimanje svih stavki",
+            add: " /add (POST) - Dodavanje nove stavke",
+            delete: " /delete/:item (DELETE) - Brisanje stavke",
+            download: " /download (GET) - Preuzimanje liste kao tekstualnog fajla"
         },
         serverPort: PORT
     };
