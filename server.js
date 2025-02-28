@@ -38,11 +38,6 @@ app.get("/", (req, res) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <style>
-        a{
-            color: #fff;
-            font-size: 1.4rem;
-            margin: 0 0 10px 0;
-        }
         .info {
             margin-bottom: 15px;
             font-size: 1.4rem;
@@ -98,7 +93,6 @@ app.get("/", (req, res) => {
 </head>
 <body>
     <div class="container">
-        <a href="https://cmagency.onrender.com">Pogledaj online</a>
         <div class="info"><strong>Status:</strong>${serverInfo.status}</div>
         <div class="info"><strong>Vreme:</strong>${new Date(serverInfo.timestamp).toLocaleString()}</div>
         <div class="info"><strong>Broj stavki:</strong>${serverInfo.itemsCount}</div>
