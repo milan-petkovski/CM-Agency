@@ -1,6 +1,28 @@
 const API_URL = "https://cmagency.onrender.com";
 
-document.addEventListener("DOMContentLoaded", checkAuth);
+document.addEventListener("DOMContentLoaded", () => {
+    checkAuth();
+
+    const notepadTextarea = document.getElementById("notepadContent");
+    if (notepadTextarea) {
+        notepadTextarea.addEventListener("input", async () => {
+            const content = notepadTextarea.value;
+            try {
+                const response = await fetch(`${API_URL}/notepad`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ content })
+                });
+                const data = await response.json();
+                if (!data.success) {
+                    console.error("Greška pri čuvanju notepad-a:", data.message);
+                }
+            } catch (error) {
+                console.error("Greška pri slanju notepad sadržaja:", error);
+            }
+        });
+    }
+});
 
 function checkAuth() {
     const user = localStorage.getItem("user");
@@ -339,29 +361,6 @@ async function showNotepad() {
         mainContent.forEach(element => element.classList.remove("hidden"));
     }
 }
-
-// Save notepad content to server on input
-document.addEventListener("DOMContentLoaded", () => {
-    const notepadTextarea = document.getElementById("notepadContent");
-    if (notepadTextarea) {
-        notepadTextarea.addEventListener("input", async () => {
-            const content = notepadTextarea.value;
-            try {
-                const response = await fetch(`${API_URL}/notepad`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ content })
-                });
-                const data = await response.json();
-                if (!data.success) {
-                    console.error("Greška pri čuvanju notepad-a:", data.message);
-                }
-            } catch (error) {
-                console.error("Greška pri slanju notepad sadržaja:", error);
-            }
-        });
-    }
-});
 
 async function showIframe() {
     const contentSection = document.getElementById("content");
