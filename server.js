@@ -168,6 +168,14 @@ const users = [
 ];
 
 // Login - Provera korisničkog imena i lozinke
+app.get("/login", (req, res) => {
+    res.status(405).json({ 
+        success: false, 
+        message: "Method Not Allowed. Use POST to log in." 
+    });
+});
+
+// Existing POST /login endpoint
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
     const user = users.find(u => u.username === username);
@@ -179,11 +187,10 @@ app.post("/login", (req, res) => {
     let message = null;
     if (username === "luka") {
         const loginTracker = loadLoginTracker();
-        const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+        const today = new Date().toISOString().split("T")[0];
         const lastLogin = loginTracker.luka?.lastLoginDate || "1970-01-01";
 
         if (lastLogin !== today) {
-            // First login of the day for Luka
             message = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
             loginTracker.luka = { lastLoginDate: today };
             saveLoginTracker(loginTracker);

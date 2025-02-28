@@ -63,6 +63,9 @@ function login() {
         if (data.success) {
             localStorage.setItem("user", username);
             checkAuth();
+            if (username === "luka" && data.motivationalMessage) {
+                showMotivationalMessage(data.motivationalMessage);
+            }
         } else {
             alert(data.message || "Pogrešno korisničko ime ili lozinka");
         }
@@ -397,9 +400,6 @@ async function backToMain() {
     const notepadView = document.getElementById("notepad");
     const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
 
-    console.log("Starting backToMain...");
-    console.log("Notepad visible before hiding:", !notepadView.classList.contains("hidden"));
-
     try {
         // Fetch items to update the main list
         const response = await fetch(`${API_URL}/items`);
@@ -411,28 +411,20 @@ async function backToMain() {
             throw new Error("Neuspešno učitavanje stavki: " + data.message);
         }
 
-        // Hide all secondary views explicitly
-        console.log("Hiding secondary views...");
         categoryView.classList.add("hidden");
         iframeView.classList.add("hidden");
         notepadView.classList.add("hidden");
-
-        // Log the state after hiding
-        console.log("Notepad hidden:", notepadView.classList.contains("hidden"));
 
         // Wait for DOM to update
         await new Promise(resolve => requestAnimationFrame(() => resolve()));
 
         // Show main content
-        console.log("Showing main content...");
         contentSection.classList.remove("hidden");
         mainContent.forEach(element => {
             element.classList.remove("hidden");
         });
 
-        console.log("Main content visible:", !contentSection.classList.contains("hidden"));
     } catch (error) {
-        console.error("Greška u backToMain:", error);
         // Revert to the previous visible view if there’s an error
         if (!categoryView.classList.contains("hidden")) {
             categoryView.classList.remove("hidden");
