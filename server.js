@@ -8,34 +8,9 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 const filePath = "items.json";
 const notepadFilePath = "notepad.json";
-const loginTrackerPath = "loginTracker.json";
 
 app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
 app.use(bodyParser.json());
-
-const motivationalMessages = [
-    "Svaki dan je nova prilika za uspeh, Luka!",
-    "Tvoj trud danas vodi ka velikim stvarima sutra, Luka!",
-    "Veruj u sebe, Luka, jer ti to možeš!",
-    "Mali koraci vode ka velikim ciljevima, Luka!",
-    "Danas je tvoj dan da zablistaš, Luka!"
-];
-
-// Load login tracker
-const loadLoginTracker = () => {
-    try {
-        if (!fs.existsSync(loginTrackerPath)) fs.writeFileSync(loginTrackerPath, JSON.stringify({}));
-        return JSON.parse(fs.readFileSync(loginTrackerPath, "utf8"));
-    } catch (error) {
-        console.error("Greška pri učitavanju loginTracker.json:", error);
-        return {};
-    }
-};
-
-// Save login tracker
-const saveLoginTracker = (tracker) => {
-    fs.writeFileSync(loginTrackerPath, JSON.stringify(tracker, null, 2));
-};
 
 // Provera da li server radi
 app.get("/", (req, res) => {
@@ -169,36 +144,12 @@ const users = [
 ];
 
 // Login - Provera korisničkog imena i lozinke
-app.get("/login", (req, res) => {
-    res.status(405).json({ 
-        success: false, 
-        message: "Method Not Allowed. Use POST to log in." 
-    });
-});
-
-// Existing POST /login endpoint
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
     const user = users.find(u => u.username === username);
-
-    if (!user || !bcrypt.compareSync(password, user.password)) {
-        return res.status(401).json({ success: false, message: "Pogrešno korisničko ime ili lozinka" });
-    }
-
-    let message = null;
-    if (username === "luka") {
-        const loginTracker = loadLoginTracker();
-        const today = new Date().toISOString().split("T")[0];
-        const lastLogin = loginTracker.luka?.lastLoginDate || "1970-01-01";
-
-        if (lastLogin !== today) {
-            message = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
-            loginTracker.luka = { lastLoginDate: today };
-            saveLoginTracker(loginTracker);
-        }
-    }
-
-    res.json({ success: true, motivationalMessage: message });
+    return user && bcrypt.compareSync(password, user.password)
+        ? res.json({ success: true })
+        : res.status(401).json({ success: false, message: "Pogrešno korisničko ime ili lozinka" });
 });
 
 // Preuzimanje svih stavki
