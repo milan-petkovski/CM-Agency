@@ -1529,6 +1529,8 @@ form{
   padding: 5px 20px 10px 20px;
   border-radius: 15px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 .portal h2 {
   margin: 10px 0 5px 0;
@@ -1654,5 +1656,79 @@ form{
   }
   .portal a {
     font-size: 9px;
+  }
+}
+
+
+#server iframe {
+  width: 100%;
+  padding: 20px;
+  height: 505px;
+  color: #fff;
+}
+#server button {
+  width: 100% !important;
+}
+#server.hidden {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+#content:not(.hidden) {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+#content.hidden {
+  animation: slideOutLeft 0.3s ease-out forwards;
+}
+#kategorije:not(.hidden) {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+#kategorije.hidden {
+  animation: slideOutRight 0.3s ease-out forwards;
+}
+#server:not(.hidden) {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+#server.hidden {
+  animation: slideOutRight 0.3s ease-out forwards;
+}
+@keyframes slideOutLeft {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideOutRight {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

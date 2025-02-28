@@ -32,7 +32,7 @@
         <div class="gore">
             <a href="#" onclick="showCategories()">Kategorije</a> |
             <a href="https://facebook.com/ads/library" target="_blank">Ads library</a> |
-            <a href="https://cmagency.onrender.com" target="_blank">Server provera</a>
+            <a href="#" onclick="showIframe()">Server provera</a>
         </div>
         <!-- LEADS -->
         <h2>Dodaj leads</h2>
@@ -47,7 +47,7 @@
         <datalist id="filterCategoryList"></datalist>
         <button id="btn2" onclick="filterItems()">Filtriraj</button>
         <ul id="list">
-            <div id="loadingMessage"></div>
+            
         </ul>
         <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
         <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
@@ -57,13 +57,21 @@
     <div id="kategorije" class="hidden">
         <h2>Kategorije</h2>
         <ul id="klist">
-            <div id="loadingMessage"></div>
+
         </ul>
         <div class="button-group">
             <button id="btn3" onclick="backToMain()">Nazad</button>
             <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
         </div>
     </div>
+
+    <!--SERVER PROVERA-->
+    <div id="server" class="hidden">
+        <h2>Server provera</h2>
+        <iframe src="https://cmagency.onrender.com/" frameborder="0"></iframe>
+        <button id="btn3" onclick="backToMain()">Nazad</button>
+    </div>
+</div>
 </section>
 
 </div>

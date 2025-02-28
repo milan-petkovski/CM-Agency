@@ -271,44 +271,105 @@ function searchList() {
     counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
 }
 
-function showCategories() {
+async function showCategories() {
     const contentSection = document.getElementById("content");
     const categoryView = document.getElementById("kategorije");
     const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
 
-    // Sakrij glavni sadržaj uključujući elemente sa klasom "gore"
-    mainContent.forEach(element => element.classList.add("hidden"));
-    
-    // Prikazivanje samo kategorija
-    categoryView.classList.remove("hidden");
+    // Zadrži prethodni prikaz (npr. #content) dok se podaci ne učitaju
+    try {
+        // Ne sakrivaj #content odmah, čekaj dok se podaci ne učitaju
+        const response = await fetch("kategorije.json");
+        const data = await response.json();
 
-    // Učitaj kategorije
-    fetch("kategorije.json")
-        .then(response => response.json())
-        .then(data => {
-            const categoryOnlyList = document.getElementById("klist");
-            categoryOnlyList.innerHTML = "";
+        // Popuni kategorije
+        const categoryOnlyList = document.getElementById("klist");
+        categoryOnlyList.innerHTML = ""; // Očisti prethodni sadržaj
 
-            data.forEach(category => {
-                const li = document.createElement("li");
-                li.textContent = category;
-                categoryOnlyList.appendChild(li);
-            });
-        })
-        .catch(error => console.error("Greška pri učitavanju kategorija:", error));
+        data.forEach(category => {
+            const li = document.createElement("li");
+            li.textContent = category;
+            categoryOnlyList.appendChild(li);
+        });
+
+        // Sakrij prethodni prikaz i prikaži kategorije sa animacijom kada je DOM spreman
+        mainContent.forEach(element => element.classList.add("hidden"));
+        contentSection.classList.add("hidden");
+
+        await new Promise(resolve => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
+
+        categoryView.classList.remove("hidden");
+    } catch (error) {
+        console.error("Greška pri učitavanju kategorija:", error);
+        // Vrati se na prethodni prikaz (npr. #content) bez animacije
+        contentSection.classList.remove("hidden");
+        mainContent.forEach(element => element.classList.remove("hidden"));
+    }
 }
 
-function backToMain() {
+async function showIframe() {
     const contentSection = document.getElementById("content");
     const categoryView = document.getElementById("kategorije");
-    // Dodaj klasu "gore" u selektor elemenata koji se vraćaju
+    const iframeView = document.getElementById("server");
     const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
 
-    // Prikazivanje glavnog sadržaja uključujući elemente sa klasom "gore"
-    mainContent.forEach(element => element.classList.remove("hidden"));
-    
-    // Sakrij kategorije
-    categoryView.classList.add("hidden");
+    // Zadrži prethodni prikaz dok se iframe ne učita
+    try {
+        // Ne sakrivaj trenutni prikaz odmah, čekaj dok se iframe ne učita
+        // Simuliraj učitavanje sa malim kašnjenjem (300ms) za sigurnost
+        await new Promise(resolve => setTimeout(resolve, 300)); // Kratko kašnjenje
+
+        // Sakrij prethodni prikaz i prikaži iframe sa animacijom kada je DOM spreman
+        mainContent.forEach(element => element.classList.add("hidden"));
+        contentSection.classList.add("hidden");
+        categoryView.classList.add("hidden");
+
+        await new Promise(resolve => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
+
+        iframeView.classList.remove("hidden");
+    } catch (error) {
+        console.error("Greška pri učitavanju iframe-a:", error);
+        // Vrati se na prethodni prikaz (npr. #content ili #kategorije)
+        contentSection.classList.remove("hidden");
+        mainContent.forEach(element => element.classList.remove("hidden"));
+    }
+}
+
+async function backToMain() {
+    const contentSection = document.getElementById("content");
+    const categoryView = document.getElementById("kategorije");
+    const iframeView = document.getElementById("server");
+    const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
+
+    // Zadrži trenutni prikaz dok se podaci ne učitaju
+    try {
+        // Ne sakrivaj trenutni prikaz odmah, čekaj dok se podaci ne učitaju
+        const response = await fetch(`${API_URL}/items`);
+        const data = await response.json();
+
+        if (data.success) {
+            await updateList(data.items);
+        } else {
+            throw new Error("Neuspešno učitavanje stavki: " + data.message);
+        }
+
+        // Sakrij trenutni prikaz (kategorije ili iframe) i prikaži glavni sadržaj sa animacijom
+        categoryView.classList.add("hidden");
+        iframeView.classList.add("hidden");
+
+        await new Promise(resolve => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
+
+        contentSection.classList.remove("hidden");
+        mainContent.forEach(element => element.classList.remove("hidden"));
+    } catch (error) {
+        console.error("Greška:", error);
+        // Vrati se na prethodni prikaz (npr. #kategorije ili #server)
+        if (!categoryView.classList.contains("hidden")) {
+            categoryView.classList.remove("hidden");
+        } else if (!iframeView.classList.contains("hidden")) {
+            iframeView.classList.remove("hidden");
+        }
+    }
 }
 
 function disableDevTools() {

@@ -12,7 +12,25 @@ app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: 
 app.use(bodyParser.json());
 
 // Provera da li server radi
-app.get("/", (req, res) => res.send("Server radi!"));
+app.get("/", (req, res) => {
+    const items = loadItems();
+    const serverInfo = {
+        status: "Server radi!",
+        timestamp: new Date().toISOString(),
+        itemsCount: items.length,
+        itemsFileStatus: fs.existsSync(filePath) ? "Postoji i čitljiv" : "Ne postoji",
+        uptime: process.uptime() + " sekundi",
+        endpoints: {
+            login: "/login (POST) - Prijava korisnika",
+            items: "/items (GET) - Preuzimanje svih stavki",
+            add: "/add (POST) - Dodavanje nove stavke",
+            delete: "/delete/:item (DELETE) - Brisanje stavke",
+            download: "/download (GET) - Preuzimanje liste kao tekstualnog fajla"
+        },
+        serverPort: PORT
+    };
+    res.json(serverInfo);
+});
 
 // Učitavanje postojećih podataka iz items.json sa obradom grešaka
 const loadItems = () => {
