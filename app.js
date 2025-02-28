@@ -307,6 +307,62 @@ async function showCategories() {
     }
 }
 
+async function showNotepad() {
+    const contentSection = document.getElementById("content");
+    const categoryView = document.getElementById("kategorije");
+    const iframeView = document.getElementById("server");
+    const notepadView = document.getElementById("notepad");
+    const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
+
+    try {
+        // Hide other views
+        mainContent.forEach(element => element.classList.add("hidden"));
+        contentSection.classList.add("hidden");
+        categoryView.classList.add("hidden");
+        iframeView.classList.add("hidden");
+
+        await new Promise(resolve => requestAnimationFrame(() => resolve()));
+
+        notepadView.classList.remove("hidden");
+
+        // Fetch notepad content from server
+        const response = await fetch(`${API_URL}/notepad`);
+        const data = await response.json();
+        if (data.success) {
+            document.getElementById("notepadContent").value = data.content || "";
+        } else {
+            throw new Error("Neuspešno učitavanje notepad sadržaja");
+        }
+    } catch (error) {
+        console.error("Greška pri učitavanju notepad-a:", error);
+        contentSection.classList.remove("hidden");
+        mainContent.forEach(element => element.classList.remove("hidden"));
+    }
+}
+
+// Save notepad content to server on input
+document.addEventListener("DOMContentLoaded", () => {
+    const notepadTextarea = document.getElementById("notepadContent");
+    if (notepadTextarea) {
+        notepadTextarea.addEventListener("input", async () => {
+            const content = notepadTextarea.value;
+            try {
+                const response = await fetch(`${API_URL}/notepad`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ content })
+                });
+                const data = await response.json();
+                if (!data.success) {
+                    console.error("Greška pri čuvanju notepad-a:", data.message);
+                }
+            } catch (error) {
+                console.error("Greška pri slanju notepad sadržaja:", error);
+            }
+        });
+    }
+});
+
 async function showIframe() {
     const contentSection = document.getElementById("content");
     const categoryView = document.getElementById("kategorije");
@@ -339,11 +395,14 @@ async function backToMain() {
     const contentSection = document.getElementById("content");
     const categoryView = document.getElementById("kategorije");
     const iframeView = document.getElementById("server");
+    const notepadView = document.getElementById("notepad");
     const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
 
-    // Zadrži trenutni prikaz dok se podaci ne učitaju
+    console.log("Starting backToMain...");
+    console.log("Notepad visible before hiding:", !notepadView.classList.contains("hidden"));
+
     try {
-        // Ne sakrivaj trenutni prikaz odmah, čekaj dok se podaci ne učitaju
+        // Fetch items to update the main list
         const response = await fetch(`${API_URL}/items`);
         const data = await response.json();
 
@@ -353,21 +412,38 @@ async function backToMain() {
             throw new Error("Neuspešno učitavanje stavki: " + data.message);
         }
 
-        // Sakrij trenutni prikaz (kategorije ili iframe) i prikaži glavni sadržaj sa animacijom
+        // Hide all secondary views explicitly
+        console.log("Hiding secondary views...");
         categoryView.classList.add("hidden");
         iframeView.classList.add("hidden");
+        notepadView.classList.add("hidden");
 
-        await new Promise(resolve => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
+        // Log the state after hiding
+        console.log("Notepad hidden:", notepadView.classList.contains("hidden"));
 
+        // Wait for DOM to update
+        await new Promise(resolve => requestAnimationFrame(() => resolve()));
+
+        // Show main content
+        console.log("Showing main content...");
         contentSection.classList.remove("hidden");
-        mainContent.forEach(element => element.classList.remove("hidden"));
+        mainContent.forEach(element => {
+            element.classList.remove("hidden");
+        });
+
+        console.log("Main content visible:", !contentSection.classList.contains("hidden"));
     } catch (error) {
-        console.error("Greška:", error);
-        // Vrati se na prethodni prikaz (npr. #kategorije ili #server)
+        console.error("Greška u backToMain:", error);
+        // Revert to the previous visible view if there’s an error
         if (!categoryView.classList.contains("hidden")) {
             categoryView.classList.remove("hidden");
+            contentSection.classList.add("hidden");
         } else if (!iframeView.classList.contains("hidden")) {
             iframeView.classList.remove("hidden");
+            contentSection.classList.add("hidden");
+        } else if (!notepadView.classList.contains("hidden")) {
+            notepadView.classList.remove("hidden");
+            contentSection.classList.add("hidden");
         }
     }
 }

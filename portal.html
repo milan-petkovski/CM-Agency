@@ -32,7 +32,9 @@
         <div class="gore">
             <a href="#" onclick="showCategories()">Kategorije</a> |
             <a href="https://facebook.com/ads/library" target="_blank">Ads library</a> |
+            <a href="#" onclick="showNotepad()">Notepad</a> |
             <a href="#" onclick="showIframe()">Server provera</a>
+            
         </div>
         <!-- LEADS -->
         <h2>Dodaj leads</h2>
@@ -63,6 +65,13 @@
             <button id="btn3" onclick="backToMain()">Nazad</button>
             <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
         </div>
+    </div>
+
+    <!-- Inside the .portal section, after the #server div -->
+    <div id="notepad" class="hidden">
+        <h2>Notepad</h2>
+        <textarea id="notepadContent" placeholder="Piši ovde bilo šta..."></textarea>
+        <button id="btn3" onclick="backToMain()">Nazad</button>
     </div>
 
     <!--SERVER PROVERA-->

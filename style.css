@@ -1659,14 +1659,13 @@ form{
   }
 }
 
-
 #server iframe {
   width: 100%;
   padding: 20px;
   height: 505px;
   color: #fff;
 }
-#server button {
+#server button, #notepad button {
   width: 100% !important;
 }
 #server.hidden {
@@ -1684,6 +1683,12 @@ form{
   animation: slideInRight 0.3s ease-out forwards;
 }
 #kategorije.hidden {
+  animation: slideOutRight 0.3s ease-out forwards;
+}
+#notepad:not(.hidden) {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+#notepad.hidden {
   animation: slideOutRight 0.3s ease-out forwards;
 }
 #server:not(.hidden) {
@@ -1749,4 +1754,24 @@ form{
 @keyframes spin {
   0% { transform: translate(-50%, -50%) rotate(0deg); }
   100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+
+#notepad textarea {
+  width: 100%;
+  height: 505px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #2a2a2a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  resize: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#notepad textarea:focus {
+  outline: none;
+  border-color: var(--crvena);
+  box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
 }

@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const app = express();
 const PORT = process.env.PORT || 10000;
 const filePath = "items.json";
+const notepadFilePath = "notepad.json";
 
 app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
 app.use(bodyParser.json());
@@ -115,7 +116,7 @@ app.get("/", (req, res) => {
     res.send(html);
 });
 
-// Učitavanje postojećih podataka iz items.json sa obradom grešaka
+// Učitavanje postojećih podataka iz items.json i notepad.json sa obradom grešaka
 const loadItems = () => {
     try {
         if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, JSON.stringify([]));
@@ -123,6 +124,15 @@ const loadItems = () => {
     } catch (error) {
         console.error("Greška pri učitavanju items.json:", error);
         return [];
+    }
+};
+const loadNotepad = () => {
+    try {
+        if (!fs.existsSync(notepadFilePath)) fs.writeFileSync(notepadFilePath, JSON.stringify({ content: "" }));
+        return JSON.parse(fs.readFileSync(notepadFilePath, "utf8"));
+    } catch (error) {
+        console.error("Greška pri učitavanju notepad.json:", error);
+        return { content: "" };
     }
 };
 
@@ -180,6 +190,22 @@ app.get("/download", (req, res) => {
     res.setHeader("Content-Disposition", "attachment; filename=lista.txt");
     res.setHeader("Content-Type", "text/plain");
     res.send(text);
+});
+
+// Endpoint to get notepad content
+app.get("/notepad", (req, res) => {
+    const notepad = loadNotepad();
+    res.json({ success: true, content: notepad.content });
+});
+
+// Endpoint to save notepad content
+app.post("/notepad", (req, res) => {
+    const { content } = req.body;
+    if (content === undefined) return res.status(400).json({ success: false, message: "Sadržaj je obavezan" });
+
+    const notepad = { content };
+    fs.writeFileSync(notepadFilePath, JSON.stringify(notepad, null, 2));
+    res.json({ success: true, content });
 });
 
 // Pokretanje servera
