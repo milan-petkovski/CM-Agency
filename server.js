@@ -39,9 +39,9 @@ app.get("/", (req, res) => {
     <title></title>
     <style>
         a{
-            color: #fff
-            font-size: 1.4rem
-            margin: 0 0 10px 0
+            color: #fff;
+            font-size: 1.4rem;
+            margin: 0 0 10px 0;
         }
         .info {
             margin-bottom: 15px;
