@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 const filePath = "items.json";
 const notepadFilePath = "notepad.json";
+const loginTrackerPath = "loginTracker.json";
 
 app.use(cors({ origin: "*", methods: ["GET", "POST", "DELETE"], allowedHeaders: ["Content-Type"] }));
 app.use(bodyParser.json());
