@@ -38,6 +38,11 @@ app.get("/", (req, res) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <style>
+        a{
+            color: #fff
+            font-size: 1.4rem
+            margin: 0 0 10px 0
+        }
         .info {
             margin-bottom: 15px;
             font-size: 1.4rem;
@@ -78,9 +83,6 @@ app.get("/", (req, res) => {
             .container {
                 padding: 15px;
                 width: 90%;
-            }
-            h1 {
-                font-size: 2rem;
             }
             .info {
                 font-size: 1.2rem;
