@@ -96,6 +96,7 @@ app.get("/", (req, res) => {
 </head>
 <body>
     <div class="container">
+        <a href="https://cmagency.onrender.com">Pogledaj online</a>
         <div class="info"><strong>Status:</strong>${serverInfo.status}</div>
         <div class="info"><strong>Vreme:</strong>${new Date(serverInfo.timestamp).toLocaleString()}</div>
         <div class="info"><strong>Broj stavki:</strong>${serverInfo.itemsCount}</div>
