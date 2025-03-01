@@ -15,6 +15,7 @@ public class ItemResponseMapper(
         {
             Id = from.Id,
             Name = from.Name,
+            Completed = from.Completed,
             Category = categoryResponseMapper.Map(from.Category),
         };
 }

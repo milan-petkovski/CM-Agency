@@ -8,6 +8,7 @@ using CmAgency.Services.Delete;
 using CmAgency.Services.Mapping.Request;
 using CmAgency.Services.Mapping.Response;
 using CmAgency.Services.Read;
+using CmAgency.Services.Update;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,6 +52,7 @@ builder.Services.AddScoped<
 #region Item
 builder.Services.AddScoped<ICreateRangeService<Item>, CreateService<Item>>();
 builder.Services.AddScoped<IReadRangeService<Item>, ReadService<Item>>();
+builder.Services.AddScoped<IExecuteUpdateService<Item>, UpdateService<Item>>();
 builder.Services.AddScoped<IDeleteService<Item>, DeleteService<Item>>();
 builder.Services.AddScoped<IRequestMapper<CreateItemRequestDto, Item>, CreateItemRequestMapper>();
 builder.Services.AddScoped<IResponseMapper<Item, ItemResponseDto>, ItemResponseMapper>();
