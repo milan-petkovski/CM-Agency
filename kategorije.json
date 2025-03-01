@@ -1,258 +1,1026 @@
 [
-  "Restoran",
-  "Kafić",
-  "Pekara",
-  "Fast food",
-  "Hotel",
-  "Apartman",
-  "Turistička agencija",
-  "Teretana",
-  "Spa centar",
-  "Frizerski salon",
-  "Kozmetički salon",
-  "Auto servis",
-  "Rent a car",
-  "Butik",
-  "Online prodavnica",
-  "Prodavnica nameštaja",
-  "Knjigovodstvena agencija",
-  "Advokatska kancelarija",
-  "Osiguravajuća kompanija",
-  "Građevinska firma",
-  "Agencija za nekretnine",
-  "Poljoprivredno gazdinstvo",
-  "Veterinarska ambulanta",
-  "Privatna klinika",
-  "Stomatološka ordinacija",
-  "IT firma",
-  "Startap",
-  "Digitalna agencija",
-  "Freelancer",
-  "Marketing agencija",
-  "Edukativni centar",
-  "Privatna škola",
-  "Auto škola",
-  "Muzička škola",
-  "Kreativni studio",
-  "Fotografija i video produkcija",
-  "Muzički bend",
-  "Fitness trener",
-  "Sportski klub",
-  "Organizatorka događaja",
-  "Catering kompanija",
-  "Proizvodna firma",
-  "Fabrika",
-  "Modni brend",
-  "Oprema za sport",
-  "Zlatarna",
-  "Cvećara",
-  "Butik obuće",
-  "Dečija prodavnica",
-  "Knjizara",
-  "Igraonica",
-  "Pivara",
-  "Vinarija",
-  "Destilerija",
-  "Auto place",
-  "Servis bele tehnike",
-  "Mobilni servis",
-  "IT oprema",
-  "Radnja elektronike",
-  "Elektro servis",
-  "Nameštaj po meri",
-  "Tapetar",
-  "Auto limar",
-  "Auto električar",
-  "Vulkanizer",
-  "Auto delovi",
-  "Transportna firma",
-  "Skladište",
-  "Agro prodavnica",
-  "Rasadnik",
-  "Ekološka organizacija",
-  "Nevladina organizacija",
-  "Muzej",
-  "Galerija",
-  "Kulturni centar",
-  "Filmska produkcija",
-  "Medijska kuća",
-  "Bloger",
-  "Influenser",
-  "Streaming servis",
-  "Podcast kreator",
-  "Autor knjiga",
-  "Udruženje umetnika",
-  "Web dizajn firma",
-  "Softverska firma",
-  "Copywriting agencija",
-  "Call centar",
-  "HR agencija",
-  "Event menadžer",
-  "TikTok kreator",
-  "Instagram influenser",
-  "YouTube kreator",
-  "Facebook grupa za biznis",
-  "Online edukacija",
-  "Kurs centar",
-  "Coaching biznis",
-  "Life coaching",
-  "Biznis mentor",
-  "Dropshipping prodavnica",
-  "Print on demand biznis",
-  "SEO konsultant",
-  "PPC ekspert",
-  "Google Ads agencija",
-  "Društvene mreže menadžer",
-  "Animator za decu",
-  "Škola jezika",
-  "Prevodilačka agencija",
-  "IT regruter",
-  "Freelance dizajner",
-  "Motion graphics studio",
-  "Branding agencija",
-  "Agencija za odnose s javnošću",
-  "Digitalni konsultant",
-  "Mobile app developer",
-  "Video edit studio",
-  "Gaming studio",
-  "NFT projekat",
-  "Blockchain startap",
-  "Finansijski konsultant",
-  "Crowdfunding kampanja",
-  "Personalizovani poklon",
-  "Radnja sa ručno rađenim proizvodima",
-  "3D print studio",
-  "Magazin i portal",
-  "Novinska agencija",
-  "Web hosting kompanija",
-  "Cybersecurity firma",
-  "E commerce brend",
-  "SaaS biznis",
-  "Podcast produkcija",
-  "Snimateljska ekipa",
-  "Reklamni studio",
-  "PR stručnjak",
-  "Stilista",
-  "Modni dizajner",
-  "Home decor brend",
-  "Arhitektonska firma",
-  "Inženjerska firma",
-  "Mobilna aplikacija",
-  "Igra za mobilne telefone",
-  "Startap inkubator",
-  "Investicioni fond",
-  "Crowdfunding platforma",
-  "Video igre studio",
-  "3D animacija",
-  "UI UX dizajn studio",
-  "Grafički dizajner",
-  "Ilustrator",
-  "Print studio",
-  "Reklamni bilbord",
-  "Influencer marketing agencija",
-  "Trgovac polovnim stvarima",
-  "Antikvarnica",
-  "Obezbeđenje",
-  "Komunalne usluge",
-  "Vodoinstalater",
-  "Električar",
-  "Moleri",
-  "Staklorezačka radnja",
-  "Štamparija",
-  "Reklamni materijal",
-  "Gift shop radnja",
-  "Izrada suvenira",
-  "Krojač",
-  "Škola plesa",
-  "Muzički studio",
-  "Snimanje spota",
-  "Filmska režija",
-  "Scenski dizajn",
-  "Kazino",
-  "Hotel sa spa centrom",
-  "Seoski turizam",
-  "Adrenalinski sportovi",
-  "Paintball centar",
-  "Escape room igra",
-  "Organizatorka venčanja",
-  "Dekorater prostora",
-  "Škola programiranja",
-  "IT kurs",
-  "Servis računara",
-  "Biciklistički servis",
-  "Trgovac poljoprivrednim mašinama",
-  "Plastenička proizvodnja",
-  "Solar paneli i energetske firme",
-  "Eko proizvodi",
-  "Vegan brend",
-  "Handmade nakit",
-  "Brend ekoloških proizvoda",
-  "Kompanija za reciklažu",
-  "Trgovac oldtimerima",
-  "Veterinarska apoteka",
-  "Stočarska farma",
-  "Ribarstvo i ribarnica",
-  "Proizvođač sireva",
-  "Destilacija rakije",
-  "Mala pivara",
-  "Biohrana brend",
-  "Fitnes oprema",
-  "Suplementi i zdrava ishrana",
-  "Bio prodavnica",
-  "Organska kozmetika",
-  "Škola vožnje dronova",
-  "Proizvođač LED rasvete",
-  "IT gadget",
-  "E commerce konsultant",
-  "Dropshipping mentor",
-  "Agencija za istraživanje tržišta",
-  "Usluga mystery shoppinga",
-  "Agencija za zapošljavanje",
-  "Portal za nekretnine",
-  "Građevinski materijali",
-  "Trgovac alatima",
-  "Samostalni majstor",
-  "Dekoracija enterijera",
-  "Prodavac zavese i roletni",
-  "Nameštaj od punog drveta",
-  "Proizvođač sobnih biljaka",
-  "Brend nameštaja",
-  "Import export firma",
-  "Logistička kompanija",
-  "Proizvođač školskog pribora",
-  "Izdavačka kuća",
-  "Radnja sa stripovima",
-  "Radnja gaming opreme",
-  "Hostel",
-  "Turistički vodič",
-  "Lov i ribolov oprema",
-  "Planinarska radnja",
-  "Proizvođač bicikala",
-  "Brend električnih trotineta",
-  "Auto detailing servis",
-  "Proizvođač ekoloških ambalaža",
-  "Trgovac čajevima i začinima",
-  "Proizvođač sveća i aromaterapije",
-  "Radnja sa kristalima i minerali",
-  "Kurirska služba",
-  "Servis električnih vozila",
-  "IT tehnička podrška",
-  "Usluga popravke elektronike",
-  "Lokalna zanatlija",
-  "Tradicionalna zanatska radnja",
-  "Servis čišćenja",
-  "Agencija za selekciju kadrova",
-  "Online terapeut",
-  "Psiholog",
-  "Motivacioni govornik",
-  "Biznis coach trener",
-  "Mentorstvo za startape",
-  "Data science konsultant",
-  "Agencija za dizajn ambalaže",
-  "Studio za animaciju",
-  "Custom print radnja",
-  "3D modelovanje",
-  "Audio produkcija",
-  "Mix i mastering studio",
-  "Ostalo"
+	{
+		"id": 256,
+		"name": "Ostalo"
+	},
+	{
+		"id": 255,
+		"name": "Mix i mastering studio"
+	},
+	{
+		"id": 254,
+		"name": "Audio produkcija"
+	},
+	{
+		"id": 253,
+		"name": "3D modelovanje"
+	},
+	{
+		"id": 252,
+		"name": "Custom print radnja"
+	},
+	{
+		"id": 251,
+		"name": "Studio za animaciju"
+	},
+	{
+		"id": 250,
+		"name": "Agencija za dizajn ambalaže"
+	},
+	{
+		"id": 249,
+		"name": "Data science konsultant"
+	},
+	{
+		"id": 248,
+		"name": "Mentorstvo za startape"
+	},
+	{
+		"id": 247,
+		"name": "Biznis coach trener"
+	},
+	{
+		"id": 246,
+		"name": "Motivacioni govornik"
+	},
+	{
+		"id": 245,
+		"name": "Psiholog"
+	},
+	{
+		"id": 244,
+		"name": "Online terapeut"
+	},
+	{
+		"id": 243,
+		"name": "Agencija za selekciju kadrova"
+	},
+	{
+		"id": 242,
+		"name": "Servis čišćenja"
+	},
+	{
+		"id": 241,
+		"name": "Tradicionalna zanatska radnja"
+	},
+	{
+		"id": 240,
+		"name": "Lokalna zanatlija"
+	},
+	{
+		"id": 239,
+		"name": "Usluga popravke elektronike"
+	},
+	{
+		"id": 238,
+		"name": "IT tehnička podrška"
+	},
+	{
+		"id": 237,
+		"name": "Servis električnih vozila"
+	},
+	{
+		"id": 236,
+		"name": "Kurirska služba"
+	},
+	{
+		"id": 235,
+		"name": "Radnja sa kristalima i minerali"
+	},
+	{
+		"id": 234,
+		"name": "Proizvođač sveća i aromaterapije"
+	},
+	{
+		"id": 233,
+		"name": "Trgovac čajevima i začinima"
+	},
+	{
+		"id": 232,
+		"name": "Proizvođač ekoloških ambalaža"
+	},
+	{
+		"id": 231,
+		"name": "Auto detailing servis"
+	},
+	{
+		"id": 230,
+		"name": "Brend električnih trotineta"
+	},
+	{
+		"id": 229,
+		"name": "Proizvođač bicikala"
+	},
+	{
+		"id": 228,
+		"name": "Planinarska radnja"
+	},
+	{
+		"id": 227,
+		"name": "Lov i ribolov oprema"
+	},
+	{
+		"id": 226,
+		"name": "Turistički vodič"
+	},
+	{
+		"id": 225,
+		"name": "Hostel"
+	},
+	{
+		"id": 224,
+		"name": "Radnja gaming opreme"
+	},
+	{
+		"id": 223,
+		"name": "Radnja sa stripovima"
+	},
+	{
+		"id": 222,
+		"name": "Izdavačka kuća"
+	},
+	{
+		"id": 221,
+		"name": "Proizvođač školskog pribora"
+	},
+	{
+		"id": 220,
+		"name": "Logistička kompanija"
+	},
+	{
+		"id": 219,
+		"name": "Import export firma"
+	},
+	{
+		"id": 218,
+		"name": "Brend nameštaja"
+	},
+	{
+		"id": 217,
+		"name": "Proizvođač sobnih biljaka"
+	},
+	{
+		"id": 216,
+		"name": "Nameštaj od punog drveta"
+	},
+	{
+		"id": 215,
+		"name": "Prodavac zavese i roletni"
+	},
+	{
+		"id": 214,
+		"name": "Dekoracija enterijera"
+	},
+	{
+		"id": 213,
+		"name": "Samostalni majstor"
+	},
+	{
+		"id": 212,
+		"name": "Trgovac alatima"
+	},
+	{
+		"id": 211,
+		"name": "Građevinski materijali"
+	},
+	{
+		"id": 210,
+		"name": "Portal za nekretnine"
+	},
+	{
+		"id": 209,
+		"name": "Agencija za zapošljavanje"
+	},
+	{
+		"id": 208,
+		"name": "Usluga mystery shoppinga"
+	},
+	{
+		"id": 207,
+		"name": "Agencija za istraživanje tržišta"
+	},
+	{
+		"id": 206,
+		"name": "Dropshipping mentor"
+	},
+	{
+		"id": 205,
+		"name": "E commerce konsultant"
+	},
+	{
+		"id": 204,
+		"name": "IT gadget"
+	},
+	{
+		"id": 203,
+		"name": "Proizvođač LED rasvete"
+	},
+	{
+		"id": 202,
+		"name": "Škola vožnje dronova"
+	},
+	{
+		"id": 201,
+		"name": "Organska kozmetika"
+	},
+	{
+		"id": 200,
+		"name": "Bio prodavnica"
+	},
+	{
+		"id": 199,
+		"name": "Suplementi i zdrava ishrana"
+	},
+	{
+		"id": 198,
+		"name": "Fitnes oprema"
+	},
+	{
+		"id": 197,
+		"name": "Biohrana brend"
+	},
+	{
+		"id": 196,
+		"name": "Mala pivara"
+	},
+	{
+		"id": 195,
+		"name": "Destilacija rakije"
+	},
+	{
+		"id": 194,
+		"name": "Proizvođač sireva"
+	},
+	{
+		"id": 193,
+		"name": "Ribarstvo i ribarnica"
+	},
+	{
+		"id": 192,
+		"name": "Stočarska farma"
+	},
+	{
+		"id": 191,
+		"name": "Veterinarska apoteka"
+	},
+	{
+		"id": 190,
+		"name": "Trgovac oldtimerima"
+	},
+	{
+		"id": 189,
+		"name": "Kompanija za reciklažu"
+	},
+	{
+		"id": 188,
+		"name": "Brend ekoloških proizvoda"
+	},
+	{
+		"id": 187,
+		"name": "Handmade nakit"
+	},
+	{
+		"id": 186,
+		"name": "Vegan brend"
+	},
+	{
+		"id": 185,
+		"name": "Eko proizvodi"
+	},
+	{
+		"id": 184,
+		"name": "Solar paneli i energetske firme"
+	},
+	{
+		"id": 183,
+		"name": "Plastenička proizvodnja"
+	},
+	{
+		"id": 182,
+		"name": "Trgovac poljoprivrednim mašinama"
+	},
+	{
+		"id": 181,
+		"name": "Biciklistički servis"
+	},
+	{
+		"id": 180,
+		"name": "Servis računara"
+	},
+	{
+		"id": 179,
+		"name": "IT kurs"
+	},
+	{
+		"id": 178,
+		"name": "Škola programiranja"
+	},
+	{
+		"id": 177,
+		"name": "Dekorater prostora"
+	},
+	{
+		"id": 176,
+		"name": "Organizatorka venčanja"
+	},
+	{
+		"id": 175,
+		"name": "Escape room igra"
+	},
+	{
+		"id": 174,
+		"name": "Paintball centar"
+	},
+	{
+		"id": 173,
+		"name": "Adrenalinski sportovi"
+	},
+	{
+		"id": 172,
+		"name": "Seoski turizam"
+	},
+	{
+		"id": 171,
+		"name": "Hotel sa spa centrom"
+	},
+	{
+		"id": 170,
+		"name": "Kazino"
+	},
+	{
+		"id": 169,
+		"name": "Scenski dizajn"
+	},
+	{
+		"id": 168,
+		"name": "Filmska režija"
+	},
+	{
+		"id": 167,
+		"name": "Snimanje spota"
+	},
+	{
+		"id": 166,
+		"name": "Muzički studio"
+	},
+	{
+		"id": 165,
+		"name": "Škola plesa"
+	},
+	{
+		"id": 164,
+		"name": "Krojač"
+	},
+	{
+		"id": 163,
+		"name": "Izrada suvenira"
+	},
+	{
+		"id": 162,
+		"name": "Gift shop radnja"
+	},
+	{
+		"id": 161,
+		"name": "Reklamni materijal"
+	},
+	{
+		"id": 160,
+		"name": "Štamparija"
+	},
+	{
+		"id": 159,
+		"name": "Staklorezačka radnja"
+	},
+	{
+		"id": 158,
+		"name": "Moleri"
+	},
+	{
+		"id": 157,
+		"name": "Električar"
+	},
+	{
+		"id": 156,
+		"name": "Vodoinstalater"
+	},
+	{
+		"id": 155,
+		"name": "Komunalne usluge"
+	},
+	{
+		"id": 154,
+		"name": "Obezbeđenje"
+	},
+	{
+		"id": 153,
+		"name": "Antikvarnica"
+	},
+	{
+		"id": 152,
+		"name": "Trgovac polovnim stvarima"
+	},
+	{
+		"id": 151,
+		"name": "Influencer marketing agencija"
+	},
+	{
+		"id": 150,
+		"name": "Reklamni bilbord"
+	},
+	{
+		"id": 149,
+		"name": "Print studio"
+	},
+	{
+		"id": 148,
+		"name": "Ilustrator"
+	},
+	{
+		"id": 147,
+		"name": "Grafički dizajner"
+	},
+	{
+		"id": 146,
+		"name": "UI UX dizajn studio"
+	},
+	{
+		"id": 145,
+		"name": "3D animacija"
+	},
+	{
+		"id": 144,
+		"name": "Video igre studio"
+	},
+	{
+		"id": 143,
+		"name": "Crowdfunding platforma"
+	},
+	{
+		"id": 142,
+		"name": "Investicioni fond"
+	},
+	{
+		"id": 141,
+		"name": "Startap inkubator"
+	},
+	{
+		"id": 140,
+		"name": "Igra za mobilne telefone"
+	},
+	{
+		"id": 139,
+		"name": "Mobilna aplikacija"
+	},
+	{
+		"id": 138,
+		"name": "Inženjerska firma"
+	},
+	{
+		"id": 137,
+		"name": "Arhitektonska firma"
+	},
+	{
+		"id": 136,
+		"name": "Home decor brend"
+	},
+	{
+		"id": 135,
+		"name": "Modni dizajner"
+	},
+	{
+		"id": 134,
+		"name": "Stilista"
+	},
+	{
+		"id": 133,
+		"name": "PR stručnjak"
+	},
+	{
+		"id": 132,
+		"name": "Reklamni studio"
+	},
+	{
+		"id": 131,
+		"name": "Snimateljska ekipa"
+	},
+	{
+		"id": 130,
+		"name": "Podcast produkcija"
+	},
+	{
+		"id": 129,
+		"name": "SaaS biznis"
+	},
+	{
+		"id": 128,
+		"name": "E commerce brend"
+	},
+	{
+		"id": 127,
+		"name": "Cybersecurity firma"
+	},
+	{
+		"id": 126,
+		"name": "Web hosting kompanija"
+	},
+	{
+		"id": 125,
+		"name": "Novinska agencija"
+	},
+	{
+		"id": 124,
+		"name": "Magazin i portal"
+	},
+	{
+		"id": 123,
+		"name": "3D print studio"
+	},
+	{
+		"id": 122,
+		"name": "Radnja sa ručno rađenim proizvodima"
+	},
+	{
+		"id": 121,
+		"name": "Personalizovani poklon"
+	},
+	{
+		"id": 120,
+		"name": "Crowdfunding kampanja"
+	},
+	{
+		"id": 119,
+		"name": "Finansijski konsultant"
+	},
+	{
+		"id": 118,
+		"name": "Blockchain startap"
+	},
+	{
+		"id": 117,
+		"name": "NFT projekat"
+	},
+	{
+		"id": 116,
+		"name": "Gaming studio"
+	},
+	{
+		"id": 115,
+		"name": "Video edit studio"
+	},
+	{
+		"id": 114,
+		"name": "Mobile app developer"
+	},
+	{
+		"id": 113,
+		"name": "Digitalni konsultant"
+	},
+	{
+		"id": 112,
+		"name": "Agencija za odnose s javnošću"
+	},
+	{
+		"id": 111,
+		"name": "Branding agencija"
+	},
+	{
+		"id": 110,
+		"name": "Motion graphics studio"
+	},
+	{
+		"id": 109,
+		"name": "Freelance dizajner"
+	},
+	{
+		"id": 108,
+		"name": "IT regruter"
+	},
+	{
+		"id": 107,
+		"name": "Prevodilačka agencija"
+	},
+	{
+		"id": 106,
+		"name": "Škola jezika"
+	},
+	{
+		"id": 105,
+		"name": "Animator za decu"
+	},
+	{
+		"id": 104,
+		"name": "Društvene mreže menadžer"
+	},
+	{
+		"id": 103,
+		"name": "Google Ads agencija"
+	},
+	{
+		"id": 102,
+		"name": "PPC ekspert"
+	},
+	{
+		"id": 101,
+		"name": "SEO konsultant"
+	},
+	{
+		"id": 100,
+		"name": "Print on demand biznis"
+	},
+	{
+		"id": 99,
+		"name": "Dropshipping prodavnica"
+	},
+	{
+		"id": 98,
+		"name": "Biznis mentor"
+	},
+	{
+		"id": 97,
+		"name": "Life coaching"
+	},
+	{
+		"id": 96,
+		"name": "Coaching biznis"
+	},
+	{
+		"id": 95,
+		"name": "Kurs centar"
+	},
+	{
+		"id": 94,
+		"name": "Online edukacija"
+	},
+	{
+		"id": 93,
+		"name": "Facebook grupa za biznis"
+	},
+	{
+		"id": 92,
+		"name": "YouTube kreator"
+	},
+	{
+		"id": 91,
+		"name": "Instagram influenser"
+	},
+	{
+		"id": 90,
+		"name": "TikTok kreator"
+	},
+	{
+		"id": 89,
+		"name": "Event menadžer"
+	},
+	{
+		"id": 88,
+		"name": "HR agencija"
+	},
+	{
+		"id": 87,
+		"name": "Call centar"
+	},
+	{
+		"id": 86,
+		"name": "Copywriting agencija"
+	},
+	{
+		"id": 85,
+		"name": "Softverska firma"
+	},
+	{
+		"id": 84,
+		"name": "Web dizajn firma"
+	},
+	{
+		"id": 83,
+		"name": "Udruženje umetnika"
+	},
+	{
+		"id": 82,
+		"name": "Autor knjiga"
+	},
+	{
+		"id": 81,
+		"name": "Podcast kreator"
+	},
+	{
+		"id": 80,
+		"name": "Streaming servis"
+	},
+	{
+		"id": 79,
+		"name": "Influenser"
+	},
+	{
+		"id": 78,
+		"name": "Bloger"
+	},
+	{
+		"id": 77,
+		"name": "Medijska kuća"
+	},
+	{
+		"id": 76,
+		"name": "Filmska produkcija"
+	},
+	{
+		"id": 75,
+		"name": "Kulturni centar"
+	},
+	{
+		"id": 74,
+		"name": "Galerija"
+	},
+	{
+		"id": 73,
+		"name": "Muzej"
+	},
+	{
+		"id": 72,
+		"name": "Nevladina organizacija"
+	},
+	{
+		"id": 71,
+		"name": "Ekološka organizacija"
+	},
+	{
+		"id": 70,
+		"name": "Rasadnik"
+	},
+	{
+		"id": 69,
+		"name": "Agro prodavnica"
+	},
+	{
+		"id": 68,
+		"name": "Skladište"
+	},
+	{
+		"id": 67,
+		"name": "Transportna firma"
+	},
+	{
+		"id": 66,
+		"name": "Auto delovi"
+	},
+	{
+		"id": 65,
+		"name": "Vulkanizer"
+	},
+	{
+		"id": 64,
+		"name": "Auto električar"
+	},
+	{
+		"id": 63,
+		"name": "Auto limar"
+	},
+	{
+		"id": 62,
+		"name": "Tapetar"
+	},
+	{
+		"id": 61,
+		"name": "Nameštaj po meri"
+	},
+	{
+		"id": 60,
+		"name": "Elektro servis"
+	},
+	{
+		"id": 59,
+		"name": "Radnja elektronike"
+	},
+	{
+		"id": 58,
+		"name": "IT oprema"
+	},
+	{
+		"id": 57,
+		"name": "Mobilni servis"
+	},
+	{
+		"id": 56,
+		"name": "Servis bele tehnike"
+	},
+	{
+		"id": 55,
+		"name": "Auto place"
+	},
+	{
+		"id": 54,
+		"name": "Destilerija"
+	},
+	{
+		"id": 53,
+		"name": "Vinarija"
+	},
+	{
+		"id": 52,
+		"name": "Pivara"
+	},
+	{
+		"id": 51,
+		"name": "Igraonica"
+	},
+	{
+		"id": 50,
+		"name": "Knjizara"
+	},
+	{
+		"id": 49,
+		"name": "Dečija prodavnica"
+	},
+	{
+		"id": 48,
+		"name": "Butik obuće"
+	},
+	{
+		"id": 47,
+		"name": "Cvećara"
+	},
+	{
+		"id": 46,
+		"name": "Zlatarna"
+	},
+	{
+		"id": 45,
+		"name": "Oprema za sport"
+	},
+	{
+		"id": 44,
+		"name": "Modni brend"
+	},
+	{
+		"id": 43,
+		"name": "Fabrika"
+	},
+	{
+		"id": 42,
+		"name": "Proizvodna firma"
+	},
+	{
+		"id": 41,
+		"name": "Catering kompanija"
+	},
+	{
+		"id": 40,
+		"name": "Organizatorka događaja"
+	},
+	{
+		"id": 39,
+		"name": "Sportski klub"
+	},
+	{
+		"id": 38,
+		"name": "Fitness trener"
+	},
+	{
+		"id": 37,
+		"name": "Muzički bend"
+	},
+	{
+		"id": 36,
+		"name": "Fotografija i video produkcija"
+	},
+	{
+		"id": 35,
+		"name": "Kreativni studio"
+	},
+	{
+		"id": 34,
+		"name": "Muzička škola"
+	},
+	{
+		"id": 33,
+		"name": "Auto škola"
+	},
+	{
+		"id": 32,
+		"name": "Privatna škola"
+	},
+	{
+		"id": 31,
+		"name": "Edukativni centar"
+	},
+	{
+		"id": 30,
+		"name": "Marketing agencija"
+	},
+	{
+		"id": 29,
+		"name": "Freelancer"
+	},
+	{
+		"id": 28,
+		"name": "Digitalna agencija"
+	},
+	{
+		"id": 27,
+		"name": "Startap"
+	},
+	{
+		"id": 26,
+		"name": "IT firma"
+	},
+	{
+		"id": 25,
+		"name": "Stomatološka ordinacija"
+	},
+	{
+		"id": 24,
+		"name": "Privatna klinika"
+	},
+	{
+		"id": 23,
+		"name": "Veterinarska ambulanta"
+	},
+	{
+		"id": 22,
+		"name": "Poljoprivredno gazdinstvo"
+	},
+	{
+		"id": 21,
+		"name": "Agencija za nekretnine"
+	},
+	{
+		"id": 20,
+		"name": "Građevinska firma"
+	},
+	{
+		"id": 19,
+		"name": "Osiguravajuća kompanija"
+	},
+	{
+		"id": 18,
+		"name": "Advokatska kancelarija"
+	},
+	{
+		"id": 17,
+		"name": "Knjigovodstvena agencija"
+	},
+	{
+		"id": 16,
+		"name": "Prodavnica nameštaja"
+	},
+	{
+		"id": 15,
+		"name": "Online prodavnica"
+	},
+	{
+		"id": 14,
+		"name": "Butik"
+	},
+	{
+		"id": 13,
+		"name": "Rent a car"
+	},
+	{
+		"id": 12,
+		"name": "Auto servis"
+	},
+	{
+		"id": 11,
+		"name": "Kozmetički salon"
+	},
+	{
+		"id": 10,
+		"name": "Frizerski salon"
+	},
+	{
+		"id": 9,
+		"name": "Spa centar"
+	},
+	{
+		"id": 8,
+		"name": "Teretana"
+	},
+	{
+		"id": 7,
+		"name": "Turistička agencija"
+	},
+	{
+		"id": 6,
+		"name": "Apartman"
+	},
+	{
+		"id": 5,
+		"name": "Hotel"
+	},
+	{
+		"id": 4,
+		"name": "Fast food"
+	},
+	{
+		"id": 3,
+		"name": "Pekara"
+	},
+	{
+		"id": 2,
+		"name": "Kafić"
+	},
+	{
+		"id": 1,
+		"name": "Restoran"
+	}
 ]
