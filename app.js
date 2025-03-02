@@ -1,472 +1,518 @@
-const API_URL = "https://cmagency.onrender.com";
+const API_URL = "http://localhost:5055/api";
 
-document.addEventListener("DOMContentLoaded", () => {
-    // Check authentication
-    checkAuth();
+let items = [];
+let categories = [];
+let notepad = {
+  id: -1,
+  content: "",
+};
+let filterCategoryId = -1;
+let showCompletedState = false;
 
-    // Set up notepad functionality
-    const notepadTextarea = document.getElementById("notepadContent");
-    if (notepadTextarea) {
-        notepadTextarea.addEventListener("input", async () => {
-            const content = notepadTextarea.value;
-            try {
-                const response = await fetch(`${API_URL}/notepad`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ content })
-                });
-                const data = await response.json();
-                if (!data.success) {
-                    console.error("Greška pri čuvanju notepad-a:", data.message);
-                }
-            } catch (error) {
-                console.error("Greška pri slanju notepad sadržaja:", error);
-            }
-        });
+async function init() {
+  showCompletedState = true;
+  await Promise.all([
+    loadCategories().then(toggleShowCompleted),
+    loadNotepad(),
+  ]);
+}
+
+async function sendApiRequest(urlExtension, method, data) {
+  try {
+    const response = await fetch(`${API_URL}/${urlExtension}`, {
+      method: method,
+      headers:
+        method === "GET" ? undefined : { "Content-Type": "application/json" },
+      credentials: "include",
+      body: data ? JSON.stringify(data) : undefined,
+    });
+
+    if (!response.ok) {
+      console.error("Greška pri slanju api request-a:", response);
+      return null;
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Greška pri slanju api request-a:", error);
+    return null;
+  }
+}
+
+async function loadNotepad() {
+  // Set up notepad functionality with debounce
+  const notepadTextarea = document.getElementById("notepadContent");
+  if (!notepadTextarea) return;
+
+  const response = await sendApiRequest("notepad/default", "GET");
+  if (response) {
+    notepad = response;
+    notepadTextarea.value = notepad.content;
+  }
+
+  const debounceSave = debounce(async () => {
+    console.log("Saving notepad content...");
+
+    const content = notepadTextarea.value;
+    notepad.content = content;
+
+    sendApiRequest("notepad", "PUT", notepad);
+  }, 500);
+
+  notepadTextarea.addEventListener("input", debounceSave);
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // Check authentication
+  const isAuth = await checkAuth();
+  if (isAuth) await init();
 });
 
-function checkAuth() {
-    const user = localStorage.getItem("user");
-    const loginSection = document.getElementById("log");
-    const contentSection = document.getElementById("content");
-    const logoutButton = document.getElementById("logout");
-
-    if (user) {
-        loginSection.classList.add("hidden");
-        contentSection.classList.remove("hidden");
-        logoutButton.style.display = "block";
-        loadItems();
-        loadCategories();
-    } else {
-        loginSection.classList.remove("hidden");
-        contentSection.classList.add("hidden");
-        logoutButton.style.display = "none";
-        disableDevTools();
-    }
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func.apply(this, args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
-function login() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
+async function checkAuth() {
+  const user = await sendApiRequest("auth/status", "GET");
 
-    if (!username || !password) {
-        alert("Unesite korisničko ime i lozinku.");
-        return;
-    }
+  const loginSection = document.getElementById("log");
+  const contentSection = document.getElementById("content");
+  const logoutButton = document.getElementById("logout");
 
-    fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            localStorage.setItem("user", username);
-            checkAuth();
-        } else {
-            alert(data.message || "Pogrešno korisničko ime ili lozinka");
-        }
-    })
-    .catch(() => alert("Greška pri logovanju"));
+  if (user) {
+    loginSection.classList.add("hidden");
+    contentSection.classList.remove("hidden");
+    logoutButton.style.display = "block";
+    return true;
+  }
+
+  loginSection.classList.remove("hidden");
+  contentSection.classList.add("hidden");
+  logoutButton.style.display = "none";
+  disableDevTools();
+  return false;
 }
 
-function logout() {
-    localStorage.removeItem("user");
+async function login() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!username || !password) {
+    alert("Unesite korisničko ime i lozinku.");
+    return;
+  }
+
+  const response = await sendApiRequest("auth/login", "POST", {
+    username,
+    password,
+  });
+
+  if (!response) alert("Pogrešno korisničko ime ili lozinka");
+  else {
+    await init();
     checkAuth();
+  }
 }
 
-function loadCategories() {
-    fetch("kategorije.json")
-        .then(response => response.json())
-        .then(data => {
-            const categoryList = document.getElementById("categoryList");
-            const filterCategoryList = document.getElementById("filterCategoryList");
-            categoryList.innerHTML = filterCategoryList.innerHTML = "";
-
-            // Prvo podeliti kategorije u one sa stavkama i one bez
-            const categoriesWithItems = [];
-            const categoriesWithoutItems = [];
-
-            // Napraviti API poziv za sve stavke, pa ih podeliti po kategorijama
-            fetch(`${API_URL}/items`)
-                .then(response => response.json())
-                .then(itemData => {
-                    if (itemData.success) {
-                        const allItems = itemData.items;
-                        
-                        // Podeliti stavke po kategorijama
-                        const categoryItemsMap = {};
-                        allItems.forEach(item => {
-                            if (!categoryItemsMap[item.category]) {
-                                categoryItemsMap[item.category] = [];
-                            }
-                            categoryItemsMap[item.category].push(item);
-                        });
-
-                        // Podeliti kategorije sa stavkama i one bez
-                        data.forEach(category => {
-                            const itemCount = categoryItemsMap[category] ? categoryItemsMap[category].length : 0;
-                            if (itemCount > 0) {
-                                categoriesWithItems.push({ category, itemCount });
-                            } else {
-                                categoriesWithoutItems.push(category);
-                            }
-                        });
-
-                        // Sortiranje kategorija po broju stavki
-                        categoriesWithItems.sort((a, b) => b.itemCount - a.itemCount);
-
-                        // Prikazivanje kategorija sa stavkama na vrhu
-                        categoriesWithItems.forEach(({ category, itemCount }) => {
-                            const option = document.createElement("option");
-                            option.value = category;
-                            option.textContent = `${itemCount} stavki`;
-                            categoryList.appendChild(option);
-                            filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-                        });
-
-                        // Prikazivanje kategorija bez stavki na dnu
-                        categoriesWithoutItems.forEach(category => {
-                            const option = document.createElement("option");
-                            option.value = category;
-                            categoryList.appendChild(option);
-                            filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-                        });
-                    }
-                })
-                .catch(error => console.error("Greška pri učitavanju stavki:", error));
-        })
-        .catch(error => console.error("Greška pri učitavanju kategorija:", error));
+async function logout() {
+  await sendApiRequest("auth/logout", "POST");
+  checkAuth();
 }
 
-function loadItems() {
-    fetch(`${API_URL}/items`)
-        .then(response => response.json())
-        .then(data => { if (data.success) updateList(data.items); })
-        .catch(error => console.error("Greška pri učitavanju stavki:", error));
+async function loadCategories() {
+  const response = await sendApiRequest("category/full", "GET");
+  categories = response
+    .map((c) => ({
+      ...c,
+      count: c.items.length,
+    }))
+    .sort((a, b) => b.count - a.count);
+  items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
+
+  updateList(items);
+
+  const categoryList = document.getElementById("categoryList");
+  const filterCategoryList = document.getElementById("filterCategoryList");
+
+  categories.forEach(({ name, count: itemsCount }) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent =
+      itemsCount === 0 ? name : `${name}: ${itemsCount} stavki`;
+    categoryList.appendChild(option);
+    filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
+  });
 }
 
 function cleanURL(url) {
-    url = url.split("?")[0].replace(/https?:\/\/www\./, "https://").replace(/http:\/\/www\./, "http://");
-    return url.includes("instagram.com") ? url.replace(/https?:\/\/www\./, "https://") : url;
+  url = url
+    .split("?")[0]
+    .replace(/https?:\/\/www\./, "https://")
+    .replace(/http:\/\/www\./, "http://");
+  return url.includes("instagram.com")
+    ? url.replace(/https?:\/\/www\./, "https://")
+    : url;
 }
 
-function addItem() {
-    const textInput = document.getElementById("textInput").value.trim();
-    const categoryInput = document.getElementById("categoryInput").value.trim();
-    if (!textInput || !categoryInput) {
-        alert("Unesite naziv stavke i kategoriju.");
-        return;
-    }
-    
-    fetch(`${API_URL}/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ item: cleanURL(textInput), category: categoryInput })
-    })
-        .then(response => {
-            if (response.status === 409) {
-                return response.json().then(data => {
-                    alert(data.message || "Stavka sa tim nazivom već postoji u toj kategoriji.");
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                updateList(data.items);
-                document.getElementById("textInput").value = "";
-                document.getElementById("categoryInput").value = "";
-            }
-        })
-        .catch(error => console.error("Greška pri dodavanju stavki:", error));
+function toggleShowCompleted() {
+  showCompletedState = !showCompletedState;
+  updateList(items.filter((i) => i.completed === showCompletedState));
+
+  const showCompletedButton = document.getElementById("showCompletedButton");
+  showCompletedButton.textContent = showCompletedState
+    ? "Prikazi zavrsene stavke"
+    : "Prikazi nezavrsene stavke";
+}
+
+async function addItem() {
+  const textInput = document.getElementById("textInput").value.trim();
+  const categoryInput = document.getElementById("categoryInput").value.trim();
+
+  if (!textInput || !categoryInput) {
+    alert("Unesite naziv stavke i kategoriju.");
+    return;
+  }
+
+  const selectedCategoryId = categories.find(
+    (category) => category.name === categoryInput
+  )?.id;
+
+  if (!selectedCategoryId || selectedCategoryId < 1) {
+    alert("Odabrana kategorija ne postoji.");
+    return;
+  }
+
+  if (items.some((i) => i.name === textInput)) {
+    alert("Stavka sa tim nazivom već postoji.");
+    return;
+  }
+
+  const response = await sendApiRequest("item", "POST", {
+    name: cleanURL(textInput),
+    categoryId: selectedCategoryId,
+  });
+
+  if (!response) {
+    alert("Greška pri dodavanju stavke.");
+    return;
+  }
+
+  items = [response, ...items];
+  updateList(items);
+  document.getElementById("textInput").value = "";
+  document.getElementById("categoryInput").value = "";
 }
 
 function updateList(items) {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-    items.reverse().forEach(i => {
-        const li = document.createElement("li");
-        const cleanedLink = cleanURL(i.name);
-        const urlPattern = /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-        
-        if (urlPattern.test(cleanedLink)) {
-            const url = new URL(cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`);
-            const link = document.createElement("a");
-            link.href = cleanedLink;
-            link.textContent = url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
-            link.target = "_blank";
-            li.appendChild(link);
-        } else {
-            li.textContent = i.count > 1 ? `${i.name} (x${i.count})` : i.name;
-        }
-        
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "X";
-        deleteButton.classList.add("delete");
-        deleteButton.addEventListener("click", e => {
-            e.stopPropagation();
-            deleteItem(i.name);
-        });
-        
-        li.addEventListener("click", e => {
-            if (e.target !== deleteButton) li.classList.toggle("line-through");
-        });
-        
-        li.appendChild(deleteButton);
-        list.appendChild(li);
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+  items.forEach((i) => {
+    const li = document.createElement("li");
+    const cleanedLink = cleanURL(i.name);
+    const urlPattern =
+      /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
+
+    if (urlPattern.test(cleanedLink)) {
+      const url = new URL(
+        cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`
+      );
+      const link = document.createElement("a");
+      link.href = cleanedLink;
+      link.textContent =
+        url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
+      link.target = "_blank";
+      li.appendChild(link);
+    } else {
+      li.textContent = i.name;
+    }
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "X";
+    deleteButton.classList.add("delete");
+    deleteButton.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      await deleteItem(i.id);
     });
-    const counter = document.getElementById("counter");
-    counter.textContent = `Ukupno stavki: ${items.length}`;
+
+    if (i.completed) li.classList.add("line-through");
+
+    li.addEventListener("click", async (e) => {
+      if (e.target === deleteButton) return;
+
+      updateList(
+        items.map((item) => {
+          if (item.id === i.id) {
+            item.completed = !item.completed;
+          }
+          return item;
+        })
+      );
+
+      const response = await sendApiRequest(
+        "item/" + i.id + "/toggle-complete",
+        "PUT"
+      );
+
+      if (!response) {
+        alert("Greška pri promjeni statusa stavke.");
+        items.map((item) => {
+          if (item.id === i.id) {
+            item.completed = !item.completed;
+          }
+          return item;
+        });
+      }
+    });
+
+    li.appendChild(deleteButton);
+    list.appendChild(li);
+  });
+  const counter = document.getElementById("counter");
+  counter.textContent = `Ukupno stavki: ${items.length}`;
 }
 
 function filterItems() {
-    const filterCategoryInput = document.getElementById("filterCategoryInput").value.trim();
-    const validCategories = Array.from(document.getElementById("filterCategoryList").options).map(option => option.value);
-    const formattedCategoryInput = filterCategoryInput.charAt(0).toUpperCase() + filterCategoryInput.slice(1).toLowerCase();
+  const filterCategoryInput = document
+    .getElementById("filterCategoryInput")
+    .value.trim();
 
-    if (filterCategoryInput && !validCategories.includes(formattedCategoryInput)) {
-        alert("Izabrana kategorija ne postoji.");
-        fetch(`${API_URL}/items`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateList(data.items);
-                }
-            })
-            .catch(error => console.error("Greška pri učitavanju stavki:", error));
-        return;
-    }
+  const formattedCategoryInput =
+    filterCategoryInput.charAt(0).toUpperCase() +
+    filterCategoryInput.slice(1).toLowerCase();
 
-    fetch(`${API_URL}/items`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const filteredItems = formattedCategoryInput ? data.items.filter(item => item.category === formattedCategoryInput) : data.items;
-                document.getElementById("filterCategoryInput").value = "";
-                if (!filteredItems.length) {
-                    alert("Nema stavki u ovoj kategoriji.");
-                    updateList(data.items);
-                } else {
-                    updateList(filteredItems);
-                }
-            }
-        })
-        .catch(error => console.error("Greška pri učitavanju stavki:", error));
+  if (!formattedCategoryInput) {
+    updateList(items);
+    filterCategoryId = -1;
+    return;
+  }
+
+  const selectedCategoryId = categories.find(
+    (category) => category.name === formattedCategoryInput
+  )?.id;
+
+  if (!selectedCategoryId) {
+    alert("Izabrana kategorija ne postoji.");
+    updateList(items);
+    filterCategoryId = -1;
+    return;
+  }
+
+  const filteredItems = items.filter(
+    (item) => item.categoryId === selectedCategoryId
+  );
+
+  if (filteredItems.length === 0) {
+    alert("Nema stavki u ovoj kategoriji.");
+    updateList(items);
+    filterCategoryId = -1;
+    return;
+  }
+
+  filterCategoryId = selectedCategoryId;
+  updateList(filteredItems);
 }
 
 function downloadList() {
-    fetch(`${API_URL}/download`)
-        .then(response => response.blob())
-        .then(blob => {
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "lista.txt";
-            a.click();
-        });
+  const text = items
+    .filter((x) => filterCategoryId < 1 || x.categoryId === filterCategoryId)
+    .map((item) => item.name)
+    .join("\n");
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "lista.txt";
+  a.click();
 }
 
-function deleteItem(itemName) {
-    fetch(`${API_URL}/delete/${encodeURIComponent(itemName)}`, { method: "DELETE" })
-        .then(response => response.json())
-        .then(data => { if (data.success) updateList(data.items); });
+async function deleteItem(id) {
+  const response = await sendApiRequest("item/" + id, "DELETE");
+  if (!response) {
+    alert("Greška pri brisanju stavke.");
+    return;
+  }
+
+  items = items.filter((item) => item.id !== id);
+  updateList(items);
 }
 
 function searchList() {
-    const searchQuery = prompt("Unesite pojam za pretragu:");
-    if (!searchQuery) return;
+  const searchQuery = prompt("Unesite pojam za pretragu:");
+  if (!searchQuery) return;
 
-    const listItems = document.querySelectorAll("#list li");
-    let visibleItemsCount = 0;
+  const listItems = document.querySelectorAll("#list li");
+  let visibleItemsCount = 0;
 
-    listItems.forEach(item => {
-        const itemText = item.textContent.toLowerCase();
-        if (itemText.includes(searchQuery.toLowerCase())) {
-            item.style.display = "";
-            visibleItemsCount++;
-        } else {
-            item.style.display = "none";
-        }
-    });
+  listItems.forEach((item) => {
+    const itemText = item.textContent.toLowerCase();
+    if (itemText.includes(searchQuery.toLowerCase())) {
+      item.style.display = "";
+      visibleItemsCount++;
+    } else {
+      item.style.display = "none";
+    }
+  });
 
-    const counter = document.getElementById("counter");
-    counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
+  const counter = document.getElementById("counter");
+  counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
 }
 
 async function showCategories() {
-    const contentSection = document.getElementById("content");
-    const categoryView = document.getElementById("kategorije");
-    const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
+  const contentSection = document.getElementById("content");
+  const categoryView = document.getElementById("kategorije");
+  const mainContent = contentSection.querySelectorAll(
+    "h2, input, button, ul#list, p, a:not(#logout), .gore"
+  );
 
-    // Zadrži prethodni prikaz (npr. #content) dok se podaci ne učitaju
-    try {
-        // Ne sakrivaj #content odmah, čekaj dok se podaci ne učitaju
-        const response = await fetch("kategorije.json");
-        const data = await response.json();
+  // Zadrži prethodni prikaz (npr. #content) dok se podaci ne učitaju
+  try {
+    // Popuni kategorije
+    const categoryOnlyList = document.getElementById("klist");
+    categoryOnlyList.innerHTML = ""; // Očisti prethodni sadržaj
 
-        // Popuni kategorije
-        const categoryOnlyList = document.getElementById("klist");
-        categoryOnlyList.innerHTML = ""; // Očisti prethodni sadržaj
+    categories.forEach((category) => {
+      const li = document.createElement("li");
+      li.textContent = category.name;
+      categoryOnlyList.appendChild(li);
+    });
 
-        data.forEach(category => {
-            const li = document.createElement("li");
-            li.textContent = category;
-            categoryOnlyList.appendChild(li);
-        });
+    // Sakrij prethodni prikaz i prikaži kategorije sa animacijom kada je DOM spreman
+    mainContent.forEach((element) => element.classList.add("hidden"));
+    contentSection.classList.add("hidden");
 
-        // Sakrij prethodni prikaz i prikaži kategorije sa animacijom kada je DOM spreman
-        mainContent.forEach(element => element.classList.add("hidden"));
-        contentSection.classList.add("hidden");
+    await new Promise((resolve) => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
 
-        await new Promise(resolve => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
-
-        categoryView.classList.remove("hidden");
-    } catch (error) {
-        console.error("Greška pri učitavanju kategorija:", error);
-        // Vrati se na prethodni prikaz (npr. #content) bez animacije
-        contentSection.classList.remove("hidden");
-        mainContent.forEach(element => element.classList.remove("hidden"));
-    }
+    categoryView.classList.remove("hidden");
+  } catch (error) {
+    console.error("Greška pri učitavanju kategorija:", error);
+    // Vrati se na prethodni prikaz (npr. #content) bez animacije
+    contentSection.classList.remove("hidden");
+    mainContent.forEach((element) => element.classList.remove("hidden"));
+  }
 }
 
 async function showNotepad() {
-    const contentSection = document.getElementById("content");
-    const categoryView = document.getElementById("kategorije");
-    const iframeView = document.getElementById("server");
-    const notepadView = document.getElementById("notepad");
-    const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
+  const contentSection = document.getElementById("content");
+  const categoryView = document.getElementById("kategorije");
+  const iframeView = document.getElementById("server");
+  const notepadView = document.getElementById("notepad");
+  const mainContent = contentSection.querySelectorAll(
+    "h2, input, button, ul#list, p, a:not(#logout), .gore"
+  );
 
-    try {
-        // Hide other views
-        mainContent.forEach(element => element.classList.add("hidden"));
-        contentSection.classList.add("hidden");
-        categoryView.classList.add("hidden");
-        iframeView.classList.add("hidden");
+  try {
+    // Hide other views
+    mainContent.forEach((element) => element.classList.add("hidden"));
+    contentSection.classList.add("hidden");
+    categoryView.classList.add("hidden");
+    iframeView.classList.add("hidden");
 
-        await new Promise(resolve => requestAnimationFrame(() => resolve()));
+    await new Promise((resolve) => requestAnimationFrame(() => resolve()));
 
-        notepadView.classList.remove("hidden");
-
-        // Fetch notepad content from server
-        const response = await fetch(`${API_URL}/notepad`);
-        const data = await response.json();
-        if (data.success) {
-            document.getElementById("notepadContent").value = data.content || "";
-        } else {
-            throw new Error("Neuspešno učitavanje notepad sadržaja");
-        }
-    } catch (error) {
-        console.error("Greška pri učitavanju notepad-a:", error);
-        contentSection.classList.remove("hidden");
-        mainContent.forEach(element => element.classList.remove("hidden"));
-    }
+    notepadView.classList.remove("hidden");
+  } catch (error) {
+    console.error("Greška pri učitavanju notepad-a:", error);
+    contentSection.classList.remove("hidden");
+    mainContent.forEach((element) => element.classList.remove("hidden"));
+  }
 }
 
 async function showIframe() {
-    const contentSection = document.getElementById("content");
-    const categoryView = document.getElementById("kategorije");
-    const iframeView = document.getElementById("server");
-    const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
+  const contentSection = document.getElementById("content");
+  const categoryView = document.getElementById("kategorije");
+  const iframeView = document.getElementById("server");
+  const mainContent = contentSection.querySelectorAll(
+    "h2, input, button, ul#list, p, a:not(#logout), .gore"
+  );
 
-    // Zadrži prethodni prikaz dok se iframe ne učita
-    try {
-        // Ne sakrivaj trenutni prikaz odmah, čekaj dok se iframe ne učita
-        // Simuliraj učitavanje sa malim kašnjenjem (300ms) za sigurnost
-        await new Promise(resolve => setTimeout(resolve, 300)); // Kratko kašnjenje
+  // Zadrži prethodni prikaz dok se iframe ne učita
+  try {
+    // Ne sakrivaj trenutni prikaz odmah, čekaj dok se iframe ne učita
+    // Simuliraj učitavanje sa malim kašnjenjem (300ms) za sigurnost
+    await new Promise((resolve) => setTimeout(resolve, 300)); // Kratko kašnjenje
 
-        // Sakrij prethodni prikaz i prikaži iframe sa animacijom kada je DOM spreman
-        mainContent.forEach(element => element.classList.add("hidden"));
-        contentSection.classList.add("hidden");
-        categoryView.classList.add("hidden");
+    // Sakrij prethodni prikaz i prikaži iframe sa animacijom kada je DOM spreman
+    mainContent.forEach((element) => element.classList.add("hidden"));
+    contentSection.classList.add("hidden");
+    categoryView.classList.add("hidden");
 
-        await new Promise(resolve => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
+    await new Promise((resolve) => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
 
-        iframeView.classList.remove("hidden");
-    } catch (error) {
-        console.error("Greška pri učitavanju iframe-a:", error);
-        // Vrati se na prethodni prikaz (npr. #content ili #kategorije)
-        contentSection.classList.remove("hidden");
-        mainContent.forEach(element => element.classList.remove("hidden"));
-    }
+    iframeView.classList.remove("hidden");
+  } catch (error) {
+    console.error("Greška pri učitavanju iframe-a:", error);
+    // Vrati se na prethodni prikaz (npr. #content ili #kategorije)
+    contentSection.classList.remove("hidden");
+    mainContent.forEach((element) => element.classList.remove("hidden"));
+  }
 }
 
 async function backToMain() {
-    const contentSection = document.getElementById("content");
-    const categoryView = document.getElementById("kategorije");
-    const iframeView = document.getElementById("server");
-    const notepadView = document.getElementById("notepad");
-    const mainContent = contentSection.querySelectorAll("h2, input, button, ul#list, p, a:not(#logout), .gore");
+  const contentSection = document.getElementById("content");
+  const categoryView = document.getElementById("kategorije");
+  const iframeView = document.getElementById("server");
+  const notepadView = document.getElementById("notepad");
+  const mainContent = contentSection.querySelectorAll(
+    "h2, input, button, ul#list, p, a:not(#logout), .gore"
+  );
 
-    console.log("Starting backToMain...");
-    console.log("Notepad visible before hiding:", !notepadView.classList.contains("hidden"));
+  try {
+    updateList(items);
 
-    try {
-        // Fetch items to update the main list
-        const response = await fetch(`${API_URL}/items`);
-        const data = await response.json();
+    // Hide all secondary views explicitly
+    categoryView.classList.add("hidden");
+    iframeView.classList.add("hidden");
+    notepadView.classList.add("hidden");
 
-        if (data.success) {
-            await updateList(data.items);
-        } else {
-            throw new Error("Neuspešno učitavanje stavki: " + data.message);
-        }
+    // Wait for DOM to update
+    await new Promise((resolve) => requestAnimationFrame(() => resolve()));
 
-        // Hide all secondary views explicitly
-        console.log("Hiding secondary views...");
-        categoryView.classList.add("hidden");
-        iframeView.classList.add("hidden");
-        notepadView.classList.add("hidden");
-
-        // Log the state after hiding
-        console.log("Notepad hidden:", notepadView.classList.contains("hidden"));
-
-        // Wait for DOM to update
-        await new Promise(resolve => requestAnimationFrame(() => resolve()));
-
-        // Show main content
-        console.log("Showing main content...");
-        contentSection.classList.remove("hidden");
-        mainContent.forEach(element => {
-            element.classList.remove("hidden");
-        });
-
-        console.log("Main content visible:", !contentSection.classList.contains("hidden"));
-    } catch (error) {
-        console.error("Greška u backToMain:", error);
-        // Revert to the previous visible view if there’s an error
-        if (!categoryView.classList.contains("hidden")) {
-            categoryView.classList.remove("hidden");
-            contentSection.classList.add("hidden");
-        } else if (!iframeView.classList.contains("hidden")) {
-            iframeView.classList.remove("hidden");
-            contentSection.classList.add("hidden");
-        } else if (!notepadView.classList.contains("hidden")) {
-            notepadView.classList.remove("hidden");
-            contentSection.classList.add("hidden");
-        }
+    // Show main content
+    contentSection.classList.remove("hidden");
+    mainContent.forEach((element) => {
+      element.classList.remove("hidden");
+    });
+  } catch (error) {
+    console.error("Greška u backToMain:", error);
+    // Revert to the previous visible view if there’s an error
+    if (!categoryView.classList.contains("hidden")) {
+      categoryView.classList.remove("hidden");
+      contentSection.classList.add("hidden");
+    } else if (!iframeView.classList.contains("hidden")) {
+      iframeView.classList.remove("hidden");
+      contentSection.classList.add("hidden");
+    } else if (!notepadView.classList.contains("hidden")) {
+      notepadView.classList.remove("hidden");
+      contentSection.classList.add("hidden");
     }
+  }
 }
 
 function disableDevTools() {
-    document.onkeydown = (e) => {
-        // Onemogućava F12
-        if (e.key === 'F12') {
-            e.preventDefault();
-            return false;
-        }
-    
-        // Onemogućava Ctrl+Shift+I i Ctrl+Shift+J
-        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) {
-            e.preventDefault();
-            return false;
-        }
-    
-        // Onemogućava Ctrl+U
-        if (e.ctrlKey && e.key === 'U') {
-            e.preventDefault();
-            return false;
-        }
-    };
-};
+  document.onkeydown = (e) => {
+    // Onemogućava F12
+    if (e.key === "F12") {
+      e.preventDefault();
+      return false;
+    }
+
+    // Onemogućava Ctrl+Shift+I i Ctrl+Shift+J
+    if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) {
+      e.preventDefault();
+      return false;
+    }
+
+    // Onemogućava Ctrl+U
+    if (e.ctrlKey && e.key === "U") {
+      e.preventDefault();
+      return false;
+    }
+  };
+}
