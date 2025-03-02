@@ -6,6 +6,7 @@ let notepad = {
   id: -1,
   content: "",
 };
+let filterCategoryId = -1;
 let showCompletedState = false;
 
 async function init() {
@@ -289,6 +290,7 @@ function filterItems() {
 
   if (!formattedCategoryInput) {
     updateList(items);
+    filterCategoryId = -1;
     return;
   }
 
@@ -298,8 +300,8 @@ function filterItems() {
 
   if (!selectedCategoryId) {
     alert("Izabrana kategorija ne postoji.");
-
     updateList(items);
+    filterCategoryId = -1;
     return;
   }
 
@@ -310,14 +312,19 @@ function filterItems() {
   if (filteredItems.length === 0) {
     alert("Nema stavki u ovoj kategoriji.");
     updateList(items);
+    filterCategoryId = -1;
     return;
   }
 
+  filterCategoryId = selectedCategoryId;
   updateList(filteredItems);
 }
 
 function downloadList() {
-  const text = items.map((item) => item.name).join("\n");
+  const text = items
+    .filter((x) => filterCategoryId < 1 || x.categoryId === filterCategoryId)
+    .map((item) => item.name)
+    .join("\n");
   const blob = new Blob([text], { type: "text/plain" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -366,17 +373,13 @@ async function showCategories() {
 
   // Zadrži prethodni prikaz (npr. #content) dok se podaci ne učitaju
   try {
-    // Ne sakrivaj #content odmah, čekaj dok se podaci ne učitaju
-    const response = await fetch("kategorije.json");
-    const data = await response.json();
-
     // Popuni kategorije
     const categoryOnlyList = document.getElementById("klist");
     categoryOnlyList.innerHTML = ""; // Očisti prethodni sadržaj
 
-    data.forEach((category) => {
+    categories.forEach((category) => {
       const li = document.createElement("li");
-      li.textContent = category;
+      li.textContent = category.name;
       categoryOnlyList.appendChild(li);
     });
 
