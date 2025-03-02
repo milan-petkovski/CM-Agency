@@ -37,6 +37,17 @@ public class NotepadController(
         return Ok(result.Value);
     }
 
+    [HttpGet("default")]
+    public async Task<ActionResult> GetDefault()
+    {
+        var result = await readService.Get(x => true, q => q.OrderByDescending(x => x.Id));
+
+        if (result.IsFailed)
+            return BadRequest(result.Errors);
+
+        return Ok(result.Value);
+    }
+
     [HttpPut]
     public async Task<ActionResult> Update([FromBody] Notepad notepad) =>
         Ok(
