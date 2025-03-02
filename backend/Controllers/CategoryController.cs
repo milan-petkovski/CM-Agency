@@ -58,6 +58,26 @@ public class CategoryController(
         return Ok(result.Value.Select(previewResponseMapper.Map));
     }
 
+    [HttpGet("full")]
+    public async Task<IActionResult> GetAllFull([FromQuery] bool? completed)
+    {
+        var result = await readRangeService.Get(
+            null,
+            0,
+            -1,
+            completed is null
+                ? q => q.Include(x => x.Items).OrderByDescending(x => x.Id)
+                : q =>
+                    q.Include(x => x.Items.Where(x => x.Completed == completed))
+                        .OrderByDescending(x => x.Id)
+        );
+
+        if (result.IsFailed)
+            return BadRequest(result.Errors);
+
+        return Ok(result.Value.Select(responseMapper.Map));
+    }
+
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {

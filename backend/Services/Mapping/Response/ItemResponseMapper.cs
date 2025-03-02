@@ -3,19 +3,13 @@ using CmAgency.Models;
 
 namespace CmAgency.Services.Mapping.Response;
 
-public class ItemResponseMapper(
-    IResponseMapper<Category, CategoryPreviewResponseDto> categoryResponseDto
-) : IResponseMapper<Item, ItemResponseDto>
+public class ItemResponseMapper : IResponseMapper<Item, ItemResponseDto>
 {
-    private readonly IResponseMapper<Category, CategoryPreviewResponseDto> categoryResponseMapper =
-        categoryResponseDto;
-
     public ItemResponseDto Map(Item from) =>
         new()
         {
             Id = from.Id,
             Name = from.Name,
             Completed = from.Completed,
-            Category = categoryResponseMapper.Map(from.Category),
         };
 }

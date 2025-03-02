@@ -9,7 +9,6 @@ let notepad = {
 };
 
 async function init() {
-  await loadItems();
   await loadCategories();
   await loadNotepad();
 }
@@ -124,83 +123,29 @@ async function logout() {
   checkAuth();
 }
 
-function loadCategories() {
-  fetch("kategorije.json")
-    .then((response) => response.json())
-    .then((data) => {
-      const categoryList = document.getElementById("categoryList");
-      const filterCategoryList = document.getElementById("filterCategoryList");
-      categoryList.innerHTML = filterCategoryList.innerHTML = "";
+async function loadCategories() {
+  const response = await sendApiRequest("category/full", "GET");
+  categories = response
+    .map((c) => ({
+      ...c,
+      count: c.items.length,
+    }))
+    .sort((a, b) => b.count - a.count);
+  items = response.flatMap((c) => c.items);
 
-      // Prvo podeliti kategorije u one sa stavkama i one bez
-      const categoriesWithItems = [];
-      const categoriesWithoutItems = [];
+  updateList(items);
 
-      // Napraviti API poziv za sve stavke, pa ih podeliti po kategorijama
-      fetch(`${API_URL}/items`)
-        .then((response) => response.json())
-        .then((itemData) => {
-          if (itemData.success) {
-            const allItems = itemData.items;
+  const categoryList = document.getElementById("categoryList");
+  const filterCategoryList = document.getElementById("filterCategoryList");
 
-            // Podeliti stavke po kategorijama
-            const categoryItemsMap = {};
-            allItems.forEach((item) => {
-              if (!categoryItemsMap[item.category]) {
-                categoryItemsMap[item.category] = [];
-              }
-              categoryItemsMap[item.category].push(item);
-            });
-
-            // Podeliti kategorije sa stavkama i one bez
-            data.forEach((category) => {
-              const itemCount = categoryItemsMap[category]
-                ? categoryItemsMap[category].length
-                : 0;
-              if (itemCount > 0) {
-                categoriesWithItems.push({ category, itemCount });
-              } else {
-                categoriesWithoutItems.push(category);
-              }
-            });
-
-            // Sortiranje kategorija po broju stavki
-            categoriesWithItems.sort((a, b) => b.itemCount - a.itemCount);
-
-            // Prikazivanje kategorija sa stavkama na vrhu
-            categoriesWithItems.forEach(({ category, itemCount }) => {
-              const option = document.createElement("option");
-              option.value = category;
-              option.textContent = `${itemCount} stavki`;
-              categoryList.appendChild(option);
-              filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-            });
-
-            // Prikazivanje kategorija bez stavki na dnu
-            categoriesWithoutItems.forEach((category) => {
-              const option = document.createElement("option");
-              option.value = category;
-              categoryList.appendChild(option);
-              filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-            });
-          }
-        })
-        .catch((error) =>
-          console.error("Greška pri učitavanju stavki:", error)
-        );
-    })
-    .catch((error) =>
-      console.error("Greška pri učitavanju kategorija:", error)
-    );
-}
-
-function loadItems() {
-  fetch(`${API_URL}/items`)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) updateList(data.items);
-    })
-    .catch((error) => console.error("Greška pri učitavanju stavki:", error));
+  categories.forEach(({ name, count: itemsCount }) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent =
+      itemsCount === 0 ? name : `${name}: ${itemsCount} stavki`;
+    categoryList.appendChild(option);
+    filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
+  });
 }
 
 function cleanURL(url) {
@@ -257,7 +202,7 @@ function updateList(items) {
     const li = document.createElement("li");
     const cleanedLink = cleanURL(i.name);
     const urlPattern =
-      /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+      /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
 
     if (urlPattern.test(cleanedLink)) {
       const url = new URL(
@@ -270,7 +215,7 @@ function updateList(items) {
       link.target = "_blank";
       li.appendChild(link);
     } else {
-      li.textContent = i.count > 1 ? `${i.name} (x${i.count})` : i.name;
+      li.textContent = i.name;
     }
 
     const deleteButton = document.createElement("button");
