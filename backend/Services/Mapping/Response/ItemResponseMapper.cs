@@ -11,5 +11,6 @@ public class ItemResponseMapper : IResponseMapper<Item, ItemResponseDto>
             Id = from.Id,
             Name = from.Name,
             Completed = from.Completed,
+            CategoryId = from.CategoryId,
         };
 }

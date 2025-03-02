@@ -241,48 +241,38 @@ function filterItems() {
   const filterCategoryInput = document
     .getElementById("filterCategoryInput")
     .value.trim();
-  const validCategories = Array.from(
-    document.getElementById("filterCategoryList").options
-  ).map((option) => option.value);
+
   const formattedCategoryInput =
     filterCategoryInput.charAt(0).toUpperCase() +
     filterCategoryInput.slice(1).toLowerCase();
 
-  if (
-    filterCategoryInput &&
-    !validCategories.includes(formattedCategoryInput)
-  ) {
-    alert("Izabrana kategorija ne postoji.");
-    fetch(`${API_URL}/items`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          updateList(data.items);
-        }
-      })
-      .catch((error) => console.error("Greška pri učitavanju stavki:", error));
+  if (!formattedCategoryInput) {
+    updateList(items);
     return;
   }
 
-  fetch(`${API_URL}/items`)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        const filteredItems = formattedCategoryInput
-          ? data.items.filter(
-              (item) => item.category === formattedCategoryInput
-            )
-          : data.items;
-        document.getElementById("filterCategoryInput").value = "";
-        if (!filteredItems.length) {
-          alert("Nema stavki u ovoj kategoriji.");
-          updateList(data.items);
-        } else {
-          updateList(filteredItems);
-        }
-      }
-    })
-    .catch((error) => console.error("Greška pri učitavanju stavki:", error));
+  const selectedCategoryId = categories.find(
+    (category) => category.name === formattedCategoryInput
+  )?.id;
+
+  if (!selectedCategoryId) {
+    alert("Izabrana kategorija ne postoji.");
+
+    updateList(items);
+    return;
+  }
+
+  const filteredItems = items.filter(
+    (item) => item.categoryId === selectedCategoryId
+  );
+
+  if (filteredItems.length === 0) {
+    alert("Nema stavki u ovoj kategoriji.");
+    updateList(items);
+    return;
+  }
+
+  updateList(filteredItems);
 }
 
 function downloadList() {
@@ -430,46 +420,22 @@ async function backToMain() {
     "h2, input, button, ul#list, p, a:not(#logout), .gore"
   );
 
-  console.log("Starting backToMain...");
-  console.log(
-    "Notepad visible before hiding:",
-    !notepadView.classList.contains("hidden")
-  );
-
   try {
-    // Fetch items to update the main list
-    const response = await fetch(`${API_URL}/items`);
-    const data = await response.json();
-
-    if (data.success) {
-      await updateList(data.items);
-    } else {
-      throw new Error("Neuspešno učitavanje stavki: " + data.message);
-    }
+    updateList(items);
 
     // Hide all secondary views explicitly
-    console.log("Hiding secondary views...");
     categoryView.classList.add("hidden");
     iframeView.classList.add("hidden");
     notepadView.classList.add("hidden");
-
-    // Log the state after hiding
-    console.log("Notepad hidden:", notepadView.classList.contains("hidden"));
 
     // Wait for DOM to update
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
 
     // Show main content
-    console.log("Showing main content...");
     contentSection.classList.remove("hidden");
     mainContent.forEach((element) => {
       element.classList.remove("hidden");
     });
-
-    console.log(
-      "Main content visible:",
-      !contentSection.classList.contains("hidden")
-    );
   } catch (error) {
     console.error("Greška u backToMain:", error);
     // Revert to the previous visible view if there’s an error
