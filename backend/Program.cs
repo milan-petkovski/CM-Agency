@@ -96,6 +96,7 @@ builder.Services.AddScoped<
 #endregion
 
 #region Item
+builder.Services.AddScoped<ICreateSingleService<Item>, CreateService<Item>>();
 builder.Services.AddScoped<ICreateRangeService<Item>, CreateService<Item>>();
 builder.Services.AddScoped<IReadRangeService<Item>, ReadService<Item>>();
 builder.Services.AddScoped<IExecuteUpdateService<Item>, UpdateService<Item>>();

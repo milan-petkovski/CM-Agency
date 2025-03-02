@@ -66,9 +66,14 @@ public class CategoryController(
             0,
             -1,
             completed is null
-                ? q => q.Include(x => x.Items).OrderByDescending(x => x.Id)
+                ? q =>
+                    q.Include(x => x.Items.OrderByDescending(x => x.Id))
+                        .OrderByDescending(x => x.Id)
                 : q =>
-                    q.Include(x => x.Items.Where(x => x.Completed == completed))
+                    q.Include(x =>
+                            x.Items.Where(x => x.Completed == completed)
+                                .OrderByDescending(x => x.Id)
+                        )
                         .OrderByDescending(x => x.Id)
         );
 

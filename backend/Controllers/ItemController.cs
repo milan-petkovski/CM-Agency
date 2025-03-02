@@ -16,6 +16,7 @@ namespace CmAgency.Controllers;
 [Route("api/item")]
 [ApiController]
 public class ItemController(
+    ICreateSingleService<Item> createSingleService,
     ICreateRangeService<Item> createRangeService,
     IReadRangeService<Item> readRangeService,
     IExecuteUpdateService<Item> updateService,
@@ -24,6 +25,7 @@ public class ItemController(
     IResponseMapper<Item, ItemResponseDto> itemResponseMapper
 ) : ControllerBase
 {
+    private readonly ICreateSingleService<Item> createSingleService = createSingleService;
     private readonly ICreateRangeService<Item> createRangeService = createRangeService;
     private readonly IReadRangeService<Item> readRangeService = readRangeService;
     private readonly IExecuteUpdateService<Item> updateService = updateService;
@@ -31,6 +33,16 @@ public class ItemController(
     private readonly IRequestMapper<CreateItemRequestDto, Item> createItemRequestMapper =
         createItemRequestMapper;
     private readonly IResponseMapper<Item, ItemResponseDto> itemResponseMapper = itemResponseMapper;
+
+    [HttpPost]
+    public async Task<ActionResult> Create(CreateItemRequestDto request)
+    {
+        var result = await createSingleService.Add(createItemRequestMapper.Map(request));
+        if (result.IsFailed)
+            return BadRequest(result.Errors);
+
+        return Ok(itemResponseMapper.Map(result.Value));
+    }
 
     [HttpPost("bulk")]
     public async Task<ActionResult> Create(IEnumerable<CreateItemRequestDto> request) =>

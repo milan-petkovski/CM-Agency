@@ -1,4 +1,3 @@
-const API_URL = "https://cmagency.onrender.com";
 const API_URL_V2 = "http://localhost:5055/api";
 
 let items = [];
@@ -131,7 +130,7 @@ async function loadCategories() {
       count: c.items.length,
     }))
     .sort((a, b) => b.count - a.count);
-  items = response.flatMap((c) => c.items);
+  items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
 
   updateList(items);
 
@@ -158,47 +157,49 @@ function cleanURL(url) {
     : url;
 }
 
-function addItem() {
+async function addItem() {
   const textInput = document.getElementById("textInput").value.trim();
   const categoryInput = document.getElementById("categoryInput").value.trim();
+
   if (!textInput || !categoryInput) {
     alert("Unesite naziv stavke i kategoriju.");
     return;
   }
 
-  fetch(`${API_URL}/add`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      item: cleanURL(textInput),
-      category: categoryInput,
-    }),
-  })
-    .then((response) => {
-      if (response.status === 409) {
-        return response.json().then((data) => {
-          alert(
-            data.message ||
-              "Stavka sa tim nazivom već postoji u toj kategoriji."
-          );
-        });
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.success) {
-        updateList(data.items);
-        document.getElementById("textInput").value = "";
-        document.getElementById("categoryInput").value = "";
-      }
-    })
-    .catch((error) => console.error("Greška pri dodavanju stavki:", error));
+  const selectedCategoryId = categories.find(
+    (category) => category.name === categoryInput
+  )?.id;
+
+  if (!selectedCategoryId || selectedCategoryId < 1) {
+    alert("Odabrana kategorija ne postoji.");
+    return;
+  }
+
+  if (items.some((i) => i.name === textInput)) {
+    alert("Stavka sa tim nazivom već postoji.");
+    return;
+  }
+
+  const response = await sendApiRequest("item", "POST", {
+    name: cleanURL(textInput),
+    categoryId: selectedCategoryId,
+  });
+
+  if (!response) {
+    alert("Greška pri dodavanju stavke.");
+    return;
+  }
+
+  items = [response, ...items];
+  updateList(items);
+  document.getElementById("textInput").value = "";
+  document.getElementById("categoryInput").value = "";
 }
 
 function updateList(items) {
   const list = document.getElementById("list");
   list.innerHTML = "";
-  items.reverse().forEach((i) => {
+  items.forEach((i) => {
     const li = document.createElement("li");
     const cleanedLink = cleanURL(i.name);
     const urlPattern =
@@ -221,9 +222,9 @@ function updateList(items) {
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "X";
     deleteButton.classList.add("delete");
-    deleteButton.addEventListener("click", (e) => {
+    deleteButton.addEventListener("click", async (e) => {
       e.stopPropagation();
-      deleteItem(i.name);
+      await deleteItem(i.id);
     });
 
     li.addEventListener("click", (e) => {
@@ -276,24 +277,23 @@ function filterItems() {
 }
 
 function downloadList() {
-  fetch(`${API_URL}/download`)
-    .then((response) => response.blob())
-    .then((blob) => {
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "lista.txt";
-      a.click();
-    });
+  const text = items.map((item) => item.name).join("\n");
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "lista.txt";
+  a.click();
 }
 
-function deleteItem(itemName) {
-  fetch(`${API_URL}/delete/${encodeURIComponent(itemName)}`, {
-    method: "DELETE",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) updateList(data.items);
-    });
+async function deleteItem(id) {
+  const response = await sendApiRequest("item/" + id, "DELETE");
+  if (!response) {
+    alert("Greška pri brisanju stavke.");
+    return;
+  }
+
+  items = items.filter((item) => item.id !== id);
+  updateList(items);
 }
 
 function searchList() {
