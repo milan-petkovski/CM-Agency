@@ -1,4 +1,4 @@
-const API_URL_V2 = "http://localhost:5055/api";
+const API_URL = "http://localhost:5055/api";
 
 let items = [];
 let categories = [];
@@ -6,15 +6,19 @@ let notepad = {
   id: -1,
   content: "",
 };
+let showCompletedState = false;
 
 async function init() {
-  await loadCategories();
-  await loadNotepad();
+  showCompletedState = true;
+  await Promise.all([
+    loadCategories().then(toggleShowCompleted),
+    loadNotepad(),
+  ]);
 }
 
-async function sendApiRequest(uri, method, data) {
+async function sendApiRequest(urlExtension, method, data) {
   try {
-    const response = await fetch(`${API_URL_V2}/${uri}`, {
+    const response = await fetch(`${API_URL}/${urlExtension}`, {
       method: method,
       headers:
         method === "GET" ? undefined : { "Content-Type": "application/json" },
@@ -157,6 +161,16 @@ function cleanURL(url) {
     : url;
 }
 
+function toggleShowCompleted() {
+  showCompletedState = !showCompletedState;
+  updateList(items.filter((i) => i.completed === showCompletedState));
+
+  const showCompletedButton = document.getElementById("showCompletedButton");
+  showCompletedButton.textContent = showCompletedState
+    ? "Prikazi zavrsene stavke"
+    : "Prikazi nezavrsene stavke";
+}
+
 async function addItem() {
   const textInput = document.getElementById("textInput").value.trim();
   const categoryInput = document.getElementById("categoryInput").value.trim();
@@ -227,8 +241,34 @@ function updateList(items) {
       await deleteItem(i.id);
     });
 
-    li.addEventListener("click", (e) => {
-      if (e.target !== deleteButton) li.classList.toggle("line-through");
+    if (i.completed) li.classList.add("line-through");
+
+    li.addEventListener("click", async (e) => {
+      if (e.target === deleteButton) return;
+
+      updateList(
+        items.map((item) => {
+          if (item.id === i.id) {
+            item.completed = !item.completed;
+          }
+          return item;
+        })
+      );
+
+      const response = await sendApiRequest(
+        "item/" + i.id + "/toggle-complete",
+        "PUT"
+      );
+
+      if (!response) {
+        alert("Greška pri promjeni statusa stavke.");
+        items.map((item) => {
+          if (item.id === i.id) {
+            item.completed = !item.completed;
+          }
+          return item;
+        });
+      }
     });
 
     li.appendChild(deleteButton);
