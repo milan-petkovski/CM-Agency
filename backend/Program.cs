@@ -95,9 +95,10 @@ builder.Services.AddScoped<
 >();
 #endregion
 
-#region Item
+#region Items
 builder.Services.AddScoped<ICreateSingleService<Item>, CreateService<Item>>();
 builder.Services.AddScoped<ICreateRangeService<Item>, CreateService<Item>>();
+builder.Services.AddScoped<IReadSingleSelectedService<Item>, ReadService<Item>>();
 builder.Services.AddScoped<IReadRangeService<Item>, ReadService<Item>>();
 builder.Services.AddScoped<IExecuteUpdateService<Item>, UpdateService<Item>>();
 builder.Services.AddScoped<IDeleteService<Item>, DeleteService<Item>>();
@@ -123,11 +124,10 @@ builder.Services.AddCors(options =>
         {
             builder
                 .WithOrigins(
-                    "cm-agency.vercel.app",
-                    "cmagency.milanwebportal.com",
-                    "cmagency.onrender.com",
-                    "127.0.0.1",
-                    "localhost:5500"
+                    "https://cm-agency.vercel.app",
+                    "https://cmagency.milanwebportal.com",
+                    "https://cmagency.onrender.com",
+                    "http://localhost:5500"
                 )
                 .AllowCredentials()
                 .AllowAnyMethod()

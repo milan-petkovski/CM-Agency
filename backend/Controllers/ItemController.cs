@@ -1,5 +1,6 @@
 using CmAgency.Dto.Request;
 using CmAgency.Dto.Response;
+using CmAgency.Errors;
 using CmAgency.Models;
 using CmAgency.Services.Create;
 using CmAgency.Services.Delete;
@@ -18,6 +19,7 @@ namespace CmAgency.Controllers;
 public class ItemController(
     ICreateSingleService<Item> createSingleService,
     ICreateRangeService<Item> createRangeService,
+    IReadSingleSelectedService<Item> readSingleSelectedService,
     IReadRangeService<Item> readRangeService,
     IExecuteUpdateService<Item> updateService,
     IDeleteService<Item> deleteService,
@@ -27,6 +29,8 @@ public class ItemController(
 {
     private readonly ICreateSingleService<Item> createSingleService = createSingleService;
     private readonly ICreateRangeService<Item> createRangeService = createRangeService;
+    private readonly IReadSingleSelectedService<Item> readSingleSelectedService =
+        readSingleSelectedService;
     private readonly IReadRangeService<Item> readRangeService = readRangeService;
     private readonly IExecuteUpdateService<Item> updateService = updateService;
     private readonly IDeleteService<Item> deleteService = deleteService;
@@ -37,6 +41,14 @@ public class ItemController(
     [HttpPost]
     public async Task<ActionResult> Create(CreateItemRequestDto request)
     {
+        var exists = await readSingleSelectedService.Get(
+            x => new { x.Id },
+            x => x.Name == request.Name
+        );
+
+        if (!exists.IsFailed || !exists.HasError<NotFound>())
+            return BadRequest("Item with this name already exists");
+
         var result = await createSingleService.Add(createItemRequestMapper.Map(request));
         if (result.IsFailed)
             return BadRequest(result.Errors);
