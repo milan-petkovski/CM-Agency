@@ -35,10 +35,10 @@ public class ItemController(
         Ok(await createRangeService.Add(request.Select(createItemRequestMapper.Map)));
 
     [HttpGet]
-    public async Task<ActionResult> GetAll()
+    public async Task<ActionResult> GetAll([FromQuery] bool? completed)
     {
         var result = await readRangeService.Get(
-            null,
+            completed is null ? null : x => x.Completed == completed,
             0,
             -1,
             q => q.Include(x => x.Category).OrderByDescending(x => x.Id)

@@ -67,8 +67,31 @@ builder.Services.AddScoped<IDeleteService<Notepad>, DeleteService<Notepad>>();
 
 #endregion
 
+#region CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "main",
+        builder =>
+        {
+            builder
+                .WithOrigins(
+                    "cm-agency.vercel.app",
+                    "cmagency.milanwebportal.com",
+                    "cmagency.onrender.com",
+                    "127.0.0.1:5500"
+                )
+                .AllowCredentials()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        }
+    );
+});
+#endregion
+
 var app = builder.Build();
 
+app.UseCors("main");
 app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
 app.UseAuthentication();
