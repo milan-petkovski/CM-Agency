@@ -6,10 +6,12 @@ using CmAgency.Services.Delete;
 using CmAgency.Services.Mapping.Request;
 using CmAgency.Services.Mapping.Response;
 using CmAgency.Services.Read;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CmAgency.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Route("api/category")]
 [ApiController]
 public class CategoryController(

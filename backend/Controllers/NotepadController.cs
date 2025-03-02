@@ -3,10 +3,12 @@ using CmAgency.Services.Create;
 using CmAgency.Services.Delete;
 using CmAgency.Services.Read;
 using CmAgency.Services.Update;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CmAgency.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Route("api/notepad")]
 [ApiController]
 public class NotepadController(

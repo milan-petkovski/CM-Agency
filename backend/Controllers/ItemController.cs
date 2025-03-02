@@ -7,10 +7,12 @@ using CmAgency.Services.Mapping.Request;
 using CmAgency.Services.Mapping.Response;
 using CmAgency.Services.Read;
 using CmAgency.Services.Update;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CmAgency.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Route("api/item")]
 [ApiController]
 public class ItemController(
