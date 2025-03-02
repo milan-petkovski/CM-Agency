@@ -18,19 +18,20 @@ async function sendApiRequest(uri, method, data) {
   try {
     const response = await fetch(`${API_URL_V2}/${uri}`, {
       method: method,
-      headers: { "Content-Type": "application/json" },
+      headers:
+        method === "GET" ? undefined : { "Content-Type": "application/json" },
       credentials: "include",
-      body: (data && JSON.stringify(data)) || undefined,
+      body: data ? JSON.stringify(data) : undefined,
     });
 
     if (!response.ok) {
-      console.error("Greška pri čuvanju notepad-a:", data.message);
+      console.error("Greška pri slanju api request-a:", response);
       return null;
     }
 
     return await response.json();
   } catch (error) {
-    console.error("Greška pri slanju notepad sadržaja:", error);
+    console.error("Greška pri slanju api request-a:", error);
     return null;
   }
 }
@@ -60,8 +61,8 @@ async function loadNotepad() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Check authentication
-  await init();
-  checkAuth();
+  const isAuth = await checkAuth();
+  if (isAuth) await init();
 });
 
 function debounce(func, wait) {
@@ -76,8 +77,9 @@ function debounce(func, wait) {
   };
 }
 
-function checkAuth() {
-  const user = localStorage.getItem("user");
+async function checkAuth() {
+  const user = await sendApiRequest("auth/status", "GET");
+
   const loginSection = document.getElementById("log");
   const contentSection = document.getElementById("content");
   const logoutButton = document.getElementById("logout");
@@ -86,17 +88,17 @@ function checkAuth() {
     loginSection.classList.add("hidden");
     contentSection.classList.remove("hidden");
     logoutButton.style.display = "block";
-    loadItems();
-    loadCategories();
-  } else {
-    loginSection.classList.remove("hidden");
-    contentSection.classList.add("hidden");
-    logoutButton.style.display = "none";
-    disableDevTools();
+    return true;
   }
+
+  loginSection.classList.remove("hidden");
+  contentSection.classList.add("hidden");
+  logoutButton.style.display = "none";
+  disableDevTools();
+  return false;
 }
 
-function login() {
+async function login() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
@@ -105,27 +107,20 @@ function login() {
     return;
   }
 
-  fetch(`${API_URL}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        localStorage.setItem("user", username);
-        checkAuth();
-      } else {
-        alert(data.message || "Pogrešno korisničko ime ili lozinka");
-      }
-    })
-    .catch(() => alert("Greška pri logovanju"));
+  const response = await sendApiRequest("auth/login", "POST", {
+    username,
+    password,
+  });
 
-  sendApiRequest("auth/login", "POST", { username, password });
+  if (!response) alert("Pogrešno korisničko ime ili lozinka");
+  else {
+    await init();
+    checkAuth();
+  }
 }
 
-function logout() {
-  localStorage.removeItem("user");
+async function logout() {
+  await sendApiRequest("auth/logout", "POST");
   checkAuth();
 }
 

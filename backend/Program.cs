@@ -125,7 +125,8 @@ builder.Services.AddCors(options =>
                     "cm-agency.vercel.app",
                     "cmagency.milanwebportal.com",
                     "cmagency.onrender.com",
-                    "127.0.0.1"
+                    "127.0.0.1",
+                    "localhost:5500"
                 )
                 .AllowCredentials()
                 .AllowAnyMethod()

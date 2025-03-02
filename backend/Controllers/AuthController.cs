@@ -55,6 +55,13 @@ public class AuthController(
         await _signInManager.SignOutAsync();
         return Ok(new { message = "Logged out successfully" });
     }
+
+    [HttpGet("status")]
+    public async Task<IActionResult> Status()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        return Ok(new { username = user?.UserName });
+    }
 }
 
 public class RegisterModel
