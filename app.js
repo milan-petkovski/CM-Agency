@@ -168,8 +168,8 @@ function toggleShowCompleted() {
 
   const showCompletedButton = document.getElementById("showCompletedButton");
   showCompletedButton.textContent = showCompletedState
-    ? "Prikazi zavrsene stavke"
-    : "Prikazi nezavrsene stavke";
+    ? "Prikazi nezavrsene stavke"
+    : "Prikazi zavrsene stavke";
 }
 
 async function addItem() {
@@ -244,7 +244,7 @@ function updateList(items) {
 
     if (i.completed) li.classList.add("line-through");
 
-    li.addEventListener("click", async (e) => {
+    li.addEventListener("dblclick", async (e) => {
       if (e.target === deleteButton) return;
 
       updateList(
