@@ -58,6 +58,13 @@ builder.Services.AddScoped<IRequestMapper<CreateItemRequestDto, Item>, CreateIte
 builder.Services.AddScoped<IResponseMapper<Item, ItemResponseDto>, ItemResponseMapper>();
 #endregion
 
+#region Notepad
+builder.Services.AddScoped<ICreateSingleService<Notepad>, CreateService<Notepad>>();
+builder.Services.AddScoped<IReadSingleService<Notepad>, ReadService<Notepad>>();
+builder.Services.AddScoped<IExecuteUpdateService<Notepad>, UpdateService<Notepad>>();
+builder.Services.AddScoped<IDeleteService<Notepad>, DeleteService<Notepad>>();
+#endregion
+
 #endregion
 
 var app = builder.Build();
