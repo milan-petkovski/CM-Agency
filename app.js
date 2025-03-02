@@ -146,7 +146,7 @@ async function loadCategories() {
     const option = document.createElement("option");
     option.value = name;
     option.textContent =
-      itemsCount === 0 ? name : `${name}: ${itemsCount} stavki`;
+      itemsCount === 0 ? name : `${itemsCount} stavki`;
     categoryList.appendChild(option);
     filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
   });
