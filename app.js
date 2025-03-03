@@ -135,98 +135,37 @@ async function logout() {
 
 async function loadCategories() {
   const response = await sendApiRequest("category/full", "GET");
-  categories = response
-    .map((c) => ({
-      ...c,
-      count: c.items.length,
-    }))
-    .sort((a, b) => b.count - a.count);
+  categories = response;
   items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
 
-  updateList();
+  updateItemsUI();
+  updateCategoryUI();
+}
 
+function updateCategoryUI() {
   const categoryList = document.getElementById("categoryList");
   const filterCategoryList = document.getElementById("filterCategoryList");
 
-  categories.forEach(({ name, count: itemsCount }) => {
-    const option = document.createElement("option");
-    option.value = name;
-    option.textContent = itemsCount === 0 ? name : `${itemsCount} stavki`;
-    categoryList.appendChild(option);
-    filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
-  });
+  categoryList.innerHTML = "";
+  filterCategoryList.innerHTML = "";
+
+  categories
+    .map((x) => ({
+      name: x.name,
+      count: x.items.filter((x) => x.completed === showCompletedState).length,
+    }))
+    .sort((a, b) => b.count - a.count)
+    .forEach(({ name, count }) => {
+      const option = document.createElement("option");
+      option.value = name;
+
+      option.textContent = count === 0 ? name : `${count} stavki`;
+      categoryList.appendChild(option);
+      filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
+    });
 }
 
-function cleanURL(url) {
-  url = url
-    .split("?")[0]
-    .replace(/https?:\/\/www\./, "https://")
-    .replace(/http:\/\/www\./, "http://");
-  return url.includes("instagram.com")
-    ? url.replace(/https?:\/\/www\./, "https://")
-    : url;
-}
-
-function toggleShowCompleted() {
-  showCompletedState = !showCompletedState;
-  updateList();
-
-  const showCompletedButton = document.getElementById("showCompletedButton");
-  showCompletedButton.textContent = showCompletedState
-    ? "Prikazi nezavrsene stavke"
-    : "Prikazi zavrsene stavke";
-}
-
-async function addItem() {
-  let textInput = cleanURL(document.getElementById("textInput").value.trim());
-  const categoryInput = document.getElementById("categoryInput").value.trim();
-
-  if (!textInput || !categoryInput) {
-    alert("Unesite naziv stavke i kategoriju.");
-    return;
-  }
-
-  const selectedCategoryId = categories.find(
-    (category) => category.name === categoryInput
-  )?.id;
-
-  if (!selectedCategoryId || selectedCategoryId < 1) {
-    alert("Odabrana kategorija ne postoji.");
-    return;
-  }
-
-  const urlPattern =
-    /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
-
-  if (urlPattern.test(textInput))
-    textInput = textInput.startsWith("http")
-      ? textInput.replace(/\/+$/, "")
-      : `https://${textInput}`.replace(/\/+$/, "");
-
-  if (items.some((i) => i.name.replace(/\/+$/, "") === textInput)) {
-    alert("Stavka sa tim nazivom već postoji.");
-    return;
-  }
-
-  const response = await sendApiRequest("item", "POST", {
-    name: textInput,
-    categoryId: selectedCategoryId,
-  });
-
-  if (!response) {
-    alert("Greška pri dodavanju stavke.");
-    return;
-  }
-
-  filterCategoryId = -1;
-  showCompletedState = false;
-  items = [response, ...items];
-  updateList();
-  document.getElementById("textInput").value = "";
-  document.getElementById("categoryInput").value = "";
-}
-
-function updateList() {
+function updateItemsUI() {
   const itemsInCategory =
     filterCategoryId < 1
       ? items
@@ -235,7 +174,7 @@ function updateList() {
   if (itemsInCategory.length === 0 && filterCategoryId > 0) {
     alert("Nema stavki u ovoj kategoriji.");
     filterCategoryId = -1;
-    updateList();
+    updateItemsUI();
     return;
   }
 
@@ -287,7 +226,7 @@ function updateList() {
         return item;
       });
 
-      updateList();
+      updateItemsUI();
 
       const response = await sendApiRequest(
         "item/" + i.id + "/toggle-complete",
@@ -303,7 +242,7 @@ function updateList() {
         });
 
         alert("Greška pri promjeni statusa stavke.");
-        updateList();
+        updateItemsUI();
       }
     });
 
@@ -314,6 +253,82 @@ function updateList() {
   counter.textContent = `Ukupno stavki: ${itemsInCategory.length} (${
     filteredItems.length
   } ${showCompletedState ? "zavrsenih" : "nezavrsenih"})`;
+}
+
+function cleanURL(url) {
+  url = url
+    .split("?")[0]
+    .replace(/https?:\/\/www\./, "https://")
+    .replace(/http:\/\/www\./, "http://");
+  return url.includes("instagram.com")
+    ? url.replace(/https?:\/\/www\./, "https://")
+    : url;
+}
+
+function toggleShowCompleted() {
+  showCompletedState = !showCompletedState;
+  updateCategoryUI();
+  updateItemsUI();
+
+  const showCompletedButton = document.getElementById("showCompletedButton");
+  showCompletedButton.textContent = showCompletedState
+    ? "Prikazi nezavrsene stavke"
+    : "Prikazi zavrsene stavke";
+}
+
+async function addItem() {
+  let textInput = cleanURL(document.getElementById("textInput").value.trim());
+  const categoryInput = document.getElementById("categoryInput").value.trim();
+
+  if (!textInput || !categoryInput) {
+    alert("Unesite naziv stavke i kategoriju.");
+    return;
+  }
+
+  const selectedCategory = categories.find(
+    (category) => category.name === categoryInput
+  );
+
+  const selectedCategoryId = selectedCategory?.id;
+
+  if (!selectedCategoryId || selectedCategoryId < 1) {
+    alert("Odabrana kategorija ne postoji.");
+    return;
+  }
+
+  const urlPattern =
+    /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
+
+  if (urlPattern.test(textInput))
+    textInput = textInput.startsWith("http")
+      ? textInput.replace(/\/+$/, "")
+      : `https://${textInput}`.replace(/\/+$/, "");
+
+  if (items.some((i) => i.name.replace(/\/+$/, "") === textInput)) {
+    alert("Stavka sa tim nazivom već postoji.");
+    return;
+  }
+
+  const response = await sendApiRequest("item", "POST", {
+    name: textInput,
+    categoryId: selectedCategoryId,
+  });
+
+  if (!response) {
+    alert("Greška pri dodavanju stavke.");
+    return;
+  }
+
+  filterCategoryId = -1;
+  showCompletedState = false;
+
+  items = [response, ...items];
+  selectedCategory.items = [response, ...selectedCategory.items];
+
+  updateCategoryUI();
+  updateItemsUI();
+  document.getElementById("textInput").value = "";
+  document.getElementById("categoryInput").value = "";
 }
 
 function filterItems() {
@@ -327,7 +342,7 @@ function filterItems() {
 
   if (!formattedCategoryInput) {
     filterCategoryId = -1;
-    updateList();
+    updateItemsUI();
     return;
   }
 
@@ -338,12 +353,12 @@ function filterItems() {
   if (!selectedCategoryId) {
     alert("Izabrana kategorija ne postoji.");
     filterCategoryId = -1;
-    updateList();
+    updateItemsUI();
     return;
   }
 
   filterCategoryId = selectedCategoryId;
-  updateList();
+  updateItemsUI();
 }
 
 function downloadList() {
@@ -365,8 +380,18 @@ async function deleteItem(id) {
     return;
   }
 
+  const item = items.find((item) => item.id === id);
+  if (item) {
+    const category = categories.find(
+      (category) => category.id === item.categoryId
+    );
+
+    category.items = category.items.filter((item) => item.id !== id);
+    updateCategoryUI();
+  }
+
   items = items.filter((item) => item.id !== id);
-  updateList();
+  updateItemsUI();
 }
 
 function searchList() {
@@ -490,7 +515,7 @@ async function backToMain() {
   );
 
   try {
-    updateList();
+    updateItemsUI();
 
     // Hide all secondary views explicitly
     categoryView.classList.add("hidden");
