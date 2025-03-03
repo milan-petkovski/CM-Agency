@@ -63,9 +63,14 @@ async function loadNotepad() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  document.getElementById("logout").classList.add("hidden");
+
   // Check authentication
   const isAuth = await checkAuth();
-  if (isAuth) await init();
+  if (!isAuth) return;
+
+  await init();
+  document.getElementById("logout").classList.remove("hidden");
 });
 
 function debounce(func, wait) {
@@ -118,6 +123,7 @@ async function login() {
   if (!response) alert("Pogrešno korisničko ime ili lozinka");
   else {
     await init();
+    document.getElementById("logout").classList.remove("hidden");
     checkAuth();
   }
 }
@@ -137,7 +143,7 @@ async function loadCategories() {
     .sort((a, b) => b.count - a.count);
   items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
 
-  updateList(items);
+  updateList();
 
   const categoryList = document.getElementById("categoryList");
   const filterCategoryList = document.getElementById("filterCategoryList");
@@ -145,8 +151,7 @@ async function loadCategories() {
   categories.forEach(({ name, count: itemsCount }) => {
     const option = document.createElement("option");
     option.value = name;
-    option.textContent =
-      itemsCount === 0 ? name : `${itemsCount} stavki`;
+    option.textContent = itemsCount === 0 ? name : `${itemsCount} stavki`;
     categoryList.appendChild(option);
     filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
   });
@@ -164,7 +169,7 @@ function cleanURL(url) {
 
 function toggleShowCompleted() {
   showCompletedState = !showCompletedState;
-  updateList(items.filter((i) => i.completed === showCompletedState));
+  updateList();
 
   const showCompletedButton = document.getElementById("showCompletedButton");
   showCompletedButton.textContent = showCompletedState
@@ -173,7 +178,7 @@ function toggleShowCompleted() {
 }
 
 async function addItem() {
-  const textInput = document.getElementById("textInput").value.trim();
+  let textInput = cleanURL(document.getElementById("textInput").value.trim());
   const categoryInput = document.getElementById("categoryInput").value.trim();
 
   if (!textInput || !categoryInput) {
@@ -190,13 +195,21 @@ async function addItem() {
     return;
   }
 
-  if (items.some((i) => i.name === textInput)) {
+  const urlPattern =
+    /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
+
+  if (urlPattern.test(textInput))
+    textInput = textInput.startsWith("http")
+      ? textInput.replace(/\/+$/, "")
+      : `https://${textInput}`.replace(/\/+$/, "");
+
+  if (items.some((i) => i.name.replace(/\/+$/, "") === textInput)) {
     alert("Stavka sa tim nazivom već postoji.");
     return;
   }
 
   const response = await sendApiRequest("item", "POST", {
-    name: cleanURL(textInput),
+    name: textInput,
     categoryId: selectedCategoryId,
   });
 
@@ -205,16 +218,34 @@ async function addItem() {
     return;
   }
 
+  filterCategoryId = -1;
+  showCompletedState = false;
   items = [response, ...items];
-  updateList(items);
+  updateList();
   document.getElementById("textInput").value = "";
   document.getElementById("categoryInput").value = "";
 }
 
-function updateList(items) {
+function updateList() {
+  const itemsInCategory =
+    filterCategoryId < 1
+      ? items
+      : items.filter((x) => x.categoryId === filterCategoryId);
+
+  if (itemsInCategory.length === 0 && filterCategoryId > 0) {
+    alert("Nema stavki u ovoj kategoriji.");
+    filterCategoryId = -1;
+    updateList();
+    return;
+  }
+
+  const filteredItems = itemsInCategory.filter(
+    (x) => x.completed === showCompletedState
+  );
+
   const list = document.getElementById("list");
   list.innerHTML = "";
-  items.forEach((i) => {
+  filteredItems.forEach((i) => {
     const li = document.createElement("li");
     const cleanedLink = cleanURL(i.name);
     const urlPattern =
@@ -224,10 +255,12 @@ function updateList(items) {
       const url = new URL(
         cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`
       );
+      const cleanedLink2 =
+        url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
+
       const link = document.createElement("a");
       link.href = cleanedLink;
-      link.textContent =
-        url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
+      link.textContent = cleanedLink2;
       link.target = "_blank";
       li.appendChild(link);
     } else {
@@ -247,14 +280,14 @@ function updateList(items) {
     li.addEventListener("dblclick", async (e) => {
       if (e.target === deleteButton) return;
 
-      updateList(
-        items.map((item) => {
-          if (item.id === i.id) {
-            item.completed = !item.completed;
-          }
-          return item;
-        })
-      );
+      items = items.map((item) => {
+        if (item.id === i.id) {
+          item.completed = !item.completed;
+        }
+        return item;
+      });
+
+      updateList();
 
       const response = await sendApiRequest(
         "item/" + i.id + "/toggle-complete",
@@ -262,13 +295,15 @@ function updateList(items) {
       );
 
       if (!response) {
-        alert("Greška pri promjeni statusa stavke.");
-        items.map((item) => {
+        items = items.map((item) => {
           if (item.id === i.id) {
             item.completed = !item.completed;
           }
           return item;
         });
+
+        alert("Greška pri promjeni statusa stavke.");
+        updateList();
       }
     });
 
@@ -276,7 +311,9 @@ function updateList(items) {
     list.appendChild(li);
   });
   const counter = document.getElementById("counter");
-  counter.textContent = `Ukupno stavki: ${items.length}`;
+  counter.textContent = `Ukupno stavki: ${itemsInCategory.length} (${
+    filteredItems.length
+  } ${showCompletedState ? "zavrsenih" : "nezavrsenih"})`;
 }
 
 function filterItems() {
@@ -289,8 +326,8 @@ function filterItems() {
     filterCategoryInput.slice(1).toLowerCase();
 
   if (!formattedCategoryInput) {
-    updateList(items);
     filterCategoryId = -1;
+    updateList();
     return;
   }
 
@@ -300,24 +337,13 @@ function filterItems() {
 
   if (!selectedCategoryId) {
     alert("Izabrana kategorija ne postoji.");
-    updateList(items);
     filterCategoryId = -1;
-    return;
-  }
-
-  const filteredItems = items.filter(
-    (item) => item.categoryId === selectedCategoryId
-  );
-
-  if (filteredItems.length === 0) {
-    alert("Nema stavki u ovoj kategoriji.");
-    updateList(items);
-    filterCategoryId = -1;
+    updateList();
     return;
   }
 
   filterCategoryId = selectedCategoryId;
-  updateList(filteredItems);
+  updateList();
 }
 
 function downloadList() {
@@ -340,7 +366,7 @@ async function deleteItem(id) {
   }
 
   items = items.filter((item) => item.id !== id);
-  updateList(items);
+  updateList();
 }
 
 function searchList() {
@@ -464,7 +490,7 @@ async function backToMain() {
   );
 
   try {
-    updateList(items);
+    updateList();
 
     // Hide all secondary views explicitly
     categoryView.classList.add("hidden");
