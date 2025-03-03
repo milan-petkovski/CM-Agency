@@ -161,7 +161,7 @@ function updateCategoryUI() {
 
       option.textContent = count === 0 ? name : `${count} stavki`;
       categoryList.appendChild(option);
-      filterCategoryList.appendChild(option.cloneNode(true)); // Dodaj i u filter
+      filterCategoryList.appendChild(option.cloneNode(true));
     });
 }
 
@@ -258,10 +258,11 @@ function updateItemsUI() {
 function cleanURL(url) {
   url = url
     .split("?")[0]
-    .replace(/https?:\/\//, "")
-    .replace(/^www\./, "")
-    .replace(/\/$/, "");
-  return url.includes("instagram.com") ? `https://${url}` : url;
+    .replace(/https?:\/\/www\./, "https://")
+    .replace(/http:\/\/www\./, "http://");
+  return url.includes("instagram.com")
+    ? url.replace(/https?:\/\/www\./, "https://")
+    : url;
 }
 
 function toggleShowCompleted() {
@@ -414,23 +415,26 @@ function searchList() {
   counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
 }
 
-async function showCategories() {
+async function openCategoriesTab() {
   const contentSection = document.getElementById("content");
   const categoryView = document.getElementById("kategorije");
   const mainContent = contentSection.querySelectorAll(
     "h2, input, button, ul#list, p, a:not(#logout), .gore"
   );
 
-  // Zadrži prethodni prikaz (npr. #content) dok se podaci ne učitaju
   try {
-    // Popuni kategorije
-    const categoryOnlyList = document.getElementById("klist");
-    categoryOnlyList.innerHTML = ""; // Očisti prethodni sadržaj
+    const tabList = document.getElementById("klist");
+    tabList.innerHTML = "";
 
     categories.forEach((category) => {
       const li = document.createElement("li");
       li.textContent = category.name;
-      categoryOnlyList.appendChild(li);
+      if (category.completed) li.classList.add("line-through");
+      tabList.appendChild(li);
+
+      li.addEventListener("dblclick", () =>
+        toggleCategoryCompletion(category.id)
+      );
     });
 
     // Sakrij prethodni prikaz i prikaži kategorije sa animacijom kada je DOM spreman
@@ -445,6 +449,21 @@ async function showCategories() {
     // Vrati se na prethodni prikaz (npr. #content) bez animacije
     contentSection.classList.remove("hidden");
     mainContent.forEach((element) => element.classList.remove("hidden"));
+  }
+
+  async function toggleCategoryCompletion(categoryId) {
+    const category = categories.find((c) => c.id === categoryId);
+    if (category) {
+      category.completed = !category.completed;
+      openCategoriesTab();
+    }
+
+    const response = await sendApiRequest(
+      "category/" + categoryId + "/toggle-complete",
+      "PUT"
+    );
+
+    if (!response) alert("Greška pri promeni statusa kategorije.");
   }
 }
 

@@ -6,6 +6,7 @@ using CmAgency.Services.Delete;
 using CmAgency.Services.Mapping.Request;
 using CmAgency.Services.Mapping.Response;
 using CmAgency.Services.Read;
+using CmAgency.Services.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ public class CategoryController(
     ICreateRangeService<Category> createRangeService,
     IReadRangeService<Category> readRangeService,
     IReadSingleService<Category> readSingleService,
+    IExecuteUpdateService<Category> updateService,
     IDeleteService<Category> deleteService,
     IRequestMapper<CreateCategoryRequestDto, Category> createRequestMapper,
     IResponseMapper<Category, CategoryPreviewResponseDto> previewResponseMapper,
@@ -27,6 +29,7 @@ public class CategoryController(
     private readonly ICreateRangeService<Category> createRangeService = createRangeService;
     private readonly IReadRangeService<Category> readRangeService = readRangeService;
     private readonly IReadSingleService<Category> readSingleService = readSingleService;
+    private readonly IExecuteUpdateService<Category> updateService = updateService;
     private readonly IDeleteService<Category> deleteService = deleteService;
     private readonly IRequestMapper<CreateCategoryRequestDto, Category> createRequestMapper =
         createRequestMapper;
@@ -93,6 +96,15 @@ public class CategoryController(
 
         return Ok(responseMapper.Map(result.Value));
     }
+
+    [HttpPut("{id:int}/toggle-complete")]
+    public async Task<IActionResult> ToggleComplete(int id) =>
+        Ok(
+            await updateService.Update(
+                x => x.Id == id,
+                x => x.SetProperty(x => x.Completed, x => !x.Completed)
+            )
+        );
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) =>

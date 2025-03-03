@@ -5,5 +5,11 @@ namespace CmAgency.Services.Mapping.Request;
 
 public class CreateCategoryRequestMapper : IRequestMapper<CreateCategoryRequestDto, Category>
 {
-    public Category Map(CreateCategoryRequestDto from) => new() { Name = from.Name, Items = [] };
+    public Category Map(CreateCategoryRequestDto from) =>
+        new()
+        {
+            Name = from.Name,
+            Completed = false,
+            Items = [],
+        };
 }

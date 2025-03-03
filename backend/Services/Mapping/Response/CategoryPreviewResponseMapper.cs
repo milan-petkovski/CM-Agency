@@ -6,5 +6,10 @@ namespace CmAgency.Services.Mapping.Response;
 public class CategoryPreviewResponseMapper : IResponseMapper<Category, CategoryPreviewResponseDto>
 {
     public CategoryPreviewResponseDto Map(Category from) =>
-        new() { Id = from.Id, Name = from.Name };
+        new()
+        {
+            Id = from.Id,
+            Name = from.Name,
+            Completed = from.Completed,
+        };
 }

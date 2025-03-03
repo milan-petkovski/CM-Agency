@@ -80,6 +80,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<ICreateRangeService<Category>, CreateService<Category>>();
 builder.Services.AddScoped<IReadSingleService<Category>, ReadService<Category>>();
 builder.Services.AddScoped<IReadRangeService<Category>, ReadService<Category>>();
+builder.Services.AddScoped<IExecuteUpdateService<Category>, UpdateService<Category>>();
 builder.Services.AddScoped<IDeleteService<Category>, DeleteService<Category>>();
 builder.Services.AddScoped<
     IRequestMapper<CreateCategoryRequestDto, Category>,
