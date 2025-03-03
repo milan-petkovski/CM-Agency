@@ -13,6 +13,7 @@ public class CategoryResponseMapper(IResponseMapper<Item, ItemResponseDto> itemR
         {
             Id = from.Id,
             Name = from.Name,
+            Completed = from.Completed,
             Items = from.Items.Select(itemResponseMapper.Map),
         };
 }
