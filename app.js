@@ -426,7 +426,12 @@ async function openCategoriesTab() {
     const tabList = document.getElementById("klist");
     tabList.innerHTML = "";
 
-    categories.forEach((category) => {
+    // Sortiraj: prvo po completed (false gore, true dole), zatim po id opadajuće
+    const sortedCategories = categories
+      .slice()
+      .sort((a, b) => a.completed - b.completed || a.id - b.id);
+
+    sortedCategories.forEach((category) => {
       const li = document.createElement("li");
       li.textContent = category.name;
       if (category.completed) li.classList.add("line-through");
@@ -463,7 +468,7 @@ async function openCategoriesTab() {
       "PUT"
     );
 
-    if (!response) alert("Greška pri promeni statusa kategorije.");
+    if (!response) alert("Greška pri promeni statusa kategorije.");
   }
 }
 
