@@ -1696,6 +1696,23 @@ form {
   }
 }
 
+#notepad textarea {
+  width: 100%;
+  height: 505px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #2a2a2a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  resize: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+#notepad textarea:focus {
+  outline: none;
+  border-color: var(--crvena);
+  box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
+}
 #server iframe {
   width: 100%;
   padding: 20px;
@@ -1775,6 +1792,14 @@ form {
     transform: translateX(0);
   }
 }
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
 
 .video-loader {
   position: absolute;
@@ -1789,34 +1814,15 @@ form {
   animation: spin 1s linear infinite;
   z-index: -1;
 }
-@keyframes spin {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-#notepad textarea {
-  width: 100%;
-  height: 505px;
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: #2a2a2a;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 14px;
-  resize: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-#notepad textarea:focus {
-  outline: none;
-  border-color: var(--crvena);
-  box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
-}
-
 .line-through {
   text-decoration: line-through;
+}
+.portal ul li.empty-message {
+  background: none;
+  border: none;
+  color: #888;
+  font-style: italic;
+  justify-content: center;
+  padding: 10px;
+  pointer-events: none;
 }

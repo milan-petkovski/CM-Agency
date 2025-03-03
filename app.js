@@ -184,56 +184,50 @@ function updateItemsUI() {
 
   const list = document.getElementById("list");
   list.innerHTML = "";
-  filteredItems.forEach((i) => {
+
+  // Check if there are no incomplete items when showing incomplete state
+  if (filteredItems.length === 0 && !showCompletedState) {
     const li = document.createElement("li");
-    const cleanedLink = cleanURL(i.name);
-    const urlPattern =
-      /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
+    li.textContent = "Nema nezavršenih stavki";
+    li.classList.add("empty-message"); // Optional class for styling
+    list.appendChild(li);
+  } else {
+    // Populate the list as usual
+    filteredItems.forEach((i) => {
+      const li = document.createElement("li");
+      const cleanedLink = cleanURL(i.name);
+      const urlPattern =
+        /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
 
-    if (urlPattern.test(cleanedLink)) {
-      const url = new URL(
-        cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`
-      );
-      const cleanedLink2 =
-        url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
+      if (urlPattern.test(cleanedLink)) {
+        const url = new URL(
+          cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`
+        );
+        const cleanedLink2 =
+          url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
 
-      const link = document.createElement("a");
-      link.href = cleanedLink;
-      link.textContent = cleanedLink2;
-      link.target = "_blank";
-      li.appendChild(link);
-    } else {
-      li.textContent = i.name;
-    }
+        const link = document.createElement("a");
+        link.href = cleanedLink;
+        link.textContent = cleanedLink2;
+        link.target = "_blank";
+        li.appendChild(link);
+      } else {
+        li.textContent = i.name;
+      }
 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "X";
-    deleteButton.classList.add("delete");
-    deleteButton.addEventListener("click", async (e) => {
-      e.stopPropagation();
-      await deleteItem(i.id);
-    });
-
-    if (i.completed) li.classList.add("line-through");
-
-    li.addEventListener("dblclick", async (e) => {
-      if (e.target === deleteButton) return;
-
-      items = items.map((item) => {
-        if (item.id === i.id) {
-          item.completed = !item.completed;
-        }
-        return item;
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "X";
+      deleteButton.classList.add("delete");
+      deleteButton.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await deleteItem(i.id);
       });
 
-      updateItemsUI();
+      if (i.completed) li.classList.add("line-through");
 
-      const response = await sendApiRequest(
-        "item/" + i.id + "/toggle-complete",
-        "PUT"
-      );
+      li.addEventListener("dblclick", async (e) => {
+        if (e.target === deleteButton) return;
 
-      if (!response) {
         items = items.map((item) => {
           if (item.id === i.id) {
             item.completed = !item.completed;
@@ -241,14 +235,31 @@ function updateItemsUI() {
           return item;
         });
 
-        alert("Greška pri promjeni statusa stavke.");
         updateItemsUI();
-      }
-    });
 
-    li.appendChild(deleteButton);
-    list.appendChild(li);
-  });
+        const response = await sendApiRequest(
+          "item/" + i.id + "/toggle-complete",
+          "PUT"
+        );
+
+        if (!response) {
+          items = items.map((item) => {
+            if (item.id === i.id) {
+              item.completed = !item.completed;
+            }
+            return item;
+          });
+
+          alert("Greška pri promjeni statusa stavke.");
+          updateItemsUI();
+        }
+      });
+
+      li.appendChild(deleteButton);
+      list.appendChild(li);
+    });
+  }
+
   const counter = document.getElementById("counter");
   counter.textContent = `Ukupno stavki: ${itemsInCategory.length} (${
     filteredItems.length
@@ -343,6 +354,7 @@ function filterItems() {
   if (!formattedCategoryInput) {
     filterCategoryId = -1;
     updateItemsUI();
+    document.getElementById("filterCategoryInput").value = "";
     return;
   }
 
@@ -354,23 +366,13 @@ function filterItems() {
     alert("Izabrana kategorija ne postoji.");
     filterCategoryId = -1;
     updateItemsUI();
+    document.getElementById("filterCategoryInput").value = "";
     return;
   }
 
   filterCategoryId = selectedCategoryId;
   updateItemsUI();
-}
-
-function downloadList() {
-  const text = items
-    .filter((x) => filterCategoryId < 1 || x.categoryId === filterCategoryId)
-    .map((item) => item.name)
-    .join("\n");
-  const blob = new Blob([text], { type: "text/plain" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "lista.txt";
-  a.click();
+  document.getElementById("filterCategoryInput").value = "";
 }
 
 async function deleteItem(id) {
@@ -394,6 +396,18 @@ async function deleteItem(id) {
   updateItemsUI();
 }
 
+function downloadList() {
+  const text = items
+    .filter((x) => filterCategoryId < 1 || x.categoryId === filterCategoryId)
+    .map((item) => item.name)
+    .join("\n");
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "lista.txt";
+  a.click();
+}
+
 function searchList() {
   const searchQuery = prompt("Unesite pojam za pretragu:");
   if (!searchQuery) return;
@@ -415,7 +429,9 @@ function searchList() {
   counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
 }
 
-async function openCategoriesTab() {
+/* --- STRANICE --- */
+
+async function showCategory() {
   const contentSection = document.getElementById("content");
   const categoryView = document.getElementById("kategorije");
   const mainContent = contentSection.querySelectorAll(
@@ -460,7 +476,7 @@ async function openCategoriesTab() {
     const category = categories.find((c) => c.id === categoryId);
     if (category) {
       category.completed = !category.completed;
-      openCategoriesTab();
+      showCategory();
     }
 
     const response = await sendApiRequest(
