@@ -136,7 +136,7 @@ async function logout() {
 async function loadCategories() {
   const response = await sendApiRequest("category/full", "GET");
   categories = response;
-  items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
+  items = response.flatMap((c) => c.items).sort((a, b) => a.id - b.id);
 
   updateItemsUI();
   updateCategoryUI();
@@ -151,10 +151,11 @@ function updateCategoryUI() {
 
   categories
     .map((x) => ({
+      id: x.id,
       name: x.name,
       count: x.items.filter((x) => x.completed === showCompletedState).length,
     }))
-    .sort((a, b) => b.count - a.count)
+    .sort((a, b) => b.count - a.count || a.id - b.id)
     .forEach(({ name, count }) => {
       const option = document.createElement("option");
       option.value = name;

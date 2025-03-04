@@ -1653,6 +1653,15 @@ form {
 .portal ul li:hover {
   background: #3a3a3a;
 }
+.portal ul li.empty-message {
+  background: none;
+  border: none;
+  color: #888;
+  font-style: italic;
+  justify-content: center;
+  padding: 10px;
+  pointer-events: none;
+}
 .portal .delete {
   display: flex;
   justify-content: center;
@@ -1816,13 +1825,4 @@ form {
 }
 .line-through {
   text-decoration: line-through;
-}
-.portal ul li.empty-message {
-  background: none;
-  border: none;
-  color: #888;
-  font-style: italic;
-  justify-content: center;
-  padding: 10px;
-  pointer-events: none;
 }
