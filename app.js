@@ -499,7 +499,6 @@ async function showNotepad() {
   );
 
   try {
-    // Hide other views
     mainContent.forEach((element) => element.classList.add("hidden"));
     contentSection.classList.add("hidden");
     categoryView.classList.add("hidden");
@@ -515,31 +514,25 @@ async function showNotepad() {
   }
 }
 
-async function showIframe() {
+async function showFunctions() {
   const contentSection = document.getElementById("content");
   const categoryView = document.getElementById("kategorije");
   const iframeView = document.getElementById("server");
   const mainContent = contentSection.querySelectorAll(
     "h2, input, button, ul#list, p, a:not(#logout), .gore"
   );
-
-  // Zadrži prethodni prikaz dok se iframe ne učita
   try {
-    // Ne sakrivaj trenutni prikaz odmah, čekaj dok se iframe ne učita
-    // Simuliraj učitavanje sa malim kašnjenjem (300ms) za sigurnost
-    await new Promise((resolve) => setTimeout(resolve, 300)); // Kratko kašnjenje
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-    // Sakrij prethodni prikaz i prikaži iframe sa animacijom kada je DOM spreman
     mainContent.forEach((element) => element.classList.add("hidden"));
     contentSection.classList.add("hidden");
     categoryView.classList.add("hidden");
 
-    await new Promise((resolve) => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
+    await new Promise((resolve) => requestAnimationFrame(() => resolve()));
 
     iframeView.classList.remove("hidden");
   } catch (error) {
     console.error("Greška pri učitavanju iframe-a:", error);
-    // Vrati se na prethodni prikaz (npr. #content ili #kategorije)
     contentSection.classList.remove("hidden");
     mainContent.forEach((element) => element.classList.remove("hidden"));
   }
