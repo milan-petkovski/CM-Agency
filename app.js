@@ -136,7 +136,7 @@ async function logout() {
 async function loadCategories() {
   const response = await sendApiRequest("category/full", "GET");
   categories = response;
-  items = response.flatMap((c) => c.items).sort((a, b) => a.id - b.id);
+  items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
 
   updateItemsUI();
   updateCategoryUI();
