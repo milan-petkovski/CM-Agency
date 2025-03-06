@@ -1830,3 +1830,30 @@ form {
 .line-through {
   text-decoration: line-through;
 }
+
+#notification-container {
+  position: fixed;
+  text-align: center;
+  top: 30px;
+  z-index: 1000;
+}
+.notification {
+  color: #fff;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+.notification.success {
+  background-color: #13a836;
+}
+.notification.error {
+  background-color: #ad1f1c;
+}
+.notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}

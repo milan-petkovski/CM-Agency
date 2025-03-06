@@ -40,11 +40,14 @@ async function sendApiRequest(urlExtension, method, data) {
 }
 
 async function loadNotepad() {
-  // Set up notepad functionality with debounce
   const notepadTextarea = document.getElementById("notepadContent");
   if (!notepadTextarea) return;
 
   const response = await sendApiRequest("notepad/default", "GET");
+  if (!response) {
+    showNotification("Greška prilikom učitavanja notepada!", "error");
+    return;
+  }
   if (response) {
     notepad = response;
     notepadTextarea.value = notepad.content;
@@ -111,7 +114,7 @@ async function login() {
   const password = document.getElementById("password").value.trim();
 
   if (!username || !password) {
-    alert("Unesite korisničko ime i lozinku.");
+    showNotification("Unesite korisničko ime i lozinku.", "error");
     return;
   }
 
@@ -120,21 +123,29 @@ async function login() {
     password,
   });
 
-  if (!response) alert("Pogrešno korisničko ime ili lozinka");
+  if (!response) {
+    showNotification("Pogrešno korisničko ime ili lozinka.", "error");
+  }
   else {
     await init();
     document.getElementById("logout").classList.remove("hidden");
     checkAuth();
+    showNotification("Uspešno ste se prijavili!", "success");
   }
 }
 
 async function logout() {
   await sendApiRequest("auth/logout", "POST");
+  showNotification("Uspešno ste se odjavili!", "success");
   checkAuth();
 }
 
 async function loadCategories() {
   const response = await sendApiRequest("category/full", "GET");
+  if (!response) {
+    showNotification("Greška prilikom učitavanja kategorija. Pokušajte ponovo.", "error");
+    return;
+  }
   categories = response;
   items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
 
@@ -173,7 +184,7 @@ function updateItemsUI() {
       : items.filter((x) => x.categoryId === filterCategoryId);
 
   if (itemsInCategory.length === 0 && filterCategoryId > 0) {
-    alert("Nema stavki u ovoj kategoriji.");
+    showNotification("Nema stavki u ovoj kategoriji.", "error");
     filterCategoryId = -1;
     updateItemsUI();
     return;
@@ -190,10 +201,10 @@ function updateItemsUI() {
   if (filteredItems.length === 0 && !showCompletedState) {
     const li = document.createElement("li");
     li.textContent = "Nema nezavršenih stavki";
-    li.classList.add("empty-message"); // Optional class for styling
+    li.classList.add("empty-message");
     list.appendChild(li);
   } else {
-    // Populate the list as usual
+
     filteredItems.forEach((i) => {
       const li = document.createElement("li");
       const cleanedLink = cleanURL(i.name);
@@ -251,7 +262,7 @@ function updateItemsUI() {
             return item;
           });
 
-          alert("Greška pri promjeni statusa stavke.");
+          showNotification("Greška prilikom promene statusa stavke.", "error");
           updateItemsUI();
         }
       });
@@ -293,7 +304,7 @@ async function addItem() {
   const categoryInput = document.getElementById("categoryInput").value.trim();
 
   if (!textInput || !categoryInput) {
-    alert("Unesite naziv stavke i kategoriju.");
+    showNotification("Unesite naziv stavke i kategoriju.", "error");
     return;
   }
 
@@ -304,7 +315,7 @@ async function addItem() {
   const selectedCategoryId = selectedCategory?.id;
 
   if (!selectedCategoryId || selectedCategoryId < 1) {
-    alert("Odabrana kategorija ne postoji.");
+    showNotification("Odabrana kategorija ne postoji.", "error");
     return;
   }
 
@@ -316,8 +327,11 @@ async function addItem() {
       ? textInput.replace(/\/+$/, "")
       : `https://${textInput}`.replace(/\/+$/, "");
 
-  if (items.some((i) => i.name.replace(/\/+$/, "") === textInput)) {
-    alert("Stavka sa tim nazivom već postoji.");
+  if (items.some((i) => i.name.replace(/\/+$/, "") === textInput)) {    
+    showNotification("Stavka sa tim nazivom već postoji.", "error");
+    document.getElementById("textInput").value = "";
+    document.getElementById("categoryInput").value = "";
+
     return;
   }
 
@@ -327,10 +341,13 @@ async function addItem() {
   });
 
   if (!response) {
-    alert("Greška pri dodavanju stavke.");
+    showNotification("Greška prilikom dodavanja stavke.", "error");
+    document.getElementById("textInput").value = "";
+    document.getElementById("categoryInput").value = "";
     return;
   }
-
+  
+  showNotification("Stavka uspešno dodata!", "success");
   filterCategoryId = -1;
   showCompletedState = false;
 
@@ -364,7 +381,7 @@ function filterItems() {
   )?.id;
 
   if (!selectedCategoryId) {
-    alert("Izabrana kategorija ne postoji.");
+    showNotification("Izabrana kategorija ne postoji.", "error");
     filterCategoryId = -1;
     updateItemsUI();
     document.getElementById("filterCategoryInput").value = "";
@@ -379,11 +396,13 @@ function filterItems() {
 async function deleteItem(id) {
   const response = await sendApiRequest("item/" + id, "DELETE");
   if (!response) {
-    alert("Greška pri brisanju stavke.");
+    showNotification("Greška prilikom brisanja stavke.", "error");
     return;
   }
 
+  showNotification("Stavka uspešno obrisana!", "success");
   const item = items.find((item) => item.id === id);
+
   if (item) {
     const category = categories.find(
       (category) => category.id === item.categoryId
@@ -407,6 +426,7 @@ function downloadList() {
   a.href = URL.createObjectURL(blob);
   a.download = "lista.txt";
   a.click();
+  showNotification("Lista je uspešno preuzeta!", "success");
 }
 
 function searchList() {
@@ -425,6 +445,13 @@ function searchList() {
       item.style.display = "none";
     }
   });
+
+  if (visibleItemsCount === 0) {
+    const li = document.createElement("li");
+    li.textContent = "Nema stavki koje odgovaraju pretrazi.";
+    li.classList.add("empty-message");
+    list.appendChild(li);
+  } 
 
   const counter = document.getElementById("counter");
   counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
@@ -485,7 +512,7 @@ async function showCategory() {
       "PUT"
     );
 
-    if (!response) alert("Greška pri promeni statusa kategorije.");
+    if (!response) showNotification("Greška prilikom promene statusa kategorije.", "error");
   }
 }
 
@@ -599,4 +626,29 @@ function disableDevTools() {
       return false;
     }
   };
+}
+
+function showNotification(message, type = "error") {
+  const container = document.getElementById("notification-container");
+  if (!container) return;
+
+  const currentNotifications = container.getElementsByClassName("notification");
+  if (currentNotifications.length > 0) {
+    currentNotifications[0].remove(); // Ukloni postojeću notifikaciju odmah
+  }
+
+  const notification = document.createElement("div");
+  notification.classList.add("notification", type);
+  notification.textContent = message;
+
+  container.appendChild(notification);
+
+  requestAnimationFrame(() => {
+    notification.classList.add("show");
+  });
+
+  setTimeout(() => {
+    notification.classList.remove("show");
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
 }
