@@ -33,9 +33,7 @@
         <div class="gore">
             <a href="#" onclick="showCategory()">Kategorije</a> |
             <a href="https://facebook.com/ads/library" target="_blank">Ads library</a> |
-            <a href="#" onclick="showNotepad()">Notepad</a> |
-            <a href="#" onclick="showFunctions()">Server funkcije</a>
-            
+            <a href="#" onclick="showNotepad()">Notepad</a>
         </div>
         <!-- LEADS -->
         <h2>Dodaj leads</h2>
@@ -50,37 +48,33 @@
         <datalist id="filterCategoryList"></datalist>
         <button id="btn2" onclick="filterItems()">Filtriraj</button>
         <ul id="list">
-            
         </ul>
+
+        <div class="button-group">     
         <button id="showCompletedButton" onclick="toggleShowCompleted()">Prikazi samo zavrsene</button>
         <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
         <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
+        </div>
     </div>
         
     <!-- KATEGORIJE -->
     <div id="kategorije" class="hidden">
         <h2>Kategorije</h2>
         <ul id="klist">
-
         </ul>
+
         <div class="button-group">
+            <button id="addCategory" onclick="addCategory()">Dodaj kategoriju</button>
             <button id="btn3" onclick="backToMain()">Nazad</button>
             <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
         </div>
     </div>
 
-    <!-- Inside the .portal section, after the #server div -->
+    <!--  NOTEPAD   -->
     <div id="notepad" class="hidden">
         <h2>Notepad</h2>
         <textarea id="notepadContent" placeholder="Piši ovde bilo šta..."></textarea>
-        <button id="btn3" onclick="backToMain()">Nazad</button>
-    </div>
-
-    <!--SERVER PROVERA-->
-    <div id="server" class="hidden">
-        <h2>Server funkcije</h2>
-        <iframe src="" frameborder="0"></iframe>
-        <button id="btn3" onclick="backToMain()">Nazad</button>
+        <button onclick="backToMain()">Nazad</button>
     </div>
 </section>
 

@@ -9,14 +9,17 @@ let notepad = {
 let filterCategoryId = -1;
 let showCompletedState = false;
 
-async function init() {
-  showCompletedState = true;
-  await Promise.all([
-    loadCategories().then(toggleShowCompleted),
-    loadNotepad(),
-  ]);
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  document.getElementById("logout").classList.add("hidden");
 
+  const isAuth = await checkAuth();
+  if (!isAuth) return;
+
+  await init();
+  document.getElementById("logout").classList.remove("hidden");
+});
+
+// API POMOĆNE FUNKCIJE
 async function sendApiRequest(urlExtension, method, data) {
   try {
     const response = await fetch(`${API_URL}/${urlExtension}`, {
@@ -39,53 +42,13 @@ async function sendApiRequest(urlExtension, method, data) {
   }
 }
 
-async function loadNotepad() {
-  const notepadTextarea = document.getElementById("notepadContent");
-  if (!notepadTextarea) return;
-
-  const response = await sendApiRequest("notepad/default", "GET");
-  if (!response) {
-    showNotification("Greška prilikom učitavanja notepada!", "error");
-    return;
-  }
-  if (response) {
-    notepad = response;
-    notepadTextarea.value = notepad.content;
-  }
-
-  const debounceSave = debounce(async () => {
-    console.log("Saving notepad content...");
-
-    const content = notepadTextarea.value;
-    notepad.content = content;
-
-    sendApiRequest("notepad", "PUT", notepad);
-  }, 500);
-
-  notepadTextarea.addEventListener("input", debounceSave);
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
-  document.getElementById("logout").classList.add("hidden");
-
-  // Check authentication
-  const isAuth = await checkAuth();
-  if (!isAuth) return;
-
-  await init();
-  document.getElementById("logout").classList.remove("hidden");
-});
-
-function debounce(func, wait) {
-  let timeout;
-  return function (...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func.apply(this, args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
+// INICIJALIZACIJA I AUTENTIFIKACIJA
+async function init() {
+  showCompletedState = true;
+  await Promise.all([
+    loadCategories().then(toggleShowCompleted),
+    loadNotepad(),
+  ]);
 }
 
 async function checkAuth() {
@@ -125,8 +88,7 @@ async function login() {
 
   if (!response) {
     showNotification("Pogrešno korisničko ime ili lozinka.", "error");
-  }
-  else {
+  } else {
     await init();
     document.getElementById("logout").classList.remove("hidden");
     checkAuth();
@@ -140,19 +102,30 @@ async function logout() {
   checkAuth();
 }
 
-async function loadCategories() {
-  const response = await sendApiRequest("category/full", "GET");
-  if (!response) {
-    showNotification("Greška prilikom učitavanja kategorija. Pokušajte ponovo.", "error");
-    return;
-  }
-  categories = response;
-  items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
-
-  updateItemsUI();
-  updateCategoryUI();
+// POMOĆNE FUNKCIJE
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func.apply(this, args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
+function cleanURL(url) {
+  url = url
+    .split("?")[0]
+    .replace(/https?:\/\/www\./, "https://")
+    .replace(/http:\/\/www\./, "http://");
+  return url.includes("instagram.com")
+    ? url.replace(/https?:\/\/www\./, "https://")
+    : url;
+}
+
+// FUNKCIJE ZA UI AŽURIRANJE
 function updateCategoryUI() {
   const categoryList = document.getElementById("categoryList");
   const filterCategoryList = document.getElementById("filterCategoryList");
@@ -170,7 +143,6 @@ function updateCategoryUI() {
     .forEach(({ name, count }) => {
       const option = document.createElement("option");
       option.value = name;
-
       option.textContent = count === 0 ? name : `${count} stavki`;
       categoryList.appendChild(option);
       filterCategoryList.appendChild(option.cloneNode(true));
@@ -197,14 +169,12 @@ function updateItemsUI() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
-  // Check if there are no incomplete items when showing incomplete state
   if (filteredItems.length === 0 && !showCompletedState) {
     const li = document.createElement("li");
     li.textContent = "Nema nezavršenih stavki";
     li.classList.add("empty-message");
     list.appendChild(li);
   } else {
-
     filteredItems.forEach((i) => {
       const li = document.createElement("li");
       const cleanedLink = cleanURL(i.name);
@@ -261,9 +231,15 @@ function updateItemsUI() {
             }
             return item;
           });
-
           showNotification("Greška prilikom promene statusa stavke.", "error");
           updateItemsUI();
+        } else {
+          const updatedItem = items.find((item) => item.id === i.id);
+          if (updatedItem.completed) {
+            showNotification("Označena kao gotova!", "success");
+          } else {
+            showNotification("Vraćena u nezavršene!", "success");
+          }
         }
       });
 
@@ -278,16 +254,6 @@ function updateItemsUI() {
   } ${showCompletedState ? "zavrsenih" : "nezavrsenih"})`;
 }
 
-function cleanURL(url) {
-  url = url
-    .split("?")[0]
-    .replace(/https?:\/\/www\./, "https://")
-    .replace(/http:\/\/www\./, "http://");
-  return url.includes("instagram.com")
-    ? url.replace(/https?:\/\/www\./, "https://")
-    : url;
-}
-
 function toggleShowCompleted() {
   showCompletedState = !showCompletedState;
   updateCategoryUI();
@@ -297,6 +263,44 @@ function toggleShowCompleted() {
   showCompletedButton.textContent = showCompletedState
     ? "Prikazi nezavrsene stavke"
     : "Prikazi zavrsene stavke";
+}
+
+// FUNKCIJE ZA MANIPULACIJU PODACIMA
+async function loadCategories() {
+  const response = await sendApiRequest("category/full", "GET");
+  if (!response) {
+    showNotification("Greška prilikom učitavanja kategorija. Pokušajte ponovo.", "error");
+    return;
+  }
+  categories = response;
+  items = response.flatMap((c) => c.items).sort((a, b) => b.id - a.id);
+
+  updateItemsUI();
+  updateCategoryUI();
+}
+
+async function loadNotepad() {
+  const notepadTextarea = document.getElementById("notepadContent");
+  if (!notepadTextarea) return;
+
+  const response = await sendApiRequest("notepad/default", "GET");
+  if (!response) {
+    showNotification("Greška prilikom učitavanja notepada!", "error");
+    return;
+  }
+  if (response) {
+    notepad = response;
+    notepadTextarea.value = notepad.content;
+  }
+
+  const debounceSave = debounce(async () => {
+    console.log("Saving notepad content...");
+    const content = notepadTextarea.value;
+    notepad.content = content;
+    sendApiRequest("notepad", "PUT", notepad);
+  }, 500);
+
+  notepadTextarea.addEventListener("input", debounceSave);
 }
 
 async function addItem() {
@@ -327,11 +331,10 @@ async function addItem() {
       ? textInput.replace(/\/+$/, "")
       : `https://${textInput}`.replace(/\/+$/, "");
 
-  if (items.some((i) => i.name.replace(/\/+$/, "") === textInput)) {    
+  if (items.some((i) => i.name.replace(/\/+$/, "") === textInput)) {
     showNotification("Stavka sa tim nazivom već postoji.", "error");
     document.getElementById("textInput").value = "";
     document.getElementById("categoryInput").value = "";
-
     return;
   }
 
@@ -346,7 +349,7 @@ async function addItem() {
     document.getElementById("categoryInput").value = "";
     return;
   }
-  
+
   showNotification("Stavka uspešno dodata!", "success");
   filterCategoryId = -1;
   showCompletedState = false;
@@ -358,6 +361,130 @@ async function addItem() {
   updateItemsUI();
   document.getElementById("textInput").value = "";
   document.getElementById("categoryInput").value = "";
+}
+
+async function addCategory() {
+  const categoryName = prompt("Unesite naziv nove kategorije:");
+  if (!categoryName || categoryName.trim() === "") {
+    showNotification("Morate uneti naziv kategorije!", "error");
+    return;
+  }
+
+  const formattedName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1).toLowerCase();
+
+  if (categories.some(cat => cat.name === formattedName)) {
+    showNotification("Kategorija sa ovim nazivom već postoji!", "error");
+    return;
+  }
+
+  const response = await sendApiRequest("category/bulk", "POST", [{ name: formattedName }]);
+
+  if (!response || response.isFailed || !response.isSuccess) {
+    showNotification("Greška prilikom dodavanja kategorije!", "error");
+    return;
+  }
+
+  const newCategory = {
+    id: Date.now(),
+    name: formattedName,
+    items: [],
+    completed: false
+  };
+
+  categories.push(newCategory);
+
+  const categoryList = document.getElementById("klist");
+  if (categoryList) {
+    const li = document.createElement("li");
+    li.textContent = newCategory.name;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "X";
+    deleteButton.classList.add("delete");
+    deleteButton.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      await deleteCategory(newCategory.id);
+    });
+
+    li.appendChild(deleteButton);
+
+    const completedCategories = Array.from(categoryList.children).filter((item) =>
+      item.classList.contains("line-through")
+    );
+
+    if (completedCategories.length > 0) {
+      categoryList.insertBefore(li, completedCategories[0]);
+    } else {
+      categoryList.appendChild(li);
+    }
+  }
+
+  updateCategoryUI();
+  showNotification("Kategorija uspešno dodata!", "success");
+}
+
+async function deleteItem(id) {
+  const response = await sendApiRequest("item/" + id, "DELETE");
+  if (!response) {
+    showNotification("Greška prilikom brisanja stavke.", "error");
+    return;
+  }
+
+  showNotification("Stavka uspešno obrisana!", "success");
+  const item = items.find((item) => item.id === id);
+
+  if (item) {
+    const category = categories.find(
+      (category) => category.id === item.categoryId
+    );
+    category.items = category.items.filter((item) => item.id !== id);
+    updateCategoryUI();
+  }
+
+  items = items.filter((item) => item.id !== id);
+  updateItemsUI();
+}
+
+async function deleteCategory(id) {
+  const response = await sendApiRequest(`category/${id}`, "DELETE");
+  if (!response) {
+    showNotification("Greška prilikom brisanja kategorije!", "error");
+    return;
+  }
+
+  categories = categories.filter(category => category.id !== id);
+  items = items.filter(item => item.categoryId !== id);
+
+  const isCategoryPage = !document.getElementById("kategorije").classList.contains("hidden");
+  if (isCategoryPage) {
+    const tabList = document.getElementById("klist");
+    tabList.innerHTML = "";
+    const sortedCategories = categories
+      .slice()
+      .sort((a, b) => a.completed - b.completed || a.id - b.id);
+
+    sortedCategories.forEach((category) => {
+      const li = document.createElement("li");
+      li.textContent = category.name;
+      if (category.completed) li.classList.add("line-through");
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "X";
+      deleteButton.classList.add("delete");
+      deleteButton.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await deleteCategory(category.id);
+      });
+
+      li.appendChild(deleteButton);
+      li.addEventListener("dblclick", () => toggleCategoryCompletion(category.id));
+      tabList.appendChild(li);
+    });
+  }
+
+  updateCategoryUI();
+  updateItemsUI();
+  showNotification("Kategorija uspešno obrisana!", "success");
 }
 
 function filterItems() {
@@ -393,29 +520,6 @@ function filterItems() {
   document.getElementById("filterCategoryInput").value = "";
 }
 
-async function deleteItem(id) {
-  const response = await sendApiRequest("item/" + id, "DELETE");
-  if (!response) {
-    showNotification("Greška prilikom brisanja stavke.", "error");
-    return;
-  }
-
-  showNotification("Stavka uspešno obrisana!", "success");
-  const item = items.find((item) => item.id === id);
-
-  if (item) {
-    const category = categories.find(
-      (category) => category.id === item.categoryId
-    );
-
-    category.items = category.items.filter((item) => item.id !== id);
-    updateCategoryUI();
-  }
-
-  items = items.filter((item) => item.id !== id);
-  updateItemsUI();
-}
-
 function downloadList() {
   const text = items
     .filter((x) => filterCategoryId < 1 || x.categoryId === filterCategoryId)
@@ -433,7 +537,10 @@ function searchList() {
   const searchQuery = prompt("Unesite pojam za pretragu:");
   if (!searchQuery) return;
 
-  const listItems = document.querySelectorAll("#list li");
+  const isCategoryPage = !document.getElementById("kategorije").classList.contains("hidden");
+  const listId = isCategoryPage ? "#klist" : "#list";
+  const listItems = document.querySelectorAll(`${listId} li`);
+  
   let visibleItemsCount = 0;
 
   listItems.forEach((item) => {
@@ -447,18 +554,21 @@ function searchList() {
   });
 
   if (visibleItemsCount === 0) {
+    const list = document.querySelector(listId);
     const li = document.createElement("li");
     li.textContent = "Nema stavki koje odgovaraju pretrazi.";
     li.classList.add("empty-message");
+    list.innerHTML = "";
     list.appendChild(li);
   } 
 
-  const counter = document.getElementById("counter");
-  counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
+  if (!isCategoryPage) {
+    const counter = document.getElementById("counter");
+    counter.textContent = `Ukupno stavki: ${visibleItemsCount}`;
+  }
 }
 
-/* --- STRANICE --- */
-
+// FUNKCIJE ZA NAVIGACIJU IZMEĐU STRANICA
 async function showCategory() {
   const contentSection = document.getElementById("content");
   const categoryView = document.getElementById("kategorije");
@@ -470,7 +580,6 @@ async function showCategory() {
     const tabList = document.getElementById("klist");
     tabList.innerHTML = "";
 
-    // Sortiraj: prvo po completed (false gore, true dole), zatim po id opadajuće
     const sortedCategories = categories
       .slice()
       .sort((a, b) => a.completed - b.completed || a.id - b.id);
@@ -479,23 +588,27 @@ async function showCategory() {
       const li = document.createElement("li");
       li.textContent = category.name;
       if (category.completed) li.classList.add("line-through");
-      tabList.appendChild(li);
 
-      li.addEventListener("dblclick", () =>
-        toggleCategoryCompletion(category.id)
-      );
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "X";
+      deleteButton.classList.add("delete");
+      deleteButton.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await deleteCategory(category.id);
+      });
+
+      li.appendChild(deleteButton);
+      li.addEventListener("dblclick", () => toggleCategoryCompletion(category.id));
+      tabList.appendChild(li);
     });
 
-    // Sakrij prethodni prikaz i prikaži kategorije sa animacijom kada je DOM spreman
     mainContent.forEach((element) => element.classList.add("hidden"));
     contentSection.classList.add("hidden");
 
-    await new Promise((resolve) => requestAnimationFrame(() => resolve())); // Sačekaj DOM ažuriranje
-
+    await new Promise((resolve) => requestAnimationFrame(() => resolve()));
     categoryView.classList.remove("hidden");
   } catch (error) {
     console.error("Greška pri učitavanju kategorija:", error);
-    // Vrati se na prethodni prikaz (npr. #content) bez animacije
     contentSection.classList.remove("hidden");
     mainContent.forEach((element) => element.classList.remove("hidden"));
   }
@@ -519,7 +632,6 @@ async function showCategory() {
 async function showNotepad() {
   const contentSection = document.getElementById("content");
   const categoryView = document.getElementById("kategorije");
-  const iframeView = document.getElementById("server");
   const notepadView = document.getElementById("notepad");
   const mainContent = contentSection.querySelectorAll(
     "h2, input, button, ul#list, p, a:not(#logout), .gore"
@@ -529,10 +641,8 @@ async function showNotepad() {
     mainContent.forEach((element) => element.classList.add("hidden"));
     contentSection.classList.add("hidden");
     categoryView.classList.add("hidden");
-    iframeView.classList.add("hidden");
 
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
-
     notepadView.classList.remove("hidden");
   } catch (error) {
     console.error("Greška pri učitavanju notepad-a:", error);
@@ -541,34 +651,9 @@ async function showNotepad() {
   }
 }
 
-async function showFunctions() {
-  const contentSection = document.getElementById("content");
-  const categoryView = document.getElementById("kategorije");
-  const iframeView = document.getElementById("server");
-  const mainContent = contentSection.querySelectorAll(
-    "h2, input, button, ul#list, p, a:not(#logout), .gore"
-  );
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    mainContent.forEach((element) => element.classList.add("hidden"));
-    contentSection.classList.add("hidden");
-    categoryView.classList.add("hidden");
-
-    await new Promise((resolve) => requestAnimationFrame(() => resolve()));
-
-    iframeView.classList.remove("hidden");
-  } catch (error) {
-    console.error("Greška pri učitavanju iframe-a:", error);
-    contentSection.classList.remove("hidden");
-    mainContent.forEach((element) => element.classList.remove("hidden"));
-  }
-}
-
 async function backToMain() {
   const contentSection = document.getElementById("content");
   const categoryView = document.getElementById("kategorije");
-  const iframeView = document.getElementById("server");
   const notepadView = document.getElementById("notepad");
   const mainContent = contentSection.querySelectorAll(
     "h2, input, button, ul#list, p, a:not(#logout), .gore"
@@ -576,28 +661,16 @@ async function backToMain() {
 
   try {
     updateItemsUI();
-
-    // Hide all secondary views explicitly
     categoryView.classList.add("hidden");
-    iframeView.classList.add("hidden");
     notepadView.classList.add("hidden");
 
-    // Wait for DOM to update
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
-
-    // Show main content
     contentSection.classList.remove("hidden");
-    mainContent.forEach((element) => {
-      element.classList.remove("hidden");
-    });
+    mainContent.forEach((element) => element.classList.remove("hidden"));
   } catch (error) {
     console.error("Greška u backToMain:", error);
-    // Revert to the previous visible view if there’s an error
     if (!categoryView.classList.contains("hidden")) {
       categoryView.classList.remove("hidden");
-      contentSection.classList.add("hidden");
-    } else if (!iframeView.classList.contains("hidden")) {
-      iframeView.classList.remove("hidden");
       contentSection.classList.add("hidden");
     } else if (!notepadView.classList.contains("hidden")) {
       notepadView.classList.remove("hidden");
@@ -606,21 +679,17 @@ async function backToMain() {
   }
 }
 
+// NOTIFIKACIJE I BEZBEDNOST
 function disableDevTools() {
   document.onkeydown = (e) => {
-    // Onemogućava F12
     if (e.key === "F12") {
       e.preventDefault();
       return false;
     }
-
-    // Onemogućava Ctrl+Shift+I i Ctrl+Shift+J
     if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) {
       e.preventDefault();
       return false;
     }
-
-    // Onemogućava Ctrl+U
     if (e.ctrlKey && e.key === "U") {
       e.preventDefault();
       return false;
@@ -634,7 +703,7 @@ function showNotification(message, type = "error") {
 
   const currentNotifications = container.getElementsByClassName("notification");
   if (currentNotifications.length > 0) {
-    currentNotifications[0].remove(); // Ukloni postojeću notifikaciju odmah
+    currentNotifications[0].remove();
   }
 
   const notification = document.createElement("div");

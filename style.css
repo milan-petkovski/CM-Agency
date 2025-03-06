@@ -1587,7 +1587,8 @@ form {
   color: var(--crvena);
 }
 .portal button {
-  width: 100%;
+  width: 99%;
+  margin: 0 auto;
   padding: 8px 10px;
   background: linear-gradient(135deg, var(--crvena), #c20d0d);
   color: white;
@@ -1601,6 +1602,10 @@ form {
   background-color: var(--hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(228, 15, 15, 0.4);
+}
+.portal .delete{
+  width: 100%;
+  margin: 0;
 }
 .portal #btn2 {
   margin-bottom: 2%;
@@ -1726,21 +1731,6 @@ form {
   border-color: var(--crvena);
   box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
 }
-#server iframe {
-  width: 100%;
-  padding: 20px;
-  height: 505px;
-  color: #fff;
-}
-#server button,
-#notepad button {
-  width: 100% !important;
-}
-#server.hidden {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
 #content:not(.hidden) {
   animation: slideInLeft 0.3s ease-out forwards;
 }
@@ -1757,12 +1747,6 @@ form {
   animation: slideInRight 0.3s ease-out forwards;
 }
 #notepad.hidden {
-  animation: slideOutRight 0.3s ease-out forwards;
-}
-#server:not(.hidden) {
-  animation: slideInRight 0.3s ease-out forwards;
-}
-#server.hidden {
   animation: slideOutRight 0.3s ease-out forwards;
 }
 @keyframes slideOutLeft {
@@ -1856,4 +1840,19 @@ form {
 .notification.show {
   opacity: 1;
   transform: translateY(0);
+}
+@media (max-width: 768px) {
+  #notification-container {
+    top: 15px;
+  }
+  .notification {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+@media (max-width: 480px) {
+  .notification {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
 }
