@@ -19,6 +19,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("logout").classList.remove("hidden");
 });
 
+document.getElementById("username").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") login();
+});
+document.getElementById("password").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") login();
+});
+
 // API POMOĆNE FUNKCIJE
 async function sendApiRequest(urlExtension, method, data) {
   try {
@@ -68,6 +75,7 @@ async function checkAuth() {
   loginSection.classList.remove("hidden");
   contentSection.classList.add("hidden");
   logoutButton.style.display = "none";
+  document.getElementById("username").focus();
   disableDevTools();
   return false;
 }
@@ -75,16 +83,23 @@ async function checkAuth() {
 async function login() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
+  const loginButton = document.querySelector("#log button");
 
   if (!username || !password) {
     showNotification("Unesite korisničko ime i lozinku.", "error");
     return;
   }
 
+  loginButton.disabled = true;
+  loginButton.textContent = "Prijavljivanje...";
+
   const response = await sendApiRequest("auth/login", "POST", {
     username,
     password,
   });
+
+  loginButton.disabled = false;
+  loginButton.textContent = "Prijavi se";
 
   if (!response) {
     showNotification("Pogrešno korisničko ime ili lozinka.", "error");
