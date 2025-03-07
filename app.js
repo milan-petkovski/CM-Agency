@@ -321,6 +321,7 @@ async function loadNotepad() {
 async function addItem() {
   let textInput = cleanURL(document.getElementById("textInput").value.trim());
   const categoryInput = document.getElementById("categoryInput").value.trim();
+  const addButton = document.getElementById("addItemBtn");
 
   if (!textInput || !categoryInput) {
     showNotification("Unesite naziv stavke i kategoriju.", "error");
@@ -353,13 +354,19 @@ async function addItem() {
     return;
   }
 
+  addButton.disabled = true;
+  addButton.textContent = "Dodavanje...";
+
   const response = await sendApiRequest("item", "POST", {
     name: textInput,
     categoryId: selectedCategoryId,
   });
 
+  addButton.disabled = false;
+  addButton.textContent = "Dodaj";
+
   if (!response) {
-    showNotification("Greška prilikom dodavanja stavke.", "error");
+    showNotification("Greška prilikom dodavanja stavke.", "error");
     document.getElementById("textInput").value = "";
     document.getElementById("categoryInput").value = "";
     return;
@@ -533,6 +540,7 @@ function filterItems() {
   filterCategoryId = selectedCategoryId;
   updateItemsUI();
   document.getElementById("filterCategoryInput").value = "";
+  showNotification(`Prikazana kategorija: ${formattedCategoryInput}`, "neutral");
 }
 
 function downloadList() {
