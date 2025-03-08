@@ -46,6 +46,8 @@ body {
   --border: #b8b8b8;
   --hover: #af0b0b;
   --neda: transparent;
+  --uvekbela: #fff;
+  --uvekcrna: #000;
 
   --hero: linear-gradient(135deg, #1c1c1c, #383838);
   --gradient: linear-gradient(135deg, #de201d, #86201e);
@@ -63,6 +65,8 @@ body.dark-mode {
   --text4: #a0a0a0;
   --border: #686868;
   --neda: #1c1c1c;
+  --uvekbela: #fff;
+  --uvekcrna: #000;
 
   --hero: #fff;
 }
@@ -1121,6 +1125,7 @@ form {
 .contact-form .radio-group label {
   display: flex;
   align-items: center;
+  color: var(--text3);
   gap: 10px;
   font-weight: 300;
   cursor: pointer;

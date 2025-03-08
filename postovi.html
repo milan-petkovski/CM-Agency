@@ -17,13 +17,15 @@
     <a href="index.html" class="logo"><img src="images/logo.png" alt="Logo">CM Agency</a>
     <ul>
         <li><a href="portal.html" class="btn">Prijavi se <ion-icon name="log-in-outline"></ion-icon></a></li>
+        <li><button id="theme-toggle">🌙</button></li>
     </ul>
 </header>
 
 <section class="single-post">
     
     <div class="post">
-        <h1 class="post-title"></h1>
+        <h1 class="post-title naslov"></h2>
+
         <div class="post-meta"><time></time></div>
         <div class="post-content">
             <img src="" id="post-image" alt="Slika">
@@ -32,7 +34,9 @@
     </div>
 
     <div class="contact-form">
-        <h1>Kontaktiraj nas</h1>
+        <h2 class="naslov underline">Kontaktiraj nas</h2>
+        <div class="container">
+    
         <form>
             <div class="row">
                 <div class="form-group">
@@ -43,20 +47,17 @@
                     <label for="naziv">Naziv kompanije</label>
                     <input type="text" id="naziv" placeholder="Google, Youtube..">
                 </div>
-            </div>
-
-            <div class="row">
                 <div class="form-group">
                     <label for="email">Vaša e-mail adresa</label>
                     <input type="email" id="email" placeholder="vasa@kompanija.com">
                 </div>
+            </div>
+    
+            <div class="row">
                 <div class="form-group">
                     <label for="websajt">Vaš vebsajt</label>
                     <input type="text" id="websajt" placeholder="Ukoliko imate vebsajt, nije obavezno">
                 </div>
-            </div>
-
-            <div class="row">
                 <div class="form-group">
                     <label for="telefon">Kontakt telefon</label>
                     <input type="text" id="telefon" placeholder="+381 60 123 45 67">
@@ -66,30 +67,31 @@
                     <input type="text" id="budzet" placeholder="500$, 1000$, 5000$...">
                 </div>
             </div>
-
+    
             <div class="form-group">
                 <label>Koje usluge su Vam potrebne? Možete izabrati više usluga</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="usluge"> Short Form Produkcija</label>
-                    <label><input type="radio" name="usluge"> Izrada web-sajta</label>
-                    <label><input type="radio" name="usluge"> Editovanje video zapise</label>
-                    <label><input type="radio" name="usluge"> Vođenje društvenih mreža</label>
-                    <label><input type="radio" name="usluge"> Facebook & Instagram reklamiranje</label>
-                    <label><input type="radio" name="usluge"> Profesionalno fotografisanje i snimanje</label>
+                    <label><input type="checkbox" name="usluge"> Short Form Produkcija</label>
+                    <label><input type="checkbox" name="usluge"> Izrada web-sajta</label>
+                    <label><input type="checkbox" name="usluge"> Editovanje video zapise</label>
+                    <label><input type="checkbox" name="usluge"> Vođenje društvenih mreža</label>
+                    <label><input type="checkbox" name="usluge"> Facebook & Instagram reklamiranje</label>
+                    <label><input type="checkbox" name="usluge"> Profesionalno fotografisanje i snimanje</label>
                 </div>
             </div>
-
+    
             <div class="form-group">
                 <label for="opis">Objasnite nam ukratko kakav Vam projekat treba i osnovne informacije</label>
                 <textarea id="opis" placeholder="Potrebno nam je reklamiranje našim proizvodima putem Facebook reklama..."></textarea>
             </div>
-
+    
             <button type="submit">Pošaljite upit</button>
         </form>
+        </div>
     </div>
     
     <div class="recommended">
-        <h2>Preporučeni blogovi</h2>
+        <h1 class="post-title naslov">Preporučeni blogovi</h2>
 
         <div class="recommended-posts">
         
@@ -165,10 +167,9 @@
 header .logo{
     color: var(--crna);
 }
-header .logo:hover{
-    color:#00000080;
+header .logo:hover {
+  color: #a1a1a1;
 }
-/* Single Post */
 .single-post {
     display: flex;
     flex-direction: column;
@@ -179,7 +180,7 @@ header .logo:hover{
     max-width: 1000px;
     background-color: var(--pozadina);
     border-radius: 10px;
-    box-shadow: 0 5px 20px 1px #1f42891a;
+    box-shadow: 0 6px 25px 2px rgba(100, 100, 100, 0.1);
 }
 .post {
     width: 100%;
@@ -190,14 +191,19 @@ header .logo:hover{
     color: var(--crna);
     text-align: center;
 }
+.recommended .post-title {
+    margin-bottom: 20px;
+    transition: 0s;
+}
 .post-meta {
     font-size: 1.2rem;
-    color: var(--sivlj);
+    color: var(--text2);
     text-align: center;
     margin-bottom: 20px;
 }
 .post-content {
     display: flex;
+    color: var(--text3);
     gap: 20px;
     margin-top: 4%;
 }
@@ -215,6 +221,9 @@ header .logo:hover{
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     width: 100%;
+}
+.single-post h1 {
+    margin: 0 auto;
 }
 .single-post h2 {
     margin-top: 5%;
@@ -247,7 +256,7 @@ header .logo:hover{
     font-size: 1.3rem;
     font-weight: 600;
     background-color: var(--crvena);
-    color: var(--bela);
+    color: var(--uvekbela);
     text-align: center;
     border-radius: 0 0 10px 10px;
 }
@@ -255,106 +264,14 @@ header .logo:hover{
     transform: translateY(-2px);
     box-shadow: 0 6px 15px #0000006b;
 }
-/* Mobile Styling */
-@media (max-width: 768px) {
-    .post-title {
-        font-size: 2rem;
-    }
-
-    .post-content {
-        font-size: 1rem;
-    }
-
-    .recommended-posts {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .blog-card {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .recommended-posts {
-        grid-template-columns: 1fr;
-    }
-}
 .contact-form {
     width: 100%;
 }
 form{
   width: auto;
-}
-.contact-form h1{
-    color: #000;
-    margin-top: 5%;
-    margin-bottom: 1%;
-}
-.contact-form .row {
-    display: flex;
-    gap: 20px;
-}
-.contact-form .row .form-group {
-    flex: 1;
-}
-.contact-form .form-group {
-    margin-bottom: 20px;
-}
-.contact-form .form-group input,
-.contact-form .form-group textarea {
-    width: 100%;
-    padding: 10px;
-    background-color: transparent;
-    border: 1px solid #33333333;
-    color: #333;
-    border-radius: 10px;
-    margin-top: 5px;
-}
-.contact-form .form-group textarea{
-    height: 150px;
-    resize: vertical;
-}
-.contact-form .form-group label {
-    color: #000;
-    display: block;
-    font-weight: 600;
-}
-.contact-form .radio-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px 20px;
-    align-items: center;
-    justify-items: start;
-}
-.contact-form .radio-group label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 300;
-    cursor: pointer;
-    white-space: nowrap;
-    text-align: left;
-    margin-top: 10px;
-}
-.contact-form .radio-group input[type="radio"] {
-    accent-color: #de201d;
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-    transform: scale(1.2);
-}
-.contact-form .contact-form button {
-    width: 100%;
-    background-image: linear-gradient(135deg, #de201d, #86201e, #000000);
-    background-size: 200%;
-    color: var(--bela);
-    padding: 10px 20px;
-    font-weight: 700;
-    border-radius: 5px 25px;
-    transition: 0.3s;
-}
-.contact-form .contact-form button:hover {
-    color: var(--bela);
-    background-position: right;
+  box-shadow: none;
+  background-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
 }
 </style>
