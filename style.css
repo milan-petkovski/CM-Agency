@@ -1672,7 +1672,7 @@ form {
   border: none;
   color: #888;
   font-style: italic;
-  justify-content: center;
+  justify-content: center !important;
   padding: 10px;
   pointer-events: none;
 }
@@ -1897,4 +1897,17 @@ form {
 #dynamicSearchInput:focus {
   outline: none;
   box-shadow: 0 0 4px var(--crvena);
+}
+
+
+#klist li {
+  display: flex;
+  justify-content: space-between; /* Naziv i datum levo, dugme desno */
+  align-items: center;
+}
+
+#klist li .completion-date {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
 }
