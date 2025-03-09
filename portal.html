@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<header id="portal">
+<header class="unselectable" id="portal">
     <a href="index.html" class="logo"><img src="images/logo.png">CM Agency</a>
     <button class="btn" id="logout" onclick="logout()">Odjavi se</button>
 </header>
@@ -20,10 +20,15 @@
 <div class="center-wrapper">
     
     <div id="log">
-      <h2>Prijava</h2>
+      <h2 class="unselectable">Prijava</h2>
       <input type="text" id="username" placeholder="Korisničko ime">
-      <input type="password" id="password" placeholder="Lozinka">
-      <button onclick="login()">Prijavi se</button>
+      <div class="password-container">
+        <input type="password" id="password" placeholder="Lozinka">
+        <span class="toggle-password" onclick="togglePassword()">
+          <ion-icon name="eye-outline" id="eye-icon"></ion-icon>
+        </span>
+      </div>
+      <button class="unselectable" onclick="login()">Prijavi se</button>
     </div>
 
     <div id="notification-container"></div>
@@ -31,7 +36,7 @@
     <section class="portal hidden" id="portal-content">
         <div id="content">
             
-        <div class="gore">
+        <div class="gore unselectable">
             <div id="weather-container">
                 <img id="weather-icon" src="" alt="Vremenska ikonica" style="display: none;">
                 <div id="current-temp"></div>
@@ -46,22 +51,22 @@
   
         <div class="middle-section">
           <!-- LEADS -->
-          <h2>Dodaj leads</h2>
+          <h2 class="unselectable">Dodaj leads</h2>
           <input type="text" id="textInput" placeholder="Unesi naziv ili link">
           <input list="categoryList" id="categoryInput" placeholder="Unesi ili izaberi kategoriju">
           <datalist id="categoryList"></datalist>
-          <button id="addItemBtn" onclick="addItem()">Dodaj</button>
+          <button class="unselectable" id="addItemBtn" onclick="addItem()">Dodaj</button>
           <!-- LISTA -->
-          <h2 id="lista">Lista</h2>
-          <p id="counter">Ukupno stavki: 0</p>
+          <h2 class="unselectable" id="lista">Lista</h2>
+          <p class="unselectable" id="counter">Ukupno stavki: 0</p>
           <input list="filterCategoryList" id="filterCategoryInput" placeholder="Filtriraj po kategoriji">
           <datalist id="filterCategoryList"></datalist>
-          <button id="btn2" onclick="filterItems()">Filtriraj</button>
+          <button class="unselectable" id="btn2" onclick="filterItems()">Filtriraj</button>
           <ul id="list"></ul>
         </div>
   
-        <button id="showCompletedButton" onclick="toggleShowCompleted()">Prikazi samo zavrsene</button>
-        <div class="button-group">  
+        <button class="unselectable" id="showCompletedButton" onclick="toggleShowCompleted()">Prikazi samo zavrsene</button>
+        <div class="button-group unselectable">  
           <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
           <button id="btn4" onclick="location.reload()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
           <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
@@ -70,10 +75,10 @@
 
         <!-- Kategorije  -->
         <div id="kategorije" class="hidden">
-            <h2>Kategorije</h2>
+            <h2 class="unselectable">Kategorije</h2>
             <ul id="klist"></ul>
-            <button id="addCategory" onclick="addCategory()">Dodaj kategoriju</button>
-            <div class="button-group">
+            <button class="unselectable" id="addCategory" onclick="addCategory()">Dodaj kategoriju</button>
+            <div class="button-group unselectable">
             <button id="btn3" onclick="backToMain()">Nazad</button>
             <button id="btn4" onclick="location.reload()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
             <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
@@ -82,9 +87,9 @@
   
         <!---  Notepad  --->
         <div id="notepad" class="hidden">
-            <h2>Notepad</h2>
+            <h2 class="unselectable">Notepad</h2>
             <textarea id="notepadContent" placeholder="Piši ovde bilo šta..."></textarea>
-            <button onclick="backToMain()">Nazad</button>
+            <button class="unselectable" onclick="backToMain()">Nazad</button>
         </div>
     </section>
 

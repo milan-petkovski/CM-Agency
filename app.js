@@ -27,6 +27,9 @@ document.getElementById("username").addEventListener("keypress", (e) => {
 document.getElementById("password").addEventListener("keypress", (e) => {
   if (e.key === "Enter") login();
 });
+document.getElementById("password").addEventListener("input", function () {
+  document.querySelector(".toggle-password").style.display = this.value ? "block" : "none";
+});
 
 // API POMOĆNE FUNKCIJE
 async function sendApiRequest(urlExtension, method, data) {
@@ -152,6 +155,13 @@ function formatDate(date) {
   return `${day} ${month} ${year}`;
 }
 
+function togglePassword() {
+  const password = document.getElementById("password");
+  const eye = document.getElementById("eye-icon");
+  password.type = password.type === "password" ? "text" : "password";
+  eye.name = password.type === "password" ? "eye-outline" : "eye-off-outline";
+}
+
 // FUNKCIJE ZA UI AŽURIRANJE
 function updateCategoryUI() {
   const categoryList = document.getElementById("categoryList");
@@ -227,6 +237,7 @@ function updateItemsUI() {
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "X";
       deleteButton.classList.add("delete");
+      deleteButton.classList.add("unselectable");
       deleteButton.addEventListener("click", async (e) => {
         e.stopPropagation();
         await deleteItem(i.id);
@@ -476,6 +487,7 @@ async function addCategory() {
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "X";
     deleteButton.classList.add("delete");
+    deleteButton.classList.add("unselectable");
     deleteButton.addEventListener("click", async (e) => {
       e.stopPropagation();
       await deleteCategory(newCategory.id);
@@ -546,6 +558,7 @@ async function deleteCategory(id) {
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "X";
       deleteButton.classList.add("delete");
+      deleteButton.classList.add("unselectable");
       deleteButton.addEventListener("click", async (e) => {
         e.stopPropagation();
         await deleteCategory(category.id);
@@ -672,6 +685,7 @@ function filterItems() {
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "X";
       deleteButton.classList.add("delete");
+      deleteButton.classList.add("unselectable");
       deleteButton.addEventListener("click", async (e) => {
         e.stopPropagation();
         await deleteItem(i.id);
@@ -827,6 +841,7 @@ async function showCategory() {
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "X";
         deleteButton.classList.add("delete");
+        deleteButton.classList.add("unselectable");
         deleteButton.addEventListener("click", async (e) => {
           e.stopPropagation();
           await deleteCategory(category.id);
