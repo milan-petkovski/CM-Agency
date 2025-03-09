@@ -1576,20 +1576,40 @@ form {
   width: 100%;
   max-width: 420px;
   height: 650px;
+  padding: 5px 20px 10px 20px;
+  border-radius: 15px;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   color: #fff;
-  padding: 5px 20px 10px 20px;
-  border-radius: 15px;
   text-align: center;
+  justify-content: center;
+  align-items: center !important;
   position: relative;
   overflow: hidden;
 }
-.portal h2 {
-  margin: 20px 0 5px 0;
+#log {
+  width: 100%;
+  max-width: 420px;
+  padding: 0 20px 20px 20px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: fadeInScale 0.5s ease-out forwards;
+  overflow: hidden;
+}
+.portal h2, #log h2 {
+  margin: 15px 0 5px 0;
   font-size: 25px;
+}
+#kategorije h2, #notepad h2{
+  margin-top: 5px;
 }
 .portal #lista{
   margin-bottom: 0;
@@ -1610,7 +1630,7 @@ form {
 .portal a:hover {
   color: var(--crvena);
 }
-.portal input {
+.portal input, #log input {
   width: 100%;
   padding: 10px;
   margin-bottom: 2%;
@@ -1620,12 +1640,12 @@ form {
   color: #fff;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-.portal input:focus {
+.portal input:focus, #log input:focus {
   outline: none;
   border-color: var(--crvena);
   box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
 }
-.portal button {
+.portal button, #log button {
   width: 100%;
   padding: 8px 10px;
   background: linear-gradient(135deg, var(--crvena), #c20d0d);
@@ -1636,7 +1656,7 @@ form {
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
-.portal button:hover {
+.portal button:hover, #log button:hover {
   background-color: var(--hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(228, 15, 15, 0.4);
@@ -1705,6 +1725,12 @@ form {
 }
 
 /* POCETNA */
+#portal-content {
+  display: none;
+}
+#portal-content:not(.hidden) {
+  display: block;
+}
 #content:not(.hidden) {
   display: flex;
   flex-direction: column;
@@ -1877,14 +1903,20 @@ form {
     height: 550px;
     padding: 10px 15px;
   }
+  #log{
+    width: 90%;
+    padding: 0 10px 20px 10px;
+  }
   .portal .gore a, .portal p, .portal span, #notepad textarea {
     font-size: 11px;
   }
-  .portal h2 {
-    font-size: 18px;
+  .portal h2, #log h2{
+    font-size: 20px;
   }
   .portal input,
-  .portal button {
+  .portal button,
+  #log input,
+  #log button{
     font-size: 12px;
     padding: 6px 8px;
   }
@@ -1896,4 +1928,38 @@ form {
     height: 15px;
     font-size: 10px;
   }
+  #current-time, #weather-container{
+    display: none !important;
+  }
+  .portal .gore{
+    justify-content: center;
+    border: 0;
+  }
+}
+
+
+.gore {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.gore .links a {
+  margin-top: 2px;
+}
+#current-time {
+  display: inline-block;
+  width: 70px;
+  font-size: 16px;
+}
+#current-temp{
+  font-size: 16px;
+}
+#weather-container {
+  display: flex;
+  align-items: center;
+}
+
+#weather-icon {
+  width: 30px;
+  height: 30px;
 }

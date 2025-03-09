@@ -8,6 +8,8 @@ let notepad = {
 };
 let filterCategoryId = -1;
 let showCompletedState = false;
+setInterval(updateBelgradeWeather, 1000);
+updateBelgradeWeather();
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("logout").classList.add("hidden");
@@ -49,7 +51,6 @@ async function sendApiRequest(urlExtension, method, data) {
   }
 }
 
-// INICIJALIZACIJA I AUTENTIFIKACIJA
 async function init() {
   showCompletedState = true;
   await Promise.all([
@@ -62,18 +63,18 @@ async function checkAuth() {
   const user = await sendApiRequest("auth/status", "GET");
 
   const loginSection = document.getElementById("log");
-  const contentSection = document.getElementById("content");
+  const portalSection = document.getElementById("portal-content");
   const logoutButton = document.getElementById("logout");
 
   if (user) {
     loginSection.classList.add("hidden");
-    contentSection.classList.remove("hidden");
+    portalSection.classList.remove("hidden");
     logoutButton.style.display = "block";
     return true;
   }
 
   loginSection.classList.remove("hidden");
-  contentSection.classList.add("hidden");
+  portalSection.classList.add("hidden");
   logoutButton.style.display = "none";
   document.getElementById("username").focus();
   disableDevTools();
@@ -289,6 +290,47 @@ function toggleShowCompleted() {
   showCompletedButton.textContent = showCompletedState
     ? "Prikazi nezavrsene stavke"
     : "Prikazi zavrsene stavke";
+}
+
+async function updateBelgradeWeather() {
+  const tempElement = document.getElementById("current-temp");
+  const timeElement = document.getElementById("current-time");
+  const weatherIcon = document.getElementById("weather-icon");
+  if (!tempElement || !timeElement || !weatherIcon) return;
+
+  const nowUTC = new Date();
+  const belgradeOffset = 0;
+  const belgradeTime = new Date(nowUTC.getTime() + belgradeOffset * 60 * 60 * 1000);
+
+  const hours = belgradeTime.getHours().toString().padStart(2, "0");
+  const minutes = belgradeTime.getMinutes().toString().padStart(2, "0");
+  const seconds = belgradeTime.getSeconds().toString().padStart(2, "0");
+  const timeString = `${hours}:${minutes}:${seconds}`;
+  timeElement.textContent = `${timeString}`;
+
+  try {
+    const apiKey = "e5ca671fe10342a68d5153018250903";
+    const response = await fetch(
+      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=Belgrade&aqi=no`
+    );
+    const data = await response.json();
+
+    if (data && data.current) {
+      const realTemp = Math.round(data.current.temp_c);
+      tempElement.textContent = `${realTemp}°C`;
+
+      const iconUrl = `https:${data.current.condition.icon}`;
+      weatherIcon.src = iconUrl;
+      weatherIcon.style.display = "inline";
+      weatherIcon.alt = data.current.condition.text;
+    } else {
+      tempElement.textContent = `N/A`;
+      weatherIcon.style.display = "none";
+    }
+  } catch (error) {
+    tempElement.textContent = `N/A`;
+    weatherIcon.style.display = "none";
+  }
 }
 
 // FUNKCIJE ZA MANIPULACIJU PODACIMA
