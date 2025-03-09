@@ -56,7 +56,7 @@ body {
 body.dark-mode {
   transition: none;
 
-  --pozadina: linear-gradient(135deg, #1c1c1c, #383838);
+  --pozadina: #222222;
   --bela: #333333;
   --siva: #dfdfdf;
   --text: #ffffff;
@@ -108,6 +108,9 @@ button {
 }
 .animation {
   animation: waveAnim 2s linear infinite alternate;
+}
+.line-through {
+  text-decoration: line-through;
 }
 
 @keyframes waveAnim {
@@ -769,6 +772,19 @@ header.active .hamburger {
   width: 100%;
   border-radius: 15px;
   display: block;
+}
+.video-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid var(--crvena);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: -1;
 }
 .video-title {
   position: absolute;
@@ -1559,6 +1575,7 @@ form {
 .portal {
   width: 100%;
   max-width: 420px;
+  height: 650px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -1571,18 +1588,20 @@ form {
   overflow: hidden;
 }
 .portal h2 {
-  margin: 5% 0 1% 0;
+  margin: 20px 0 5px 0;
+  font-size: 25px;
 }
-.portal #lista {
-  margin-bottom: 0px;
-}
-.portal #log h2 {
-  margin-bottom: 10px;
+.portal #lista{
+  margin-bottom: 0;
 }
 .portal p,
 .portal .gore a {
   font-size: 13px;
   color: var(--border);
+  margin: 5px 0;
+}
+.portal #counter{
+  margin: 0 0 5px 0;
 }
 .portal a {
   font-size: 12px;
@@ -1591,9 +1610,23 @@ form {
 .portal a:hover {
   color: var(--crvena);
 }
+.portal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 2%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #2a2a2a;
+  border-radius: 8px;
+  color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.portal input:focus {
+  outline: none;
+  border-color: var(--crvena);
+  box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
+}
 .portal button {
-  width: 99%;
-  margin: 0 auto;
+  width: 100%;
   padding: 8px 10px;
   background: linear-gradient(135deg, var(--crvena), #c20d0d);
   color: white;
@@ -1608,45 +1641,22 @@ form {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(228, 15, 15, 0.4);
 }
-.portal .delete{
-  width: 100%;
-  margin: 0;
-}
-.portal #btn2 {
-  margin-bottom: 2%;
-}
-.portal #showCompletedButton{
-  margin-top: 2%;
+.portal .button-group {
+  display: flex;
+  gap: 5px;
 }
 .portal #btn3 {
-  display: inline-block;
-  width: 49%;
+  flex: 1;
   margin-top: 2%;
-}
-.portal input {
-  width: 100%;
-  padding: 10px 10px;
-  margin-bottom: 2%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: #2a2a2a;
-  border-radius: 8px;
-  color: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.portal input:focus {
-  outline: none;
-  border-color: var(--crvena);
-  box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
 }
 .portal .hidden {
   display: none;
 }
 .portal ul {
   list-style: none;
-  padding: 0;
-  max-height: 190px;
-  overflow-y: auto;
   padding: 0 3px 0 0;
+  overflow-y: auto;
+  margin: 2% 0 2% 0;
 }
 .portal ul::-webkit-scrollbar, #notepad textarea::-webkit-scrollbar{
   width: 4px;
@@ -1672,6 +1682,7 @@ form {
   border: none;
   color: #888;
   font-style: italic;
+  display: flex;
   justify-content: center !important;
   padding: 10px;
   pointer-events: none;
@@ -1682,7 +1693,8 @@ form {
   align-items: center;
   background: #e40f0f;
   width: 20px;
-  height: 20px;
+  height: 20px;  
+  margin: 0;
   border-radius: 50%;
   font-size: 14px;
   transition: 0.3s;
@@ -1691,38 +1703,53 @@ form {
   transform: scale(1);
   background: #b80c0c;
 }
-.portal #filterCategoryInput {
-  margin-top: 5px;
+
+/* POCETNA */
+#content:not(.hidden) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: slideInLeft 0.3s ease-out forwards;
 }
-.portal #kategorije ul#klist {
-  max-height: 505px;
-}
-@media (max-width: 480px) {
-  .portal {
-    overflow-y: hidden;
-    width: 90%;
-    padding: 5px 10px 10px 10px;
-  }
-  .portal .gore a {
-    font-size: 10px;
-  }
-  .portal h2 {
-    font-size: 20px;
-  }
-  .portal input,
-  .portal button {
-    font-size: 14px;
-    padding: 6px 8px;
-  }
-  .portal a {
-    font-size: 9px;
-  }
+#content .middle-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
+/* KATEGORIJE */
+#kategorije:not(.hidden) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  animation: slideInRight 0.3s ease-out forwards;
+}
+#kategorije #klist li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#kategorije #klist li .completion-date {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+}
+
+/* NOTEPAD */
+#notepad:not(.hidden) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: slideInRight 0.3s ease-out forwards;
+}
 #notepad textarea {
+  flex: 1;
   width: 100%;
-  height: 505px;
   padding: 10px;
+  margin-bottom: 2%;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: #2a2a2a;
   border-radius: 8px;
@@ -1736,20 +1763,59 @@ form {
   border-color: var(--crvena);
   box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
 }
-#content:not(.hidden) {
-  animation: slideInLeft 0.3s ease-out forwards;
+
+/* NOTIFIKACIJA */
+#notification-container {
+  position: fixed;
+  text-align: center;
+  top: 30px;
+  z-index: 1000;
 }
+.notification {
+  color: #fff;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+.notification.success {
+  background-color: #13a836;
+}
+.notification.error {
+  background-color: #ad1f1c;
+}
+.notification.neutral {
+  background-color: #333333;
+}
+.notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (max-width: 768px) {
+  #notification-container {
+    top: 15px;
+  }
+  .notification {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+@media (max-width: 480px) {
+  .notification {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ANIMACIJE */
 #content.hidden {
   animation: slideOutLeft 0.3s ease-out forwards;
 }
-#kategorije:not(.hidden) {
-  animation: slideInRight 0.3s ease-out forwards;
-}
 #kategorije.hidden {
   animation: slideOutRight 0.3s ease-out forwards;
-}
-#notepad:not(.hidden) {
-  animation: slideInRight 0.3s ease-out forwards;
 }
 #notepad.hidden {
   animation: slideOutRight 0.3s ease-out forwards;
@@ -1803,111 +1869,31 @@ form {
   }
 }
 
-.video-loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid var(--crvena);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  z-index: -1;
-}
-.line-through {
-  text-decoration: line-through;
-}
-
-#notification-container {
-  position: fixed;
-  text-align: center;
-  top: 30px;
-  z-index: 1000;
-}
-.notification {
-  color: #fff;
-  padding: 10px 20px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  transform: translateY(-100%);
-  transition: 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-.notification.success {
-  background-color: #13a836;
-}
-.notification.error {
-  background-color: #ad1f1c;
-}
-.notification.neutral {
-  background-color: #333333;
-}
-.notification.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-@media (max-width: 768px) {
-  #notification-container {
-    top: 15px;
-  }
-  .notification {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-}
+/* MEDIA */
 @media (max-width: 480px) {
-  .notification {
-    padding: 6px 12px;
-    font-size: 12px;
+  .portal {
+    overflow-y: hidden;
+    width: 90%;
+    height: 550px;
+    padding: 10px 15px;
   }
-}
-
-
-
-.search-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 998;
-}
-
-.search-popup {
-  position: absolute;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  z-index: 999;
-}
-
-#dynamicSearchInput {
-  margin-top: 1%;
-  width: 100%;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: none;
-  background: #333;
-  color: #fff;
-  font-size: 14px;
-}
-
-#dynamicSearchInput:focus {
-  outline: none;
-  box-shadow: 0 0 4px var(--crvena);
-}
-
-
-#klist li {
-  display: flex;
-  justify-content: space-between; /* Naziv i datum levo, dugme desno */
-  align-items: center;
-}
-
-#klist li .completion-date {
-  font-size: 12px;
-  color: #888;
-  white-space: nowrap;
+  .portal .gore a, .portal p, .portal span, #notepad textarea {
+    font-size: 11px;
+  }
+  .portal h2 {
+    font-size: 18px;
+  }
+  .portal input,
+  .portal button {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+  .portal a {
+    font-size: 9px;
+  }
+  .portal .delete{
+    width: 15px;
+    height: 15px;
+    font-size: 10px;
+  }
 }

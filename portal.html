@@ -35,25 +35,27 @@
             <a href="https://facebook.com/ads/library" target="_blank">Ads library</a> |
             <a href="#" onclick="showNotepad()">Notepad</a>
         </div>
-        <!-- LEADS -->
-        <h2>Dodaj leads</h2>
-        <input type="text" id="textInput" placeholder="Unesi naziv ili link">
-        <input list="categoryList" id="categoryInput" placeholder="Unesi ili izaberi kategoriju">
-        <datalist id="categoryList"></datalist>
-        <button id="addItemBtn" onclick="addItem()">Dodaj</button>
-        <!-- LISTA -->
-        <h2 id="lista">Lista</h2>
-        <p id="counter">Ukupno stavki: 0</p>
-        <input list="filterCategoryList" id="filterCategoryInput" placeholder="Filtriraj po kategoriji">
-        <datalist id="filterCategoryList"></datalist>
-        <button id="btn2" onclick="filterItems()">Filtriraj</button>
-        <ul id="list">
-        </ul>
 
-        <div class="button-group">     
+        <div class="middle-section">
+            <!-- LEADS -->
+            <h2>Dodaj leads</h2>
+            <input type="text" id="textInput" placeholder="Unesi naziv ili link">
+            <input list="categoryList" id="categoryInput" placeholder="Unesi ili izaberi kategoriju">
+            <datalist id="categoryList"></datalist>
+            <button id="addItemBtn" onclick="addItem()">Dodaj</button>
+            <!-- LISTA -->
+            <h2 id="lista">Lista</h2>
+            <p id="counter">Ukupno stavki: 0</p>
+            <input list="filterCategoryList" id="filterCategoryInput" placeholder="Filtriraj po kategoriji">
+            <datalist id="filterCategoryList"></datalist>
+            <button id="btn2" onclick="filterItems()">Filtriraj</button>
+            <ul id="list"></ul>
+        </div>
+
         <button id="showCompletedButton" onclick="toggleShowCompleted()">Prikazi samo zavrsene</button>
-        <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
-        <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
+        <div class="button-group">  
+            <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
+            <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
         </div>
     </div>
         
@@ -63,8 +65,8 @@
         <ul id="klist">
         </ul>
 
+        <button id="addCategory" onclick="addCategory()">Dodaj kategoriju</button>
         <div class="button-group">
-            <button id="addCategory" onclick="addCategory()">Dodaj kategoriju</button>
             <button id="btn3" onclick="backToMain()">Nazad</button>
             <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
         </div>

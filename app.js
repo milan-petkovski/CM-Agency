@@ -520,9 +520,40 @@ async function deleteCategory(id) {
   showNotification("Kategorija uspešno obrisana!", "success");
 }
 
+async function toggleCategoryCompletion(categoryId) {
+  const category = categories.find((c) => c.id === categoryId);
+  if (category) {
+    category.completed = !category.completed;
+    if (category.completed && !category.completionDate) {
+      // Ako je tek označena kao gotova, dodaj trenutni datum
+      category.completionDate = new Date().toISOString();
+    } else if (!category.completed) {
+      delete category.completionDate;
+    }
+    showCategory();
+  }
+
+  const response = await sendApiRequest(
+    "category/" + categoryId + "/toggle-complete",
+    "PUT"
+  );
+
+  if (!response) {
+    showNotification("Greška prilikom promene statusa kategorije.", "error");
+
+    category.completed = !category.completed;
+    if (!category.completed) delete category.completionDate;
+    showCategory();
+  } else {
+    showNotification(
+      category.completed ? "Kategorija označena kao gotova!" : "Kategorija vraćena u nezavršene!", "success"
+    );
+  }
+}
+
 function filterItems() {
-  const filterCategoryInput = document
-    .getElementById("filterCategoryInput")
+  const filterCategoryInput = 
+    document.getElementById("filterCategoryInput")
     .value.trim();
 
   const formattedCategoryInput =
@@ -549,7 +580,109 @@ function filterItems() {
   }
 
   filterCategoryId = selectedCategoryId;
-  updateItemsUI();
+  const itemsInCategory = items.filter((x) => x.categoryId === filterCategoryId);
+  const filteredItems = itemsInCategory.filter(
+    (x) => x.completed === showCompletedState
+  );
+
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  // Ako nema stavki u kategoriji, prikazujemo empty message
+  if (itemsInCategory.length === 0) {
+    const li = document.createElement("li");
+    li.textContent = "Nema stavki u ovoj kategoriji";
+    li.classList.add("empty-message");
+    list.appendChild(li);
+    showNotification(`Kategorija "${formattedCategoryInput}" je prazna.`, "neutral");
+  } else if (filteredItems.length === 0) {
+    // Ako nema stavki za trenutni showCompletedState
+    const li = document.createElement("li");
+    li.textContent = showCompletedState
+      ? "Nema završenih stavki u ovoj kategoriji"
+      : "Nema nezavršenih stavki u ovoj kategoriji";
+    li.classList.add("empty-message");
+    list.appendChild(li);
+  } else {
+    // Normalan prikaz stavki
+    filteredItems.forEach((i) => {
+      const li = document.createElement("li");
+      const cleanedLink = cleanURL(i.name);
+      const urlPattern =
+        /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
+
+      if (urlPattern.test(cleanedLink)) {
+        const url = new URL(
+          cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`
+        );
+        const cleanedLink2 =
+          url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
+
+        const link = document.createElement("a");
+        link.href = cleanedLink;
+        link.textContent = cleanedLink2;
+        link.target = "_blank";
+        li.appendChild(link);
+      } else {
+        li.textContent = i.name;
+      }
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "X";
+      deleteButton.classList.add("delete");
+      deleteButton.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await deleteItem(i.id);
+      });
+
+      if (i.completed) li.classList.add("line-through");
+
+      li.addEventListener("dblclick", async (e) => {
+        if (e.target === deleteButton) return;
+
+        items = items.map((item) => {
+          if (item.id === i.id) {
+            item.completed = !item.completed;
+          }
+          return item;
+        });
+
+        updateItemsUI();
+
+        const response = await sendApiRequest(
+          "item/" + i.id + "/toggle-complete",
+          "PUT"
+        );
+
+        if (!response) {
+          items = items.map((item) => {
+            if (item.id === i.id) {
+              item.completed = !item.completed;
+            }
+            return item;
+          });
+          showNotification("Greška prilikom promene statusa stavke.", "error");
+          updateItemsUI();
+        } else {
+          const updatedItem = items.find((item) => item.id === i.id);
+          if (updatedItem.completed) {
+            showNotification("Označena kao gotova!", "success");
+          } else {
+            showNotification("Vraćena u nezavršene!", "success");
+          }
+        }
+      });
+
+      li.appendChild(deleteButton);
+      list.appendChild(li);
+    });
+  }
+
+  const counter = document.getElementById("counter");
+  counter.textContent = `Ukupno stavki: ${itemsInCategory.length} (${
+    filteredItems.length
+  } ${showCompletedState ? "završenih" : "nezavršenih"})`;
+
   document.getElementById("filterCategoryInput").value = "";
   showNotification(`Prikazana kategorija: ${formattedCategoryInput}`, "neutral");
 }
@@ -726,23 +859,6 @@ async function backToMain() {
 }
 
 // NOTIFIKACIJE I BEZBEDNOST
-function disableDevTools() {
-  document.onkeydown = (e) => {
-    if (e.key === "F12") {
-      e.preventDefault();
-      return false;
-    }
-    if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) {
-      e.preventDefault();
-      return false;
-    }
-    if (e.ctrlKey && e.key === "U") {
-      e.preventDefault();
-      return false;
-    }
-  };
-}
-
 function showNotification(message, type = "error") {
   const container = document.getElementById("notification-container");
   if (!container) return;
@@ -768,34 +884,19 @@ function showNotification(message, type = "error") {
   }, 3000);
 }
 
-
-async function toggleCategoryCompletion(categoryId) {
-  const category = categories.find((c) => c.id === categoryId);
-  if (category) {
-    category.completed = !category.completed;
-    if (category.completed && !category.completionDate) {
-      // Ako je tek označena kao gotova, dodaj trenutni datum
-      category.completionDate = new Date().toISOString();
-    } else if (!category.completed) {
-      delete category.completionDate;
+function disableDevTools() {
+  document.onkeydown = (e) => {
+    if (e.key === "F12") {
+      e.preventDefault();
+      return false;
     }
-    showCategory();
-  }
-
-  const response = await sendApiRequest(
-    "category/" + categoryId + "/toggle-complete",
-    "PUT"
-  );
-
-  if (!response) {
-    showNotification("Greška prilikom promene statusa kategorije.", "error");
-
-    category.completed = !category.completed;
-    if (!category.completed) delete category.completionDate;
-    showCategory();
-  } else {
-    showNotification(
-      category.completed ? "Kategorija označena kao gotova!" : "Kategorija vraćena u nezavršene!", "success"
-    );
-  }
+    if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) {
+      e.preventDefault();
+      return false;
+    }
+    if (e.ctrlKey && e.key === "U") {
+      e.preventDefault();
+      return false;
+    }
+  };
 }
