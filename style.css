@@ -1669,6 +1669,19 @@ form {
   flex: 1;
   margin-top: 2%;
 }
+.portal #btn4{
+  width: auto;
+  font-size: 35px;
+  color: var(--siva);
+  padding: 0;
+  background: none;
+  margin-top: 2%;
+}
+.portal #btn4:hover{
+  background-color: none;
+  box-shadow: none;
+  transform: rotate(360deg);
+}
 .portal .hidden {
   display: none;
 }
@@ -1958,7 +1971,6 @@ form {
   display: flex;
   align-items: center;
 }
-
 #weather-icon {
   width: 30px;
   height: 30px;
