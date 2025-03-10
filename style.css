@@ -1964,7 +1964,7 @@ form {
     padding: 6px 8px;
   }
   .portal a {
-    font-size: 9px;
+    font-size: 8px;
   }
   .portal .delete{
     width: 15px;
@@ -1987,10 +1987,8 @@ form {
 .gore {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-.gore .links a {
-  margin-top: 2px;
 }
 #current-time {
   display: inline-block;
