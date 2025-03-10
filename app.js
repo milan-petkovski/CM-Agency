@@ -181,6 +181,28 @@ async function refreshPortal() {
   await init();
 }
 
+async function openall() {
+  const uncompletedItems = items.filter(item => !item.completed);
+  if (uncompletedItems.length === 0) {
+    showNotification("Nema nezavršenih stavki sa linkovima za otvaranje.", "error");
+    return;
+  }
+  const urlPattern = /^https?:\/\/([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
+  let openedCount = 0;
+  uncompletedItems.forEach(item => {
+    const link = item.name.trim();
+    
+    if (urlPattern.test(link)) {
+      window.open(link, "_blank");
+      openedCount++;
+    }
+  });
+
+  if (openedCount < 0) {
+    showNotification("Nema validnih linkova sa protokolom (http/https) među nezavršenim stavkama.", "error");
+  }
+}
+
 // FUNKCIJE ZA UI AŽURIRANJE
 function updateCategoryUI() {
   const categoryList = document.getElementById("categoryList");
