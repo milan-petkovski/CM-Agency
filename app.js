@@ -162,6 +162,25 @@ function togglePassword() {
   eye.name = password.type === "password" ? "eye-outline" : "eye-off-outline";
 }
 
+async function refreshPortal() {
+  const portalContent = document.getElementById("portal-content");
+  if (!portalContent) return;
+
+  items = [];
+  categories = [];
+  notepad = { id: -1, content: "" };
+  filterCategoryId = -1;
+  showCompletedState = false;
+
+  document.getElementById("list").innerHTML = "";
+  document.getElementById("categoryList").innerHTML = "";
+  document.getElementById("filterCategoryList").innerHTML = "";
+  document.getElementById("counter").textContent = "Ukupno stavki: 0";
+
+  // Ponovno učitavanje podataka
+  await init();
+}
+
 // FUNKCIJE ZA UI AŽURIRANJE
 function updateCategoryUI() {
   const categoryList = document.getElementById("categoryList");
