@@ -1,3 +1,4 @@
+//TODO: replace with 
 const API_URL = "https://cmagency-backend.onrender.com/api";
 
 let items = [];
@@ -28,7 +29,9 @@ document.getElementById("password").addEventListener("keypress", (e) => {
   if (e.key === "Enter") login();
 });
 document.getElementById("password").addEventListener("input", function () {
-  document.querySelector(".toggle-password").style.display = this.value ? "block" : "none";
+  document.querySelector(".toggle-password").style.display = this.value
+    ? "block"
+    : "none";
 });
 
 // API POMOĆNE FUNKCIJE
@@ -147,8 +150,18 @@ function cleanURL(url) {
 function formatDate(date) {
   const day = date.getDate().toString().padStart(2, "0");
   const monthNames = [
-    "Januar", "Februar", "Mart", "April", "Maj", "Jun",
-    "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"
+    "Januar",
+    "Februar",
+    "Mart",
+    "April",
+    "Maj",
+    "Jun",
+    "Jul",
+    "Avgust",
+    "Septembar",
+    "Oktobar",
+    "Novembar",
+    "Decembar",
   ];
   const month = monthNames[date.getMonth()];
   const year = date.getFullYear();
@@ -239,7 +252,9 @@ function updateItemsUI() {
 
       if (urlPattern.test(cleanedLink)) {
         const url = new URL(
-          cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`
+          cleanedLink.startsWith("http")
+            ? cleanedLink
+            : `https://${cleanedLink}`
         );
         const cleanedLink2 =
           url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
@@ -326,7 +341,10 @@ function toggleShowCompleted() {
 async function loadCategories() {
   const response = await sendApiRequest("category/full", "GET");
   if (!response) {
-    showNotification("Greška prilikom učitavanja kategorija. Pokušajte ponovo.", "error");
+    showNotification(
+      "Greška prilikom učitavanja kategorija. Pokušajte ponovo.",
+      "error"
+    );
     return;
   }
   categories = response;
@@ -434,14 +452,17 @@ async function addCategory() {
     return;
   }
 
-  const formattedName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1).toLowerCase();
+  const formattedName =
+    categoryName.charAt(0).toUpperCase() + categoryName.slice(1).toLowerCase();
 
-  if (categories.some(cat => cat.name === formattedName)) {
+  if (categories.some((cat) => cat.name === formattedName)) {
     showNotification("Kategorija sa ovim nazivom već postoji!", "error");
     return;
   }
 
-  const response = await sendApiRequest("category/bulk", "POST", [{ name: formattedName }]);
+  const response = await sendApiRequest("category/bulk", "POST", [
+    { name: formattedName },
+  ]);
 
   if (!response || response.isFailed || !response.isSuccess) {
     showNotification("Greška prilikom dodavanja kategorije!", "error");
@@ -452,7 +473,7 @@ async function addCategory() {
     id: Date.now(),
     name: formattedName,
     items: [],
-    completed: false
+    completed: false,
   };
 
   categories.push(newCategory);
@@ -473,8 +494,8 @@ async function addCategory() {
 
     li.appendChild(deleteButton);
 
-    const completedCategories = Array.from(categoryList.children).filter((item) =>
-      item.classList.contains("line-through")
+    const completedCategories = Array.from(categoryList.children).filter(
+      (item) => item.classList.contains("line-through")
     );
 
     if (completedCategories.length > 0) {
@@ -517,10 +538,12 @@ async function deleteCategory(id) {
     return;
   }
 
-  categories = categories.filter(category => category.id !== id);
-  items = items.filter(item => item.categoryId !== id);
+  categories = categories.filter((category) => category.id !== id);
+  items = items.filter((item) => item.categoryId !== id);
 
-  const isCategoryPage = !document.getElementById("kategorije").classList.contains("hidden");
+  const isCategoryPage = !document
+    .getElementById("kategorije")
+    .classList.contains("hidden");
   if (isCategoryPage) {
     const tabList = document.getElementById("klist");
     tabList.innerHTML = "";
@@ -543,7 +566,9 @@ async function deleteCategory(id) {
       });
 
       li.appendChild(deleteButton);
-      li.addEventListener("dblclick", () => toggleCategoryCompletion(category.id));
+      li.addEventListener("dblclick", () =>
+        toggleCategoryCompletion(category.id)
+      );
       tabList.appendChild(li);
     });
   }
@@ -579,14 +604,17 @@ async function toggleCategoryCompletion(categoryId) {
     showCategory();
   } else {
     showNotification(
-      category.completed ? "Kategorija označena kao gotova!" : "Kategorija vraćena u nezavršene!", "success"
+      category.completed
+        ? "Kategorija označena kao gotova!"
+        : "Kategorija vraćena u nezavršene!",
+      "success"
     );
   }
 }
 
 function filterItems() {
-  const filterCategoryInput = 
-    document.getElementById("filterCategoryInput")
+  const filterCategoryInput = document
+    .getElementById("filterCategoryInput")
     .value.trim();
 
   const formattedCategoryInput =
@@ -613,7 +641,9 @@ function filterItems() {
   }
 
   filterCategoryId = selectedCategoryId;
-  const itemsInCategory = items.filter((x) => x.categoryId === filterCategoryId);
+  const itemsInCategory = items.filter(
+    (x) => x.categoryId === filterCategoryId
+  );
   const filteredItems = itemsInCategory.filter(
     (x) => x.completed === showCompletedState
   );
@@ -627,7 +657,10 @@ function filterItems() {
     li.textContent = "Nema stavki u ovoj kategoriji";
     li.classList.add("empty-message");
     list.appendChild(li);
-    showNotification(`Kategorija "${formattedCategoryInput}" je prazna.`, "neutral");
+    showNotification(
+      `Kategorija "${formattedCategoryInput}" je prazna.`,
+      "neutral"
+    );
   } else if (filteredItems.length === 0) {
     // Ako nema stavki za trenutni showCompletedState
     const li = document.createElement("li");
@@ -646,7 +679,9 @@ function filterItems() {
 
       if (urlPattern.test(cleanedLink)) {
         const url = new URL(
-          cleanedLink.startsWith("http") ? cleanedLink : `https://${cleanedLink}`
+          cleanedLink.startsWith("http")
+            ? cleanedLink
+            : `https://${cleanedLink}`
         );
         const cleanedLink2 =
           url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
@@ -718,7 +753,10 @@ function filterItems() {
   } ${showCompletedState ? "završenih" : "nezavršenih"})`;
 
   document.getElementById("filterCategoryInput").value = "";
-  showNotification(`Prikazana kategorija: ${formattedCategoryInput}`, "neutral");
+  showNotification(
+    `Prikazana kategorija: ${formattedCategoryInput}`,
+    "neutral"
+  );
 }
 
 function downloadList() {
@@ -738,10 +776,12 @@ function searchList() {
   const searchQuery = prompt("Unesite pojam za pretragu:");
   if (!searchQuery) return;
 
-  const isCategoryPage = !document.getElementById("kategorije").classList.contains("hidden");
+  const isCategoryPage = !document
+    .getElementById("kategorije")
+    .classList.contains("hidden");
   const listId = isCategoryPage ? "#klist" : "#list";
   const listItems = document.querySelectorAll(`${listId} li`);
-  
+
   let visibleItemsCount = 0;
 
   listItems.forEach((item) => {
@@ -761,7 +801,7 @@ function searchList() {
     li.classList.add("empty-message");
     list.innerHTML = "";
     list.appendChild(li);
-  } 
+  }
 
   if (!isCategoryPage) {
     const counter = document.getElementById("counter");
@@ -787,48 +827,50 @@ async function showCategory() {
       .slice()
       .sort((a, b) => a.completed - b.completed || a.id - b.id);
 
-      sortedCategories.forEach((category) => {
-        const li = document.createElement("li");
-      
-        const textContainer = document.createElement("span");
-        textContainer.style.display = "flex";
-        textContainer.style.alignItems = "center";
-        textContainer.style.gap = "5px";
-      
-        const nameSpan = document.createElement("span");
-        nameSpan.textContent = category.name;
-        if (category.completed) {
-          nameSpan.style.textDecoration = "line-through";
-        }
-        textContainer.appendChild(nameSpan);
-      
-        if (category.completed) {
-          const completionDate = category.completionDate
-            ? new Date(category.completionDate)
-            : new Date();
-          li.dataset.completionDate = completionDate.toISOString();
-          const formattedDate = formatDate(completionDate);
-          const dateSpan = document.createElement("span");
-          dateSpan.textContent = `- ${formattedDate}`;
-          dateSpan.classList.add("completion-date");
-          textContainer.appendChild(dateSpan);
-        }
-      
-        li.appendChild(textContainer);
-      
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "X";
-        deleteButton.classList.add("delete");
-        deleteButton.classList.add("unselectable");
-        deleteButton.addEventListener("click", async (e) => {
-          e.stopPropagation();
-          await deleteCategory(category.id);
-        });
-      
-        li.appendChild(deleteButton);
-        li.addEventListener("dblclick", () => toggleCategoryCompletion(category.id));
-        tabList.appendChild(li);
+    sortedCategories.forEach((category) => {
+      const li = document.createElement("li");
+
+      const textContainer = document.createElement("span");
+      textContainer.style.display = "flex";
+      textContainer.style.alignItems = "center";
+      textContainer.style.gap = "5px";
+
+      const nameSpan = document.createElement("span");
+      nameSpan.textContent = category.name;
+      if (category.completed) {
+        nameSpan.style.textDecoration = "line-through";
+      }
+      textContainer.appendChild(nameSpan);
+
+      if (category.completed) {
+        const completionDate = category.completionDate
+          ? new Date(category.completionDate)
+          : new Date();
+        li.dataset.completionDate = completionDate.toISOString();
+        const formattedDate = formatDate(completionDate);
+        const dateSpan = document.createElement("span");
+        dateSpan.textContent = `- ${formattedDate}`;
+        dateSpan.classList.add("completion-date");
+        textContainer.appendChild(dateSpan);
+      }
+
+      li.appendChild(textContainer);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "X";
+      deleteButton.classList.add("delete");
+      deleteButton.classList.add("unselectable");
+      deleteButton.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await deleteCategory(category.id);
       });
+
+      li.appendChild(deleteButton);
+      li.addEventListener("dblclick", () =>
+        toggleCategoryCompletion(category.id)
+      );
+      tabList.appendChild(li);
+    });
 
     mainContent.forEach((element) => element.classList.add("hidden"));
     contentSection.classList.add("hidden");
@@ -840,7 +882,6 @@ async function showCategory() {
     contentSection.classList.remove("hidden");
     mainContent.forEach((element) => element.classList.remove("hidden"));
   }
-
 }
 
 async function showNotepad() {
@@ -927,7 +968,9 @@ async function updateBelgradeWeather() {
 
   const nowUTC = new Date();
   const belgradeOffset = 0;
-  const belgradeTime = new Date(nowUTC.getTime() + belgradeOffset * 60 * 60 * 1000);
+  const belgradeTime = new Date(
+    nowUTC.getTime() + belgradeOffset * 60 * 60 * 1000
+  );
 
   const hours = belgradeTime.getHours().toString().padStart(2, "0");
   const minutes = belgradeTime.getMinutes().toString().padStart(2, "0");

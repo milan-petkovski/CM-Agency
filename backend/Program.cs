@@ -10,7 +10,6 @@ using CmAgency.Services.Mapping.Response;
 using CmAgency.Services.Read;
 using CmAgency.Services.Update;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

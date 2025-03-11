@@ -11,5 +11,6 @@ public class CategoryPreviewResponseMapper : IResponseMapper<Category, CategoryP
             Id = from.Id,
             Name = from.Name,
             Completed = from.Completed,
+            CompletedAt = from.CompletedAt,
         };
 }

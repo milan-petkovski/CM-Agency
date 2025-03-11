@@ -5,5 +5,6 @@ public class CategoryResponseDto
     public int Id { get; set; }
     public string Name { get; set; } = null!;
     public bool Completed { get; set; }
+    public DateOnly? CompletedAt { get; set; }
     public IEnumerable<ItemResponseDto> Items { get; set; } = null!;
 }
