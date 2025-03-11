@@ -1,4 +1,3 @@
-//TODO: replace with 
 const API_URL = "https://cmagency-backend.onrender.com/api";
 
 let items = [];
@@ -582,11 +581,11 @@ async function toggleCategoryCompletion(categoryId) {
   const category = categories.find((c) => c.id === categoryId);
   if (category) {
     category.completed = !category.completed;
-    if (category.completed && !category.completionDate) {
+    if (category.completed && !category.completionAt) {
       // Ako je tek označena kao gotova, dodaj trenutni datum
-      category.completionDate = new Date().toISOString();
+      category.completionAt = new Date().toISOString();
     } else if (!category.completed) {
-      delete category.completionDate;
+      delete category.completionAt;
     }
     showCategory();
   }
@@ -600,7 +599,7 @@ async function toggleCategoryCompletion(categoryId) {
     showNotification("Greška prilikom promene statusa kategorije.", "error");
 
     category.completed = !category.completed;
-    if (!category.completed) delete category.completionDate;
+    if (!category.completed) delete category.completionAt;
     showCategory();
   } else {
     showNotification(
@@ -843,11 +842,12 @@ async function showCategory() {
       textContainer.appendChild(nameSpan);
 
       if (category.completed) {
-        const completionDate = category.completionDate
-          ? new Date(category.completionDate)
+        console.log(category.completedAt);
+        const completionAt = category.completedAt
+          ? new Date(category.completedAt)
           : new Date();
-        li.dataset.completionDate = completionDate.toISOString();
-        const formattedDate = formatDate(completionDate);
+        li.dataset.completionAt = completionAt.toISOString();
+        const formattedDate = formatDate(completionAt);
         const dateSpan = document.createElement("span");
         dateSpan.textContent = `- ${formattedDate}`;
         dateSpan.classList.add("completion-date");
