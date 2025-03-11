@@ -6,5 +6,6 @@ public class Category
     public string Name { get; set; } = null!;
 
     public bool Completed { get; set; }
+    public DateOnly? CompletedAt { get; set; } = null;
     public ICollection<Item> Items { get; set; } = [];
 }

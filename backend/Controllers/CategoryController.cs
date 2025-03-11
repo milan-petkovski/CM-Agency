@@ -102,7 +102,12 @@ public class CategoryController(
         Ok(
             await updateService.Update(
                 x => x.Id == id,
-                x => x.SetProperty(x => x.Completed, x => !x.Completed)
+                x =>
+                    x.SetProperty(x => x.Completed, x => !x.Completed)
+                        .SetProperty(
+                            x => x.CompletedAt,
+                            x => DateOnly.FromDateTime(DateTime.UtcNow)
+                        )
             )
         );
 

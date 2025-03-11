@@ -14,6 +14,7 @@ public class CategoryResponseMapper(IResponseMapper<Item, ItemResponseDto> itemR
             Id = from.Id,
             Name = from.Name,
             Completed = from.Completed,
+            CompletedAt = from.CompletedAt,
             Items = from.Items.Select(itemResponseMapper.Map),
         };
 }
