@@ -822,9 +822,15 @@ async function showCategory() {
     const tabList = document.getElementById("klist");
     tabList.innerHTML = "";
 
-    const sortedCategories = categories
-      .slice()
-      .sort((a, b) => a.completed - b.completed || a.id - b.id);
+    // Sortiranje kategorija: završene od najstarijih do najnovijih
+    const sortedCategories = categories.slice().sort((a, b) => {
+      if (a.completed && b.completed) {
+        const dateA = a.completedAt ? new Date(a.completedAt) : new Date(0);
+        const dateB = b.completedAt ? new Date(b.completedAt) : new Date(0);
+        return dateB - dateA; // Od najstarijih ka najnovijim
+      }
+      return a.completed - b.completed || a.id - b.id;
+    });
 
     sortedCategories.forEach((category) => {
       const li = document.createElement("li");
@@ -842,12 +848,11 @@ async function showCategory() {
       textContainer.appendChild(nameSpan);
 
       if (category.completed) {
-        console.log(category.completedAt);
-        const completionAt = category.completedAt
+        const completedAt = category.completedAt
           ? new Date(category.completedAt)
           : new Date();
-        li.dataset.completionAt = completionAt.toISOString();
-        const formattedDate = formatDate(completionAt);
+        li.dataset.completedAt = completedAt.toISOString();
+        const formattedDate = formatDate(completedAt);
         const dateSpan = document.createElement("span");
         dateSpan.textContent = `- ${formattedDate}`;
         dateSpan.classList.add("completion-date");
