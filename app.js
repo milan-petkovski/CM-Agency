@@ -137,13 +137,15 @@ function debounce(func, wait) {
 }
 
 function cleanURL(url) {
-  url = url
-    .split("?")[0]
-    .replace(/https?:\/\/www\./, "https://")
-    .replace(/http:\/\/www\./, "http://");
-  return url.includes("instagram.com")
-    ? url.replace(/https?:\/\/www\./, "https://")
-    : url;
+  url = url.trim();
+  url = url.split("?")[0];
+  url = url.replace(/^https?:\/\/(www\.)?/, "");
+  
+  if (!url.startsWith("http")) {
+    url = `https://${url}`;
+  }
+
+  return url.replace(/\/+$/, "");
 }
 
 function formatDate(date) {
@@ -246,18 +248,14 @@ function updateItemsUI() {
     filteredItems.forEach((i) => {
       const li = document.createElement("li");
       const cleanedLink = cleanURL(i.name);
-      const urlPattern =
-        /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
+      const urlPattern = /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
 
       if (urlPattern.test(cleanedLink)) {
-        const url = new URL(
-          cleanedLink.startsWith("http")
-            ? cleanedLink
-            : `https://${cleanedLink}`
+        const url = new URL(cleanedLink.startsWith("https://") || cleanedLink.startsWith("http://")
+          ? cleanedLink.replace("http://", "https://") 
+          : `https://${cleanedLink}`
         );
-        const cleanedLink2 =
-          url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
-
+        const cleanedLink2 = url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
         const link = document.createElement("a");
         link.href = cleanedLink;
         link.textContent = cleanedLink2;
