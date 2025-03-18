@@ -609,6 +609,7 @@ async function toggleCategoryCompletion(categoryId) {
   }
 }
 
+// FUNKCIJE ZA BUTTONE
 function filterItems() {
   const filterCategoryInput = document
     .getElementById("filterCategoryInput")
