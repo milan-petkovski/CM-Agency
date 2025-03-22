@@ -110,17 +110,27 @@ async function login() {
   if (!response) {
     showNotification("Pogrešno korisničko ime ili lozinka.", "error");
   } else {
-    await init();
-    document.getElementById("logout").classList.remove("hidden");
-    checkAuth();
+    document.querySelector(".prijava").classList.add("hidden");
+    document.querySelector(".obavestenje").classList.remove("hidden");
     showNotification("Uspešno ste se prijavili!", "success");
   }
+}
+
+function showPortal() {
+  document.getElementById("log").classList.add("hidden");
+  document.getElementById("logout").classList.remove("hidden");
+  document.getElementById("portal-content").classList.remove("hidden");
+  init();
 }
 
 async function logout() {
   await sendApiRequest("auth/logout", "POST");
   showNotification("Uspešno ste se odjavili!", "success");
-  checkAuth();
+  document.getElementById("log").classList.remove("hidden");
+  document.querySelector(".prijava").classList.remove("hidden");
+  document.querySelector(".obavestenje").classList.add("hidden");
+  document.getElementById("portal-content").classList.add("hidden");
+  document.getElementById("logout").classList.add("hidden");
 }
 
 // POMOĆNE FUNKCIJE
