@@ -74,13 +74,11 @@ async function checkAuth() {
   if (user) {
     loginSection.classList.add("hidden");
     portalSection.classList.remove("hidden");
-    logoutButton.style.display = "block";
     return true;
   }
 
   loginSection.classList.remove("hidden");
   portalSection.classList.add("hidden");
-  logoutButton.style.display = "none";
   document.getElementById("username").focus();
   disableDevTools();
   return false;
@@ -118,8 +116,8 @@ async function login() {
 
 function showPortal() {
   document.getElementById("log").classList.add("hidden");
-  document.getElementById("logout").classList.remove("hidden");
   document.getElementById("portal-content").classList.remove("hidden");
+  document.getElementById("logout").classList.remove("hidden");
   init();
 }
 
