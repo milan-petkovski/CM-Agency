@@ -35,7 +35,7 @@ body {
   background-color: var(--crvena);
 }
 :root {
-  --pozadina: #f5f4f2;
+  --pozadina: #f5f4f2;  
   --bela: #ffffff;
   --siva: #e6e6e6;
   --text: #333333;
@@ -55,6 +55,7 @@ body {
 }
 body.dark-mode {
   transition: none;
+  background-image: url("https://www.transparenttextures.com/patterns/cartographer.png");
 
   --pozadina: #222222;
   --bela: #333333;
@@ -1120,7 +1121,7 @@ form {
 }
 .contact-form .form-group input::placeholder,
 .contact-form .form-group textarea::placeholder {
-  color: var(--svetlo);
+  color: var(--text4);
   opacity: 0.5;
 }
 .contact-form .form-group textarea {
@@ -1141,7 +1142,7 @@ form {
 .contact-form .radio-group label {
   display: flex;
   align-items: center;
-  color: var(--text3);
+  color: var(--text4);
   gap: 10px;
   font-weight: 300;
   cursor: pointer;
