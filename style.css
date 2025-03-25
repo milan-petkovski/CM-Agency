@@ -1649,6 +1649,9 @@ form {
 .password-container .toggle-password:hover {
   color: var(--crvena);
 }
+.password-container .toggle-password #eye-icon{
+  margin-top: 5px;
+}
 .portal h2, #log h2 {
   margin: 15px 0 5px 0;
   font-size: 25px;

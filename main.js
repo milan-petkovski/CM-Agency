@@ -290,22 +290,21 @@ setInterval(() => {
 // #endregion
 
 //#region - RADOVI
-function togglePlay(btn) {
-  const video = btn.closest('.video-card')?.querySelector('video');
-  const icon = btn.querySelector('ion-icon');
-  if (video) {
-      video.paused ? video.play() : video.pause();
-      icon?.setAttribute('name', video.paused ? 'play-outline' : 'pause-outline');
-  }
+function togglePlay(button) {
+    let video = button.parentElement.querySelector('video');
+    if (video.paused) {
+        video.play();
+        button.innerHTML = '<ion-icon name="pause-outline"></ion-icon>';
+    } else {
+        video.pause();
+        button.innerHTML = '<ion-icon name="play-outline"></ion-icon>';
+    }
 }
 
-function toggleMute(btn) {
-  const video = btn.closest('.video-card')?.querySelector('video');
-  const icon = btn.querySelector('ion-icon');
-  if (video) {
-      video.muted = !video.muted;
-      icon?.setAttribute('name', video.muted ? 'volume-mute-outline' : 'volume-high-outline');
-  }
+function toggleMute(button) {
+    let video = button.parentElement.querySelector('video');
+    video.muted = !video.muted;
+    button.innerHTML = video.muted ? '<ion-icon name="volume-mute-outline"></ion-icon>' : '<ion-icon name="volume-high-outline"></ion-icon>';
 }
 
 //#endregion
