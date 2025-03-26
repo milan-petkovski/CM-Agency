@@ -108,8 +108,16 @@ async function login() {
   if (!response) {
     showNotification("Pogrešno korisničko ime ili lozinka.", "error");
   } else {
-    document.querySelector(".prijava").classList.add("hidden");
-    document.querySelector(".obavestenje").classList.remove("hidden");
+    const obavestenjeParagraf = document.querySelector(".obavestenje p");
+    const obavestenjeSadrzaj = obavestenjeParagraf.textContent.trim();
+
+    if (obavestenjeSadrzaj === "") {
+      showPortal();
+    } else {
+      // Ako ima sadržaja, prikaži obaveštenje
+      document.querySelector(".prijava").classList.add("hidden");
+      document.querySelector(".obavestenje").classList.remove("hidden");
+    }
     showNotification("Uspešno ste se prijavili!", "success");
   }
 }
