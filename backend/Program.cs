@@ -159,4 +159,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.MapGet("/ping", () => "OK");
+
 await app.RunAsync();
