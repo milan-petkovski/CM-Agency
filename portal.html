@@ -34,7 +34,7 @@
 
         <div class="obavestenje hidden">
             <h2>Važno obaveštenje</h2>
-            <p></p>
+            <p>Opcija za prebacivanje jezika leadsova je dodata na portal, ali trenutno nije u funkciji. Radimo na implementaciji i uskoro će biti dostupna. Hvala na razumevanju!</p>
             <button class="unselectable" onclick="showPortal()">Razumem</button>
         </div>
     </div>
@@ -61,7 +61,11 @@
           <!-- LEADS -->
           <h2 class="unselectable">Dodaj leads</h2>
           <input type="text" id="textInput" placeholder="Unesi naziv ili link">
-          <input list="categoryList" id="categoryInput" placeholder="Unesi ili izaberi kategoriju">
+          <div id="ctgroup">
+            <input list="categoryList" id="categoryInput" placeholder="Unesi ili izaberi kategoriju">
+            <button id="languageBtn" class="language-toggle">SRB</button>
+        </div>
+
           <datalist id="categoryList"></datalist>
           <button class="unselectable" id="addItemBtn" onclick="addItem()">Dodaj</button>
           <!-- LISTA -->
@@ -77,6 +81,7 @@
         <div class="button-group unselectable">  
           <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
           <button id="btn4" onclick="refreshPortal()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
+          <button id="btn4"><ion-icon name="planet-outline"></ion-icon></button>
           <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
         </div>
         </div>

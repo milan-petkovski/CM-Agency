@@ -1788,6 +1788,21 @@ form {
   background: #b80c0c;
 }
 
+#ctgroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#languageBtn {
+  width: 15%;
+  font-family: "Source Sans Pro", sans-serif;
+  padding: 10px;
+  margin-bottom: 2%;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 /* POCETNA */
 #portal-content {
   display: none;

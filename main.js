@@ -323,3 +323,13 @@ if (localStorage.getItem('theme') === 'dark') {
 }
 
 //#endregion
+
+
+document.getElementById('languageBtn').addEventListener('click', function() {
+  const btn = this;
+  if (btn.textContent === 'SRB') {
+      btn.textContent = 'ENG';
+  } else {
+      btn.textContent = 'SRB';
+  }
+});
