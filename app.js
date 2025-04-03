@@ -350,6 +350,17 @@ function toggleShowCompleted() {
     : "Prikazi zavrsene stavke";
 }
 
+function promeniJezik() {
+  document.getElementById('languageBtn').addEventListener('click', function() {
+      const btn = this;
+      if (btn.textContent === 'SRB') {
+          btn.textContent = 'ENG';
+      } else {
+          btn.textContent = 'SRB';
+      }
+  });
+}
+promeniJezik();
 // FUNKCIJE ZA MANIPULACIJU PODACIMA
 async function loadCategories() {
   const response = await sendApiRequest("category/full", "GET");

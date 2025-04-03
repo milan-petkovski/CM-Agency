@@ -751,23 +751,34 @@ header.active .hamburger {
 .radovi h2 {
   margin-top: 3%;
 }
+.video-wrapper {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 .video-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   gap: 25px;
   padding: 0 15px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 .video-card {
   position: relative;
-  width: clamp(250px, 22vw, 300px);
+  flex: 0 0 calc(25% - 11.5px);
+  max-width: calc(25% - 11.5px);
   border-radius: 15px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: 0.3s ease;
+  scroll-snap-align: start;
+  filter: brightness(0.9);
 }
 .video-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.5);
+  filter: brightness(1.1);
 }
 .video-card video {
   width: 100%;
@@ -834,15 +845,50 @@ header.active .hamburger {
 .mute-btn:hover ion-icon {
   transform: scale(1.2);
 }
+.video-nav-left,
+.video-nav-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+  border: none;
+  background-color: var(--crvena);
+  color: white;
+  border-radius: 50%;
+  padding: 0.5rem;
+  transition: visibility 0s, opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  z-index: 100;
+}
+.video-nav-left {
+  left: -30px;
+}
+.video-nav-right {
+  right: -30px;
+}
+.video-nav-left:hover,
+.video-nav-right:hover {
+  background-color: #b71c1c;
+  transform: translateY(-50%) scale(1.1);
+}
 @media (max-width: 768px) {
-  .video-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+  .video-wrapper {
+    padding: 0 10px;
+  }
+  .video-container{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 25px;
+    overflow-x: hidden;
+    width: 100%;
   }
   .video-card {
-    width: 80%;
-    max-width: 400px;
+    flex: 0 0 calc(100% - 10px);
+    max-width: calc(100% - 10px);
+  }
+  .video-nav-left, .video-nav-right {
+    display: none;
   }
 }
 @media (max-width: 480px) {
@@ -850,12 +896,8 @@ header.active .hamburger {
     padding-block: 30px;
   }
   .video-card {
-    width: 100%;
-    max-width: 300px;
-  }
-  .video-card:hover {
-    transform: scale(1);
-    box-shadow: none;
+    flex: 0 0 calc(100% - 10px);
+    max-width: calc(100% - 10px);
   }
   .video-title {
     font-size: 1rem;

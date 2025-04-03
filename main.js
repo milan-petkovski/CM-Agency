@@ -290,6 +290,83 @@ setInterval(() => {
 // #endregion
 
 //#region - RADOVI
+const videoContainer = document.querySelector('.video-container');
+const prevVideoBtn = document.getElementById('prevVideo');
+const nextVideoBtn = document.getElementById('nextVideo');
+const videos = document.querySelectorAll('.video-card video');
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const video = entry.target;
+        if (entry.isIntersecting) {
+            video.play();
+        } else {
+            video.pause();
+        }
+    });
+}, {
+    threshold: 0.5
+});
+
+videos.forEach(video => {
+    observer.observe(video);
+});
+
+function scrollVideos(direction) {
+    const cardWidth = document.querySelector('.video-card').offsetWidth + 25;
+    const scrollAmount = cardWidth * 1;
+    const currentScroll = videoContainer.scrollLeft;
+    const maxScroll = videoContainer.scrollWidth - videoContainer.clientWidth;
+
+    let newScrollPosition;
+    if (direction === 'next') {
+        newScrollPosition = currentScroll + scrollAmount;
+        if (newScrollPosition > maxScroll) {
+            newScrollPosition = maxScroll;
+        }
+    } else if (direction === 'prev') {
+        newScrollPosition = currentScroll - scrollAmount;
+        if (newScrollPosition < 0) {
+            newScrollPosition = 0;
+        }
+    }
+
+    newScrollPosition = Math.round(newScrollPosition / cardWidth) * cardWidth;
+
+    videoContainer.scrollTo({
+        left: newScrollPosition,
+        behavior: 'smooth'
+    });
+
+    // Ažuriranje stanja dugmadi nakon skrolovanja
+    setTimeout(updateButtonStates, 300); // Čekamo da se animacija završi
+}
+
+function updateButtonStates() {
+    const maxScroll = videoContainer.scrollWidth - videoContainer.clientWidth;
+    const currentScroll = videoContainer.scrollLeft;
+
+    if (currentScroll <= 0) {
+        prevVideoBtn.style.visibility = 'hidden';
+        prevVideoBtn.style.opacity = '0';
+    } else {
+        prevVideoBtn.style.visibility = 'visible';
+        prevVideoBtn.style.opacity = '1';
+    }
+
+    if (currentScroll >= maxScroll - 1) {
+        nextVideoBtn.style.visibility = 'hidden';
+        nextVideoBtn.style.opacity = '0';
+    } else {
+        nextVideoBtn.style.visibility = 'visible';
+        nextVideoBtn.style.opacity = '1';
+    }
+}
+
+updateButtonStates();
+prevVideoBtn.addEventListener('click', () => scrollVideos('prev'));
+nextVideoBtn.addEventListener('click', () => scrollVideos('next'));
+
 function togglePlay(button) {
     let video = button.parentElement.querySelector('video');
     if (video.paused) {
@@ -300,7 +377,6 @@ function togglePlay(button) {
         button.innerHTML = '<ion-icon name="play-outline"></ion-icon>';
     }
 }
-
 function toggleMute(button) {
     let video = button.parentElement.querySelector('video');
     video.muted = !video.muted;
@@ -323,13 +399,3 @@ if (localStorage.getItem('theme') === 'dark') {
 }
 
 //#endregion
-
-
-document.getElementById('languageBtn').addEventListener('click', function() {
-  const btn = this;
-  if (btn.textContent === 'SRB') {
-      btn.textContent = 'ENG';
-  } else {
-      btn.textContent = 'SRB';
-  }
-});
