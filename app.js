@@ -1,4 +1,5 @@
-const API_URL = "https://cmagency-backend.onrender.com/api";
+// const API_URL = "https://cmagency-backend.onrender.com/api";
+const API_URL = "http://localhost:5055/api";
 
 let items = [];
 let categories = [];

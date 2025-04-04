@@ -9,4 +9,6 @@ public class Item
 
     public int CategoryId { get; set; }
     public Category Category { get; set; } = null!;
+
+    public string LanguageCode { get; set; } = null!;
 }

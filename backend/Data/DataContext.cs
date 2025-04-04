@@ -26,6 +26,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
                 .OnDelete(DeleteBehavior.Cascade);
 
             item.HasIndex(i => i.Name).IsUnique();
+            item.HasIndex(i => i.LanguageCode);
         });
 
         modelBuilder.Entity<Notepad>(notepad =>
