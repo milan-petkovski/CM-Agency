@@ -8,6 +8,7 @@ let notepad = {
   content: "",
 };
 let filterCategoryId = -1;
+let selectedDisplayLang = "sr";
 let showCompletedState = false;
 setInterval(updateBelgradeWeather, 1000);
 updateBelgradeWeather();
@@ -249,7 +250,8 @@ function updateItemsUI() {
   }
 
   const filteredItems = itemsInCategory.filter(
-    (x) => x.completed === showCompletedState
+    (x) =>
+      x.completed === showCompletedState && x.langCode === selectedDisplayLang
   );
 
   const list = document.getElementById("list");
@@ -674,7 +676,8 @@ function filterItems() {
     (x) => x.categoryId === filterCategoryId
   );
   const filteredItems = itemsInCategory.filter(
-    (x) => x.completed === showCompletedState
+    (x) =>
+      x.completed === showCompletedState && x.langCode === selectedDisplayLang
   );
 
   const list = document.getElementById("list");
@@ -917,6 +920,18 @@ async function showCategory() {
     contentSection.classList.remove("hidden");
     mainContent.forEach((element) => element.classList.remove("hidden"));
   }
+}
+
+async function changeDisplayLang() {
+  if (selectedDisplayLang === "sr") {
+    selectedDisplayLang = "en";
+  } else {
+    selectedDisplayLang = "sr";
+  }
+
+  const langButton = document.querySelector(".language-display-toggle");
+  langButton.style.transform = selectedDisplayLang === "en" ? "scaleX(-1)" : "";
+  updateItemsUI();
 }
 
 async function showNotepad() {
