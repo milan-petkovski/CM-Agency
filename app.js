@@ -7,6 +7,8 @@ let notepad = {
   content: "",
 };
 let filterCategoryId = -1;
+let selectedDisplayLang = "sr";
+let selectedCreateLang = "sr";
 let showCompletedState = false;
 setInterval(updateBelgradeWeather, 1000);
 updateBelgradeWeather();
@@ -69,7 +71,6 @@ async function checkAuth() {
 
   const loginSection = document.getElementById("log");
   const portalSection = document.getElementById("portal-content");
-  const logoutButton = document.getElementById("logout");
 
   if (user) {
     loginSection.classList.add("hidden");
@@ -156,7 +157,7 @@ function cleanURL(url) {
   url = url.trim();
   url = url.split("?")[0];
   url = url.replace(/^https?:\/\/(www\.)?/, "");
-  
+
   if (!url.startsWith("http")) {
     url = `https://${url}`;
   }
@@ -249,7 +250,8 @@ function updateItemsUI() {
   }
 
   const filteredItems = itemsInCategory.filter(
-    (x) => x.completed === showCompletedState
+    (x) =>
+      x.completed === showCompletedState && x.langCode === selectedDisplayLang
   );
 
   const list = document.getElementById("list");
@@ -264,14 +266,18 @@ function updateItemsUI() {
     filteredItems.forEach((i) => {
       const li = document.createElement("li");
       const cleanedLink = cleanURL(i.name);
-      const urlPattern = /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
+      const urlPattern =
+        /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)\/?$/;
 
       if (urlPattern.test(cleanedLink)) {
-        const url = new URL(cleanedLink.startsWith("https://") || cleanedLink.startsWith("http://")
-          ? cleanedLink.replace("http://", "https://") 
-          : `https://${cleanedLink}`
+        const url = new URL(
+          cleanedLink.startsWith("https://") ||
+          cleanedLink.startsWith("http://")
+            ? cleanedLink.replace("http://", "https://")
+            : `https://${cleanedLink}`
         );
-        const cleanedLink2 = url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
+        const cleanedLink2 =
+          url.hostname.replace(/^www\./, "") + url.pathname.replace(/\/+$/, "");
         const link = document.createElement("a");
         link.href = cleanedLink;
         link.textContent = cleanedLink2;
@@ -351,13 +357,15 @@ function toggleShowCompleted() {
 }
 
 function promeniJezik() {
-  document.getElementById('languageBtn').addEventListener('click', function() {
-      const btn = this;
-      if (btn.textContent === 'SRB') {
-          btn.textContent = 'ENG';
-      } else {
-          btn.textContent = 'SRB';
-      }
+  document.getElementById("languageBtn").addEventListener("click", function () {
+    const btn = this;
+    if (selectedCreateLang === "sr") {
+      btn.textContent = "ENG";
+      selectedCreateLang = "en";
+    } else {
+      btn.textContent = "SRB";
+      selectedCreateLang = "sr";
+    }
   });
 }
 promeniJezik();
@@ -444,6 +452,7 @@ async function addItem() {
   const response = await sendApiRequest("item", "POST", {
     name: textInput,
     categoryId: selectedCategoryId,
+    langCode: selectedCreateLang,
   });
 
   addButton.disabled = false;
@@ -670,7 +679,8 @@ function filterItems() {
     (x) => x.categoryId === filterCategoryId
   );
   const filteredItems = itemsInCategory.filter(
-    (x) => x.completed === showCompletedState
+    (x) =>
+      x.completed === showCompletedState && x.langCode === selectedDisplayLang
   );
 
   const list = document.getElementById("list");
@@ -915,6 +925,18 @@ async function showCategory() {
   }
 }
 
+async function changeDisplayLang() {
+  if (selectedDisplayLang === "sr") {
+    selectedDisplayLang = "en";
+  } else {
+    selectedDisplayLang = "sr";
+  }
+
+  const langButton = document.querySelector(".language-display-toggle");
+  langButton.style.transform = selectedDisplayLang === "en" ? "scaleX(-1)" : "";
+  updateItemsUI();
+}
+
 async function showNotepad() {
   const contentSection = document.getElementById("content");
   const categoryView = document.getElementById("kategorije");
@@ -1016,7 +1038,7 @@ async function updateBelgradeWeather() {
     );
     const data = await response.json();
 
-    if (data && data.current) {
+    if (data?.current) {
       const realTemp = Math.round(data.current.temp_c);
       tempElement.textContent = `${realTemp}°C`;
 
