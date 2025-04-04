@@ -6,4 +6,5 @@ public class ItemResponseDto
     public string Name { get; set; } = null!;
     public bool Completed { get; set; }
     public int CategoryId { get; set; }
+    public string LangCode { get; set; } = null!;
 }

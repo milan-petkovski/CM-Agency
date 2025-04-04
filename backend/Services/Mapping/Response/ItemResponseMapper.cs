@@ -12,5 +12,6 @@ public class ItemResponseMapper : IResponseMapper<Item, ItemResponseDto>
             Name = from.Name,
             Completed = from.Completed,
             CategoryId = from.CategoryId,
+            LangCode = from.LanguageCode,
         };
 }
