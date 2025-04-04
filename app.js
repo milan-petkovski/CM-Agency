@@ -9,6 +9,7 @@ let notepad = {
 };
 let filterCategoryId = -1;
 let selectedDisplayLang = "sr";
+let selectedCreateLang = "sr";
 let showCompletedState = false;
 setInterval(updateBelgradeWeather, 1000);
 updateBelgradeWeather();
@@ -359,10 +360,12 @@ function toggleShowCompleted() {
 function promeniJezik() {
   document.getElementById("languageBtn").addEventListener("click", function () {
     const btn = this;
-    if (btn.textContent === "SRB") {
+    if (selectedCreateLang === "sr") {
       btn.textContent = "ENG";
+      selectedCreateLang = "en";
     } else {
       btn.textContent = "SRB";
+      selectedCreateLang = "sr";
     }
   });
 }
@@ -450,6 +453,7 @@ async function addItem() {
   const response = await sendApiRequest("item", "POST", {
     name: textInput,
     categoryId: selectedCategoryId,
+    langCode: selectedCreateLang,
   });
 
   addButton.disabled = false;
