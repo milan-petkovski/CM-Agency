@@ -224,13 +224,21 @@ function updateCategoryUI() {
     .map((x) => ({
       id: x.id,
       name: x.name,
-      count: x.items.filter((x) => x.completed === showCompletedState).length,
+      engCount: x.items.filter(
+        (x) => x.completed === showCompletedState && x.langCode === "en"
+      ).length,
+      srCount: x.items.filter(
+        (x) => x.completed === showCompletedState && x.langCode === "sr"
+      ).length,
     }))
-    .sort((a, b) => b.count - a.count || a.id - b.id)
-    .forEach(({ name, count }) => {
+    .sort(
+      (a, b) => b.engCount + b.srCount - (a.engCount + a.srCount) || a.id - b.id
+    )
+    .forEach(({ name, engCount, srCount }) => {
       const option = document.createElement("option");
       option.value = name;
-      option.textContent = count === 0 ? name : `${count} stavki`;
+      option.textContent =
+        engCount + srCount === 0 ? name : `${srCount}/${engCount} stavki`;
       categoryList.appendChild(option);
       filterCategoryList.appendChild(option.cloneNode(true));
     });
