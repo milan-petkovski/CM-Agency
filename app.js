@@ -77,6 +77,21 @@ async function checkAuth() {
   if (user) {
     loginSection.classList.add("hidden");
     portalSection.classList.remove("hidden");
+
+    if (user.username === "luka") {
+      const motivationalQuotes = [
+        "Zeljko motivacija",
+        "Zeditor motivation",
+        "Zeljko",
+      ];
+
+      showNotification(
+        motivationalQuotes[
+          Math.floor(Math.random() * motivationalQuotes.length)
+        ],
+        "success"
+      );
+    }
     return true;
   }
 
