@@ -263,8 +263,7 @@ function updateCategoryUI() {
     .forEach(({ name, engCount, srCount }) => {
       const option = document.createElement("option");
       option.value = name;
-      option.textContent =
-        engCount + srCount === 0 ? name : `${srCount}/${engCount} stavki`;
+      option.textContent = count === 0 ? name : `${count} stavki`;
       categoryList.appendChild(option);
       filterCategoryList.appendChild(option.cloneNode(true));
     });
