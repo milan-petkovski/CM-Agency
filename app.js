@@ -223,7 +223,7 @@ async function refreshPortal() {
   document.getElementById("list").innerHTML = "";
   document.getElementById("categoryList").innerHTML = "";
   document.getElementById("filterCategoryList").innerHTML = "";
-  document.getElementById("counter").textContent = "Ukupno stavki: 0";
+  document.getElementById("counter").textContent = "Učitavanje...";
 
   // Ponovno učitavanje podataka
   await init();
