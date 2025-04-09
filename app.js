@@ -7,11 +7,13 @@ let notepad = {
   content: "",
 };
 let filterCategoryId = -1;
-let selectedDisplayLang = "sr";
-let selectedCreateLang = "sr";
+let selectedDisplayLang = "en";
 let showCompletedState = false;
 setInterval(updateBelgradeWeather, 1000);
 updateBelgradeWeather();
+
+const languageBtn = document.getElementById("languageBtn");
+if (!languageBtn) throw new Error("Greska pri ucitavanju stranice");
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("logout").classList.add("hidden");
@@ -75,6 +77,30 @@ async function checkAuth() {
   if (user) {
     loginSection.classList.add("hidden");
     portalSection.classList.remove("hidden");
+
+    if (user.username === "luka") {
+      const motivationalQuotes = [
+        "Zeljko motivacija",
+        "Zeditor motivation",
+        "Zeljko",
+      ];
+
+      const startDate = new Date("2025-04-09");
+      const dateStr = localStorage.getItem("gotQuoteOfDay");
+
+      const today = new Date().toISOString().split("T")[0];
+      if (dateStr === today) return;
+
+      localStorage.setItem("gotQuoteOfDay", today);
+
+      showNotification(
+        motivationalQuotes[
+          Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24)) %
+            motivationalQuotes.length
+        ],
+        "success"
+      );
+    }
     return true;
   }
 
@@ -224,13 +250,21 @@ function updateCategoryUI() {
     .map((x) => ({
       id: x.id,
       name: x.name,
-      count: x.items.filter((x) => x.completed === showCompletedState).length,
+      engCount: x.items.filter(
+        (x) => x.completed === showCompletedState && x.langCode === "en"
+      ).length,
+      srCount: x.items.filter(
+        (x) => x.completed === showCompletedState && x.langCode === "sr"
+      ).length,
     }))
-    .sort((a, b) => b.count - a.count || a.id - b.id)
-    .forEach(({ name, count }) => {
+    .sort(
+      (a, b) => b.engCount + b.srCount - (a.engCount + a.srCount) || a.id - b.id
+    )
+    .forEach(({ name, engCount, srCount }) => {
       const option = document.createElement("option");
       option.value = name;
-      option.textContent = count === 0 ? name : `${count} stavki`;
+      option.textContent =
+        engCount + srCount === 0 ? name : `${srCount}/${engCount} stavki`;
       categoryList.appendChild(option);
       filterCategoryList.appendChild(option.cloneNode(true));
     });
@@ -249,9 +283,12 @@ function updateItemsUI() {
     return;
   }
 
-  const filteredItems = itemsInCategory.filter(
-    (x) =>
-      x.completed === showCompletedState && x.langCode === selectedDisplayLang
+  const languageItems = itemsInCategory.filter(
+    (x) => x.langCode === selectedDisplayLang
+  );
+
+  const filteredItems = languageItems.filter(
+    (x) => x.completed === showCompletedState
   );
 
   const list = document.getElementById("list");
@@ -340,7 +377,7 @@ function updateItemsUI() {
   }
 
   const counter = document.getElementById("counter");
-  counter.textContent = `Ukupno stavki: ${itemsInCategory.length} (${
+  counter.textContent = `Ukupno stavki: ${languageItems.length} (${
     filteredItems.length
   } ${showCompletedState ? "zavrsenih" : "nezavrsenih"})`;
 }
@@ -357,15 +394,19 @@ function toggleShowCompleted() {
 }
 
 function promeniJezik() {
-  document.getElementById("languageBtn").addEventListener("click", function () {
-    const btn = this;
-    if (selectedCreateLang === "sr") {
-      btn.textContent = "ENG";
-      selectedCreateLang = "en";
+  languageBtn.addEventListener("click", function () {
+    if (selectedDisplayLang === "sr") {
+      languageBtn.textContent = "ENG";
+      selectedDisplayLang = "en";
     } else {
-      btn.textContent = "SRB";
-      selectedCreateLang = "sr";
+      languageBtn.textContent = "SRB";
+      selectedDisplayLang = "sr";
     }
+
+    const langButton = document.querySelector(".language-display-toggle");
+    langButton.style.transform =
+      selectedDisplayLang === "en" ? "scaleX(-1)" : "";
+    updateItemsUI();
   });
 }
 promeniJezik();
@@ -452,7 +493,7 @@ async function addItem() {
   const response = await sendApiRequest("item", "POST", {
     name: textInput,
     categoryId: selectedCategoryId,
-    langCode: selectedCreateLang,
+    langCode: selectedDisplayLang,
   });
 
   addButton.disabled = false;
@@ -796,7 +837,12 @@ function filterItems() {
 
 function downloadList() {
   const text = items
-    .filter((x) => filterCategoryId < 1 || x.categoryId === filterCategoryId)
+    .filter(
+      (x) =>
+        (filterCategoryId < 1 || x.categoryId === filterCategoryId) &&
+        x.completed === showCompletedState &&
+        x.langCode === selectedDisplayLang
+    )
     .map((item) => item.name)
     .join("\n");
   const blob = new Blob([text], { type: "text/plain" });
@@ -927,8 +973,10 @@ async function showCategory() {
 
 async function changeDisplayLang() {
   if (selectedDisplayLang === "sr") {
+    languageBtn.textContent = "ENG";
     selectedDisplayLang = "en";
   } else {
+    languageBtn.textContent = "SRB";
     selectedDisplayLang = "sr";
   }
 
