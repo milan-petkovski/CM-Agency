@@ -7,7 +7,7 @@ let notepad = {
   content: "",
 };
 let filterCategoryId = -1;
-let selectedDisplayLang = "sr";
+let selectedDisplayLang = "en";
 let showCompletedState = false;
 setInterval(updateBelgradeWeather, 1000);
 updateBelgradeWeather();
