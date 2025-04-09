@@ -85,9 +85,18 @@ async function checkAuth() {
         "Zeljko",
       ];
 
+      const startDate = new Date("2025-04-09");
+      const dateStr = localStorage.getItem("gotQuoteOfDay");
+
+      const today = new Date().toISOString().split("T")[0];
+      if (dateStr === today) return;
+
+      localStorage.setItem("gotQuoteOfDay", today);
+
       showNotification(
         motivationalQuotes[
-          Math.floor(Math.random() * motivationalQuotes.length)
+          Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24)) %
+            motivationalQuotes.length
         ],
         "success"
       );
