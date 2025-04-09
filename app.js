@@ -263,7 +263,8 @@ function updateCategoryUI() {
     .forEach(({ name, engCount, srCount }) => {
       const option = document.createElement("option");
       option.value = name;
-      option.textContent = count === 0 ? name : `${count} stavki`;
+      option.textContent =
+        engCount + srCount === 0 ? name : `${srCount}/${engCount} stavki`;
       categoryList.appendChild(option);
       filterCategoryList.appendChild(option.cloneNode(true));
     });
@@ -409,6 +410,7 @@ function promeniJezik() {
   });
 }
 promeniJezik();
+
 // FUNKCIJE ZA MANIPULACIJU PODACIMA
 async function loadCategories() {
   const response = await sendApiRequest("category/full", "GET");
