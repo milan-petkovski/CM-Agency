@@ -257,9 +257,12 @@ function updateItemsUI() {
     return;
   }
 
-  const filteredItems = itemsInCategory.filter(
-    (x) =>
-      x.completed === showCompletedState && x.langCode === selectedDisplayLang
+  const languageItems = itemsInCategory.filter(
+    (x) => x.langCode === selectedDisplayLang
+  );
+
+  const filteredItems = languageItems.filter(
+    (x) => x.completed === showCompletedState
   );
 
   const list = document.getElementById("list");
@@ -348,7 +351,7 @@ function updateItemsUI() {
   }
 
   const counter = document.getElementById("counter");
-  counter.textContent = `Ukupno stavki: ${itemsInCategory.length} (${
+  counter.textContent = `Ukupno stavki: ${languageItems.length} (${
     filteredItems.length
   } ${showCompletedState ? "zavrsenih" : "nezavrsenih"})`;
 }
