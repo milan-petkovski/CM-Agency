@@ -813,7 +813,12 @@ function filterItems() {
 
 function downloadList() {
   const text = items
-    .filter((x) => filterCategoryId < 1 || x.categoryId === filterCategoryId)
+    .filter(
+      (x) =>
+        (filterCategoryId < 1 || x.categoryId === filterCategoryId) &&
+        x.completed === showCompletedState &&
+        x.langCode === selectedDisplayLang
+    )
     .map((item) => item.name)
     .join("\n");
   const blob = new Blob([text], { type: "text/plain" });
