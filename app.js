@@ -8,10 +8,12 @@ let notepad = {
 };
 let filterCategoryId = -1;
 let selectedDisplayLang = "sr";
-let selectedCreateLang = "sr";
 let showCompletedState = false;
 setInterval(updateBelgradeWeather, 1000);
 updateBelgradeWeather();
+
+const languageBtn = document.getElementById("languageBtn");
+if (!languageBtn) throw new Error("Greska pri ucitavanju stranice");
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("logout").classList.add("hidden");
@@ -368,15 +370,19 @@ function toggleShowCompleted() {
 }
 
 function promeniJezik() {
-  document.getElementById("languageBtn").addEventListener("click", function () {
-    const btn = this;
-    if (selectedCreateLang === "sr") {
-      btn.textContent = "ENG";
-      selectedCreateLang = "en";
+  languageBtn.addEventListener("click", function () {
+    if (selectedDisplayLang === "sr") {
+      languageBtn.textContent = "ENG";
+      selectedDisplayLang = "en";
     } else {
-      btn.textContent = "SRB";
-      selectedCreateLang = "sr";
+      languageBtn.textContent = "SRB";
+      selectedDisplayLang = "sr";
     }
+
+    const langButton = document.querySelector(".language-display-toggle");
+    langButton.style.transform =
+      selectedDisplayLang === "en" ? "scaleX(-1)" : "";
+    updateItemsUI();
   });
 }
 promeniJezik();
@@ -463,7 +469,7 @@ async function addItem() {
   const response = await sendApiRequest("item", "POST", {
     name: textInput,
     categoryId: selectedCategoryId,
-    langCode: selectedCreateLang,
+    langCode: selectedDisplayLang,
   });
 
   addButton.disabled = false;
@@ -938,8 +944,10 @@ async function showCategory() {
 
 async function changeDisplayLang() {
   if (selectedDisplayLang === "sr") {
+    languageBtn.textContent = "ENG";
     selectedDisplayLang = "en";
   } else {
+    languageBtn.textContent = "SRB";
     selectedDisplayLang = "sr";
   }
 
