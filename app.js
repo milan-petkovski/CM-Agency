@@ -73,6 +73,7 @@ async function checkAuth() {
 
   const loginSection = document.getElementById("log");
   const portalSection = document.getElementById("portal-content");
+  const logoutButton = document.getElementById("logout");
 
   if (user) {
     loginSection.classList.add("hidden");
@@ -80,12 +81,23 @@ async function checkAuth() {
 
     if (user.username === "luka") {
       const motivationalQuotes = [
-        "Zeljko motivacija",
-        "Zeditor motivation",
-        "Zeljko",
-        "Zeljko2",
-        "Zeljko3",
-        "Zeljko4",
+      "Danas je dan kad tvoj biznis dobija krila - svaka poruka koju pošalješ je vetar koji ga diže, svaki sastanak je nebo koje osvajaš. Kreni sad i neka te svi vide!",
+      "Nema više sutra, danas je tvoj trenutak - zgrabi telefon, pusti glas da odjekne, idi na sastanke kao da si vlasnik sveta. Tvoj posao čeka tvoj potez!",
+      "Tvoj biznis je kao reka - ako staneš, usporava. Danas je dan da je pokreneš: šalji poruke, zakazuj susrete, budi struja koja sve nosi!",
+      "Svaki korak danas je pobeda - poruke koje šalješ su tvoje zastave, sastanci su tvoje bitke. Ustani i pokaži da si ti taj koji menja igru!",
+      "Danas nije običan dan, to je tvoj poziv za akciju - svaka reč koju izgovoriš, svaki sastanak na koji odeš gradi tvoj san. Ne čekaj, budi taj plamen!",
+      "Tvoj biznis je priča koju pišeš - danas je nova stranica. Pošalji poruke koje će se pamtiti, idi na susrete koji menjaju sve. Ti si autor, kreni!",
+      "Nema izgovora - tvoj posao je kao vatra koja čeka da plane. Danas je dan da je raspiriš: pozovi, piši, sastani se i neka gori!",
+      "Ti si snaga iza svog biznisa - svaka poruka koju pošalješ je korak napred, svaki sastanak je prilika da zablistaš. Danas je tvoj dan, uzmi ga!",
+      "Danas je tvoj maraton - ne moraš juriti, ali moraš krenuti. Pošalji prvu poruku, zakorači na prvi sastanak, tvoj cilj je bliži nego što misliš!",
+      "Tvoj biznis je kao mašina - ti si taj koji je pokreće. Danas pritisni gas: poruke, pozivi, sastanci - neka sve bruji od tvoje energije!",
+      "Svaki dan je nova šansa, ali danas je poseban - tvoj glas može da otvori vrata, tvoj korak može da pomeri planine. Piši, zovi, idi, sad je vreme!",
+      "Tvoj posao nije samo posao, to je tvoj pečat na svetu. Danas ga utisni: poruke koje šalješ su tvoj potpis, sastanci su tvoj dokaz. Kreni!",
+      "Danas je dan kad tvoj biznis diše punim plućima - svaka poruka je dah, svaki sastanak je otkucaj srca. Ne staj, budi taj ritam!",
+      "Ti si kapetan svog broda - danas je dan da zaploviš. Poruke su tvoj vetar, sastanci su tvoje luke. Diži sidro i kreni u osvajanje!",
+      "Nema malih koraka danas - svaka poruka koju pošalješ je skok, svaki sastanak je let. Tvoj biznis je nebo, a ti si zvezda, zasijaj!",
+      "Tvoj posao je kao ples - ti vodiš korake. Danas zapleši: pošalji poruke koje imaju ritam, idi na sastanke koji imaju strast. Pokaži ko si!",
+      "Danas je tvoj trenutak istine - svaka poruka koju napišeš je tvoj glas, svaki sastanak je tvoj dokaz. Tvoj biznis čeka heroja - to si ti, kreni!"
       ];
 
       const startDate = new Date("2025-04-09");
@@ -96,7 +108,7 @@ async function checkAuth() {
 
       localStorage.setItem("gotQuoteOfDay", today);
 
-      showNotification(
+      showNotification1(
         motivationalQuotes[
           Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24)) %
             motivationalQuotes.length
@@ -104,6 +116,7 @@ async function checkAuth() {
         "success"
       );
     }
+
     return true;
   }
 
@@ -1065,6 +1078,31 @@ function showNotification(message, type = "error") {
     notification.classList.remove("show");
     setTimeout(() => notification.remove(), 300);
   }, 3000);
+}
+
+function showNotification1(message, type = "error") {
+  const container = document.getElementById("notification-container");
+  if (!container) return;
+
+  const currentNotifications = container.getElementsByClassName("notification");
+  if (currentNotifications.length > 0) {
+    currentNotifications[0].remove();
+  }
+
+  const notification = document.createElement("div");
+  notification.classList.add("notification", type);
+  notification.textContent = message;
+
+  container.appendChild(notification);
+
+  requestAnimationFrame(() => {
+    notification.classList.add("show");
+  });
+
+  setTimeout(() => {
+    notification.classList.remove("show");
+    setTimeout(() => notification.remove(), 300);
+  }, 20000);
 }
 
 async function updateBelgradeWeather() {
