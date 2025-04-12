@@ -159,5 +159,5 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.MapGet("/", () => "Server radi!");
+app.MapMethods("/", ["HEAD"], () => "CM Agency API");
 await app.RunAsync();
