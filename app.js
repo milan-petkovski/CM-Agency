@@ -83,13 +83,16 @@ async function checkAuth() {
         "Zeljko motivacija",
         "Zeditor motivation",
         "Zeljko",
+        "Zeljko2",
+        "Zeljko3",
+        "Zeljko4",
       ];
 
       const startDate = new Date("2025-04-09");
       const dateStr = localStorage.getItem("gotQuoteOfDay");
 
       const today = new Date().toISOString().split("T")[0];
-      if (dateStr === today) return;
+      if (dateStr === today) return true;
 
       localStorage.setItem("gotQuoteOfDay", today);
 
@@ -146,6 +149,8 @@ async function login() {
       document.querySelector(".obavestenje").classList.remove("hidden");
     }
     showNotification("Uspešno ste se prijavili!", "success");
+
+    checkAuth();
   }
 }
 
