@@ -14,6 +14,7 @@ updateBelgradeWeather();
 
 const languageBtn = document.getElementById("languageBtn");
 if (!languageBtn) throw new Error("Greska pri ucitavanju stranice");
+languageBtn.addEventListener("click", changeDisplayLang);
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("logout").classList.add("hidden");
@@ -418,24 +419,6 @@ function toggleShowCompleted() {
     ? "Prikazi nezavrsene stavke"
     : "Prikazi zavrsene stavke";
 }
-
-function promeniJezik() {
-  languageBtn.addEventListener("click", function () {
-    if (selectedDisplayLang === "sr") {
-      languageBtn.textContent = "ENG";
-      selectedDisplayLang = "en";
-    } else {
-      languageBtn.textContent = "SRB";
-      selectedDisplayLang = "sr";
-    }
-
-    const langButton = document.querySelector(".language-display-toggle");
-    langButton.style.transform =
-      selectedDisplayLang === "en" ? "scaleX(-1)" : "";
-    updateItemsUI();
-  });
-}
-promeniJezik();
 
 // FUNKCIJE ZA MANIPULACIJU PODACIMA
 async function loadCategories() {
@@ -1007,8 +990,6 @@ async function changeDisplayLang() {
     selectedDisplayLang = "sr";
   }
 
-  const langButton = document.querySelector(".language-display-toggle");
-  langButton.style.transform = selectedDisplayLang === "en" ? "scaleX(-1)" : "";
   updateItemsUI();
   updateCategoryUI();
 }
