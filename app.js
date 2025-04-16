@@ -280,13 +280,17 @@ function updateCategoryUI() {
       ).length,
     }))
     .sort(
-      (a, b) => b.engCount + b.srCount - (a.engCount + a.srCount) || a.id - b.id
+      selectedDisplayLang === "sr"
+        ? (a, b) => b.srCount - a.srCount
+        : (a, b) => b.engCount - a.engCount
     )
     .forEach(({ name, engCount, srCount }) => {
       const option = document.createElement("option");
       option.value = name;
-      option.textContent =
-        engCount + srCount === 0 ? name : `${srCount}/${engCount} stavki`;
+
+      const count = selectedDisplayLang === "sr" ? srCount : engCount;
+      option.textContent = count === 0 ? name : `${count} stavki`;
+
       categoryList.appendChild(option);
       filterCategoryList.appendChild(option.cloneNode(true));
     });
@@ -1006,6 +1010,7 @@ async function changeDisplayLang() {
   const langButton = document.querySelector(".language-display-toggle");
   langButton.style.transform = selectedDisplayLang === "en" ? "scaleX(-1)" : "";
   updateItemsUI();
+  updateCategoryUI();
 }
 
 async function showNotepad() {
