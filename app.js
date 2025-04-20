@@ -39,34 +39,52 @@ document.getElementById("password").addEventListener("input", function () {
 });
 
 // API POMOĆNE FUNKCIJE
-async function sendApiRequest(urlExtension, method, data) {
-  try {
-    const response = await fetch(`${API_URL}/${urlExtension}`, {
-      method: method,
-      headers:
-        method === "GET" ? undefined : { "Content-Type": "application/json" },
-      credentials: "include",
-      body: data ? JSON.stringify(data) : undefined,
-    });
+async function sendApiRequest(urlExtension, method, data, retries = 3) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(`${API_URL}/${urlExtension}`, {
+        method: method,
+        headers:
+          method === "GET"
+            ? undefined
+            : { "Content-Type": "application/json" },
+        credentials: "include",
+        body: data ? JSON.stringify(data) : undefined,
+      });
 
-    if (!response.ok) {
-      console.error("Greška pri slanju api request-a:", response);
-      return null;
+      if (!response.ok) {
+        console.error("Greška pri slanju api request-a:", response);
+        if (attempt === retries) return null;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        continue;
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Greška pri slanju api request-a:", error);
+      if (attempt === retries) return null;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Greška pri slanju api request-a:", error);
-    return null;
   }
+  return null;
 }
 
 async function init() {
+  const loadingSpinner = document.getElementById("loading-spinner");
+  if (loadingSpinner) loadingSpinner.classList.remove("hidden");
+
   showCompletedState = true;
-  await Promise.all([
-    loadCategories().then(toggleShowCompleted),
-    loadNotepad(),
-  ]);
+  try {
+    await Promise.all([
+      loadCategories().then(toggleShowCompleted),
+      loadNotepad(),
+    ]);
+  } catch (error) {
+    showNotification("Greška prilikom inicijalizacije portala.", "error");
+    console.error("Init error:", error);
+  } finally {
+    if (loadingSpinner) loadingSpinner.classList.add("hidden");
+  }
 }
 
 async function checkAuth() {
@@ -76,7 +94,7 @@ async function checkAuth() {
   const portalSection = document.getElementById("portal-content");
   const logoutButton = document.getElementById("logout");
 
-  console.log("a", user);
+  console.log("Prijavljen: ", user);
 
   if (!user) {
     loginSection.classList.remove("hidden");
@@ -126,7 +144,7 @@ async function checkAuth() {
       Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24)) %
         motivationalQuotes.length
     ],
-    "success"
+    "neutral"
   );
 
   return true;
@@ -162,7 +180,6 @@ async function login() {
     if (obavestenjeSadrzaj === "") {
       showPortal();
     } else {
-      // Ako ima sadržaja, prikaži obaveštenje
       document.querySelector(".prijava").classList.add("hidden");
       document.querySelector(".obavestenje").classList.remove("hidden");
     }
