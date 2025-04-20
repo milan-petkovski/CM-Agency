@@ -103,7 +103,7 @@
             <textarea id="notepadContent" placeholder="Piši ovde bilo šta..."></textarea>
             <div class="button-group unselectable">
                 <button id="btn3" onclick="backToMain()">Nazad</button>
-                <button id="btn4" onclick="refreshPortal()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
+                <button id="btn4" onclick="location.reload()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
                 <button id="btn3" class="problem">Prijavi problem</button>
             </div>
         </div>
@@ -113,39 +113,7 @@
 
 </body>
 </html>
-
-
-<script>
-window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
-    
-formbutton("create", {
-  theme: "minimal",
-  button: ".problem",
-  offset: {bottom: 5, left: 0},
-  action: "https://formspree.io/f/mvgappby",
-  title: "Prijavi problem",
-  fields: [
-    {
-      type: "textarea",
-      required: true,
-      placeholder: "Opisite problem..."
-    },
-    {
-      type: "submit",
-    }],    
-    onResponse: function(ok, setStatus) {
-    if (ok) {
-      setStatus("Hvala što ste prijavili problem!");
-    } else {
-      setStatus("<span style='color:red'>Postoji problem. Dobili smo obaveštenje.</span>");
-    }
-  }
-});
-</script>
 <script src="app.js"></script>
-<script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
 
 <style>
 .hidden {

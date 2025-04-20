@@ -25,7 +25,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   await init();
   document.getElementById("logout").classList.remove("hidden");
 });
-
+document.addEventListener("DOMContentLoaded", () => {
+  loadExternalLibraries();
+});
 document.getElementById("username").addEventListener("keypress", (e) => {
   if (e.key === "Enter") login();
 });
@@ -249,6 +251,9 @@ async function refreshPortal() {
   filterCategoryId = -1;
   showCompletedState = false;
 
+  document.getElementById("textInput").value = "";
+  document.getElementById("categoryInput").value = "";
+  document.getElementById("filterCategoryInput").value = "";
   document.getElementById("list").innerHTML = "";
   document.getElementById("categoryList").innerHTML = "";
   document.getElementById("filterCategoryList").innerHTML = "";
@@ -1038,6 +1043,63 @@ async function backToMain() {
       notepadView.classList.remove("hidden");
       contentSection.classList.add("hidden");
     }
+  }
+}
+
+// EKSTERNE SKRIPTE
+function loadScript(src, isModule = false) {
+  return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = src;
+      if (isModule) script.type = "module";
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+  });
+}
+
+async function loadExternalLibraries() {
+  try {
+      // Učitavanje Ionicons skripti
+      await Promise.all([
+          loadScript("https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js", true),
+          loadScript("https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js")
+      ]);
+
+      // Učitavanje Formspree biblioteke
+      await loadScript("https://formspree.io/js/formbutton-v1.min.js");
+
+      // Inicijalizacija Formspree konfiguracije
+      window.formbutton = window.formbutton || function () {
+          (formbutton.q = formbutton.q || []).push(arguments);
+      };
+
+      formbutton("create", {
+          theme: "minimal",
+          button: ".problem",
+          offset: { bottom: 5, left: 0 },
+          action: "https://formspree.io/f/mvgappby",
+          title: "Prijavi problem",
+          fields: [
+              {
+                  type: "textarea",
+                  required: true,
+                  placeholder: "Opisite problem..."
+              },
+              {
+                  type: "submit",
+              }
+          ],
+          onResponse: function (ok, setStatus) {
+              if (ok) {
+                  setStatus("Hvala što ste prijavili problem!");
+              } else {
+                  setStatus("<span style='color:red'>Postoji problem. Dobili smo obaveštenje.</span>");
+              }
+          }
+      });
+  } catch (error) {
+      console.error("Greška prilikom učitavanja eksternih biblioteka:", error);
   }
 }
 
