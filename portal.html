@@ -34,7 +34,7 @@
 
         <div class="obavestenje hidden">
             <h2>Važno obaveštenje</h2>
-            <p>Promena jezika leadova je omogućena na portalu. Menjanje jezika vrši se klikom na dugme ENG/SRB u okviru sekcije „Dodaj“. Prijavljivanje problema je važno i obavlja se klikom na dugme „Prijavi problem“.</p>
+            <p>Promena jezika leadova je omogućena na portalu. Menjanje jezika vrši se klikom na dugme ENG/SRB u okviru sekcije „Dodaj“. Prijavljivanje problema se obavlja klikom na dugme „Prijavi problem“ u okviru „Notepad“ stranice.</p>
             <button class="unselectable" onclick="showPortal()">Razumem</button>
         </div>
     </div>
@@ -101,7 +101,11 @@
         <div id="notepad" class="hidden">
             <h2 class="unselectable">Notepad</h2>
             <textarea id="notepadContent" placeholder="Piši ovde bilo šta..."></textarea>
-            <button class="unselectable" onclick="backToMain()">Nazad</button>
+            <div class="button-group unselectable">
+                <button id="btn3" onclick="backToMain()">Nazad</button>
+                <button id="btn4" onclick="refreshPortal()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
+                <button id="btn3" class="problem">Prijavi problem</button>
+            </div>
         </div>
     </section>
 
@@ -110,7 +114,36 @@
 </body>
 </html>
 
+
+<script>
+window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+    
+formbutton("create", {
+  theme: "minimal",
+  button: ".problem",
+  offset: {bottom: 5, left: 0},
+  action: "https://formspree.io/f/mvgappby",
+  title: "Prijavi problem",
+  fields: [
+    {
+      type: "textarea",
+      required: true,
+      placeholder: "Opisite problem..."
+    },
+    {
+      type: "submit",
+    }],    
+    onResponse: function(ok, setStatus) {
+    if (ok) {
+      setStatus("Hvala što ste prijavili problem!");
+    } else {
+      setStatus("<span style='color:red'>Postoji problem. Dobili smo obaveštenje.</span>");
+    }
+  }
+});
+</script>
 <script src="app.js"></script>
+<script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
 

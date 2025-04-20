@@ -1917,6 +1917,9 @@ form {
   border-color: var(--crvena);
   box-shadow: 0 0 8px rgba(228, 15, 15, 0.3);
 }
+#problem {
+  margin-bottom: 2%;
+}
 
 /* NOTIFIKACIJA */
 #notification-container {
