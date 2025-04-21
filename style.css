@@ -2107,3 +2107,7 @@ form {
 .obavestenje p{
   margin-bottom: 10px;
 }
+#languageBtn:hover {
+  transform: translateY(0) !important;
+  box-shadow: none;
+}

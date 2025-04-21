@@ -205,7 +205,8 @@ function cleanURL(url) {
   url = url.trim();
   url = url.split("?")[0];
   url = url.replace(/^https?:\/\/(www\.)?/, "");
-
+  url = url.replace("/@", "/");
+  
   if (!url.startsWith("http")) {
     url = `https://${url}`;
   }
@@ -987,9 +988,11 @@ async function changeDisplayLang() {
   if (selectedDisplayLang === "sr") {
     languageBtn.textContent = "ENG";
     selectedDisplayLang = "en";
+    showNotification("Prikazani jezik: Engleski", "success")
   } else {
     languageBtn.textContent = "SRB";
     selectedDisplayLang = "sr";
+    showNotification("Prikazani jezik: Srpski", "success")
   }
 
   updateItemsUI();
