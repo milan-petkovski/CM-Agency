@@ -115,7 +115,7 @@ async function checkAuth() {
     "Danas je tvoj trenutak istine - svaka poruka koju napišeš je tvoj glas, svaki sastanak je tvoj dokaz. Tvoj biznis čeka heroja - to si ti, kreni!",
   ];
 
-  const startDate = new Date("2025-04-20");
+  const startDate = new Date("2025-04-21");
   const dateStr = localStorage.getItem("gotQuoteOfDay");
 
   const today = new Date().toISOString().split("T")[0];
@@ -175,6 +175,7 @@ function showPortal() {
   document.getElementById("log").classList.add("hidden");
   document.getElementById("portal-content").classList.remove("hidden");
   document.getElementById("logout").classList.remove("hidden");
+  checkAuth();
   init();
 }
 
