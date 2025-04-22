@@ -1,13 +1,14 @@
 const API_URL = "https://cmagency-backend.onrender.com/api";
 
-const state = {
-  items: [],
-  categories: [],
-  notepad: { id: -1, content: "" },
-  filterCategoryId: -1,
-  selectedDisplayLang: "en",
-  showCompletedState: false,
-};
+let items = [];
+let categories = [];
+let notepad = { id: -1, content: "" };
+let filterCategoryId = -1;
+let selectedDisplayLang = "en";
+let showCompletedState = false;
+setInterval(updateBelgradeWeather, 1000);
+updateBelgradeWeather();
+
 const languageBtn = document.getElementById("languageBtn");
 if (!languageBtn) throw new Error("Greška pri učitavanju stranice");
 
@@ -18,10 +19,8 @@ const addEventListeners = () => {
   const passwordInput = document.getElementById("password");
   const togglePassword = document.querySelector(".toggle-password");
 
-  [usernameInput, passwordInput].forEach(input => 
-    input.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") login();
-    })
+  [usernameInput, passwordInput].forEach((input) =>
+    input.addEventListener("keypress", (e) => e.key === "Enter" && login())
   );
 
   passwordInput.addEventListener("input", () => {
@@ -29,19 +28,18 @@ const addEventListeners = () => {
   });
 };
 const initializeApp = async () => {
-  document.getElementById("logout").classList.add("hidden");
+  const logoutBtn = document.getElementById("logout");
+  logoutBtn.classList.add("hidden");
 
-  if (!(await checkAuth())) return;
-
-  await init();
-  document.getElementById("logout").classList.remove("hidden");
+  if (await checkAuth()) {
+    await init();
+    logoutBtn.classList.remove("hidden");
+  }
 };
 document.addEventListener("DOMContentLoaded", () => {
   addEventListeners();
   loadExternalLibraries();
   initializeApp();
-  setInterval(updateBelgradeWeather, 1000);
-  updateBelgradeWeather();
 });
 
 // API POMOĆNE FUNKCIJE
