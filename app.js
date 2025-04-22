@@ -1,43 +1,47 @@
 const API_URL = "https://cmagency-backend.onrender.com/api";
 
-let items = [];
-let categories = [];
-let notepad = {
-  id: -1,
-  content: "",
+const state = {
+  items: [],
+  categories: [],
+  notepad: { id: -1, content: "" },
+  filterCategoryId: -1,
+  selectedDisplayLang: "en",
+  showCompletedState: false,
 };
-let filterCategoryId = -1;
-let selectedDisplayLang = "en";
-let showCompletedState = false;
-setInterval(updateBelgradeWeather, 1000);
-updateBelgradeWeather();
-
 const languageBtn = document.getElementById("languageBtn");
-if (!languageBtn) throw new Error("Greska pri ucitavanju stranice");
-languageBtn.addEventListener("click", changeDisplayLang);
+if (!languageBtn) throw new Error("Greška pri učitavanju stranice");
 
-document.addEventListener("DOMContentLoaded", async () => {
+const addEventListeners = () => {
+  languageBtn.addEventListener("click", changeDisplayLang);
+
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const togglePassword = document.querySelector(".toggle-password");
+
+  [usernameInput, passwordInput].forEach(input => 
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") login();
+    })
+  );
+
+  passwordInput.addEventListener("input", () => {
+    togglePassword.style.display = passwordInput.value ? "block" : "none";
+  });
+};
+const initializeApp = async () => {
   document.getElementById("logout").classList.add("hidden");
 
-  const isAuth = await checkAuth();
-  if (!isAuth) return;
+  if (!(await checkAuth())) return;
 
   await init();
   document.getElementById("logout").classList.remove("hidden");
-});
+};
 document.addEventListener("DOMContentLoaded", () => {
+  addEventListeners();
   loadExternalLibraries();
-});
-document.getElementById("username").addEventListener("keypress", (e) => {
-  if (e.key === "Enter") login();
-});
-document.getElementById("password").addEventListener("keypress", (e) => {
-  if (e.key === "Enter") login();
-});
-document.getElementById("password").addEventListener("input", function () {
-  document.querySelector(".toggle-password").style.display = this.value
-    ? "block"
-    : "none";
+  initializeApp();
+  setInterval(updateBelgradeWeather, 1000);
+  updateBelgradeWeather();
 });
 
 // API POMOĆNE FUNKCIJE
@@ -93,7 +97,7 @@ async function checkAuth() {
   portalSection.classList.remove("hidden");
   logoutButton.classList.remove("hidden");
 
-  if (user.username !== "luka") return true;
+  if (user.username !== "luka" && user.username !== "milan") return true;
 
   const motivationalQuotes = [
     "Danas je dan kad tvoj biznis dobija krila - svaka poruka koju pošalješ je vetar koji ga diže, svaki sastanak je nebo koje osvajaš. Kreni sad i neka te svi vide!",
@@ -115,7 +119,7 @@ async function checkAuth() {
     "Danas je tvoj trenutak istine - svaka poruka koju napišeš je tvoj glas, svaki sastanak je tvoj dokaz. Tvoj biznis čeka heroja - to si ti, kreni!",
   ];
 
-  const startDate = new Date("2025-04-21");
+  const startDate = new Date("2025-04-22");
   const dateStr = localStorage.getItem("gotQuoteOfDay");
 
   const today = new Date().toISOString().split("T")[0];
@@ -989,11 +993,11 @@ async function changeDisplayLang() {
   if (selectedDisplayLang === "sr") {
     languageBtn.textContent = "ENG";
     selectedDisplayLang = "en";
-    showNotification("Prikazani jezik: Engleski", "success")
+    showNotification("Prikazani jezik: Engleski", "neutral")
   } else {
     languageBtn.textContent = "SRB";
     selectedDisplayLang = "sr";
-    showNotification("Prikazani jezik: Srpski", "success")
+    showNotification("Prikazani jezik: Srpski", "neutral")
   }
 
   updateItemsUI();
