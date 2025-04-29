@@ -1219,3 +1219,89 @@ function disableDevTools() {
     }
   };
 }
+
+
+
+async function getCategorySuggestions(text) {
+  try {
+    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer sk-031740e6a2674df38818517a9916bd47`
+      },
+      body: JSON.stringify({
+        model: "deepseek-chat",
+        messages: [
+          {
+            role: "system",
+            content: "Ti si asistent koji pomaže sa kategorizacijom web linkova i sadržaja. Korisnik će poslati link ili tekst, a ti treba da predložiš najrelevantniju kategoriju iz postojeće liste ili da predložiš novu. Odgovaraj samo sa imenom kategorije, bez dodatnih komentara."
+          },
+          {
+            role: "user",
+            content: `Postojeće kategorije: ${categories.map(c => c.name).join(', ')}. Predloži kategoriju za: "${text}"`
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 10
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error("Greška pri dobijanju predloga:", error);
+    return null;
+  }
+}
+function showSuggestions(suggestions) {
+  const suggestionsList = document.getElementById('suggestionsList');
+  suggestionsList.innerHTML = '';
+  
+  suggestions.forEach(suggestion => {
+    const item = document.createElement('div');
+    item.className = 'suggestion-item';
+    item.textContent = suggestion;
+    item.addEventListener('click', () => {
+      document.getElementById('categoryInput').value = suggestion;
+      suggestionsList.classList.add('hidden');
+    });
+    suggestionsList.appendChild(item);
+  });
+  
+  suggestionsList.classList.remove('hidden');
+}
+async function suggestCategory() {
+  const textInput = document.getElementById('textInput').value.trim();
+  const button = document.getElementById('suggestButton');
+  button.disabled = true;
+  button.textContent = "...";
+  
+  try {
+    const suggestion = await getCategorySuggestions(textInput);
+    if (suggestion) {
+      showSuggestions([suggestion]);
+    } else {
+      showNotification("AI nije mogao da generiše predlog", "neutral");
+    }
+  } catch (error) {
+    showNotification("Greška pri dobijanju predloga", "error");
+    console.error(error);
+  } finally {
+    button.disabled = false;
+    button.textContent = "AI predlog kategorije";
+  }
+}
+
+const textInput = document.getElementById('textInput');
+const suggestButton = document.getElementById('suggestButton');
+
+function toggleButtonVisibility() {
+  suggestButton.style.display = textInput.value.trim() ? 'inline-block' : 'none';
+}
+textInput.addEventListener('input', toggleButtonVisibility);
+toggleButtonVisibility();

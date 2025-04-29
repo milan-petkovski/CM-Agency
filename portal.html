@@ -17,99 +17,103 @@
     <button class="btn" id="logout" onclick="logout()">Odjavi se</button>
 </header>
 
-<div class="center-wrapper">
-    
-    <div id="log">
-        <div class="prijava">
-            <h2 class="unselectable">Prijava</h2>
-            <input type="text" id="username" placeholder="Korisničko ime">
-            <div class="password-container">
-            <input type="password" id="password" placeholder="Lozinka">
-            <span class="toggle-password" onclick="togglePassword()">
-                <ion-icon name="eye-outline" id="eye-icon"></ion-icon>
-            </span>
-            </div>
-            <button class="unselectable" onclick="login()">Prijavi se</button>
-        </div>
+<main class="center-wrapper">
+<div id="notification-container"></div>    
 
-        <div class="obavestenje hidden">
-            <h2>Važno obaveštenje</h2>
-            <p>Promena jezika leadova je omogućena na portalu. Menjanje jezika vrši se klikom na dugme ENG/SRB u okviru sekcije „Dodaj“. Prijavljivanje problema se obavlja klikom na dugme „Prijavi problem“ u okviru „Notepad“ stranice.</p>
-            <button class="unselectable" onclick="showPortal()">Razumem</button>
+<div id="log">
+    <div class="prijava">
+        <h2 class="unselectable">Prijava</h2>
+        <input type="text" id="username" placeholder="Korisničko ime">
+        <div class="password-container">
+        <input type="password" id="password" placeholder="Lozinka">
+        <span class="toggle-password" onclick="togglePassword()">
+            <ion-icon name="eye-outline" id="eye-icon"></ion-icon>
+        </span>
+        </div>
+        <button class="unselectable" onclick="login()">Prijavi se</button>
+    </div>
+
+    <div class="obavestenje hidden">
+        <h2>Važno obaveštenje</h2>
+        <p>Promena jezika leadova je omogućena na portalu. Menjanje jezika vrši se klikom na dugme ENG/SRB u okviru sekcije „Dodaj“. Prijavljivanje problema se obavlja klikom na dugme „Prijavi problem“ u okviru „Notepad“ stranice.</p>
+        <button class="unselectable" onclick="showPortal()">Razumem</button>
+    </div>
+</div>
+
+<section class="portal unselectable hidden" id="portal-content">
+    <div id="content">
+            
+    <div class="gore">
+        <div id="weather-container">
+            <img id="weather-icon" src="" style="display: none;">
+            <div id="current-temp"></div>
+        </div>
+        <div class="links">
+            <a href="#" onclick="showCategory()">Kategorije</a> |
+            <a href="https://facebook.com/ads/library" target="_blank">Ads library</a> |
+            <a href="#" onclick="showNotepad()">Notepad</a>
+        </div>
+        <div id="current-time"></div>
+    </div>
+  
+    <div class="middle">
+        <!-- LEADS -->
+        <h2>Dodaj leads</h2>
+        <input type="text" id="textInput" placeholder="Unesi naziv ili link">
+        <div id="ctgroup">
+            <input list="categoryList" id="categoryInput" placeholder="Unesi ili izaberi kategoriju">
+            <button id="languageBtn">ENG</button>
+        </div>
+        <button id="suggestButton" onclick="suggestCategory()">AI predlog kategorije</button>
+        <datalist id="categoryList"></datalist>
+        <button id="addItemBtn" onclick="addItem()">Dodaj</button>
+
+        <!-- LISTA -->
+        <h2 id="lista">Lista</h2>
+        <p id="counter">Ucitavanje...</p>
+        <input list="filterCategoryList" id="filterCategoryInput" placeholder="Filtriraj po kategoriji">
+        <datalist id="filterCategoryList"></datalist>
+        <button onclick="filterItems()">Filtriraj</button>
+        <ul id="list" class="selectable"></ul>
+    </div>
+
+    <div class="dole">
+        <button id="showCompletedButton" onclick="toggleShowCompleted()">Prikazi samo zavrsene</button>   
+        <div class="button-group">  
+        <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
+        <button id="btn4" onclick="refreshPortal()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
+        <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
+        </div>
+    </div>
+  
+    </div>
+
+    <!-- Kategorije  -->
+    <div id="kategorije" class="hidden">
+        <h2>Kategorije</h2>
+        <ul id="klist" class="selectable"></ul>
+        <button id="addCategory" onclick="addCategory()">Dodaj kategoriju</button>
+        <div class="button-group">
+        <button id="btn3" onclick="backToMain()">Nazad</button>
+        <button id="btn4" onclick="location.reload()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
+        <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
+        </div>
+    </div>
+  
+    <!---  Notepad  --->
+    <div id="notepad" class="hidden">
+        <h2>Notepad</h2>
+        <textarea id="notepadContent" placeholder="Piši ovde bilo šta..."></textarea>
+        <div class="button-group">
+            <button id="btn3" onclick="backToMain()">Nazad</button>
+            <button id="btn4" onclick="location.reload()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
+            <button id="btn3" class="problem">Prijavi problem</button>
         </div>
     </div>
 
-    <div id="notification-container"></div>
+</section>
 
-    <section class="portal hidden" id="portal-content">
-        <div id="content">
-            
-        <div class="gore unselectable">
-            <div id="weather-container">
-                <img id="weather-icon" src="" alt="Vremenska ikonica" style="display: none;">
-                <div id="current-temp"></div>
-            </div>
-            <div class="links">
-                <a href="#" onclick="showCategory()">Kategorije</a> |
-                <a href="https://facebook.com/ads/library" target="_blank">Ads library</a> |
-                <a href="#" onclick="showNotepad()">Notepad</a>
-            </div>
-            <div id="current-time"></div>
-        </div>
-  
-        <div class="middle-section">
-          <!-- LEADS -->
-          <h2 class="unselectable">Dodaj leads</h2>
-          <input type="text" id="textInput" placeholder="Unesi naziv ili link">
-          <div id="ctgroup">
-            <input list="categoryList" id="categoryInput" placeholder="Unesi ili izaberi kategoriju">
-            <button id="languageBtn" class="language-toggle">ENG</button>
-        </div>
-
-          <datalist id="categoryList"></datalist>
-          <button class="unselectable" id="addItemBtn" onclick="addItem()">Dodaj</button>
-          <!-- LISTA -->
-          <h2 class="unselectable" id="lista">Lista</h2>
-          <p class="unselectable" id="counter">Ucitavanje...</p>
-          <input list="filterCategoryList" id="filterCategoryInput" placeholder="Filtriraj po kategoriji">
-          <datalist id="filterCategoryList"></datalist>
-          <button class="unselectable" id="btn2" onclick="filterItems()">Filtriraj</button>
-          <ul id="list"></ul>
-        </div>
-  
-        <button class="unselectable" id="showCompletedButton" onclick="toggleShowCompleted()">Prikazi samo zavrsene</button>
-        <div class="button-group unselectable">  
-          <button id="btn3" onclick="downloadList()">Preuzmi listu</button>
-          <button id="btn4" onclick="refreshPortal()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
-          <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
-        </div>
-        </div>
-
-        <!-- Kategorije  -->
-        <div id="kategorije" class="hidden">
-            <h2 class="unselectable">Kategorije</h2>
-            <ul id="klist"></ul>
-            <button class="unselectable" id="addCategory" onclick="addCategory()">Dodaj kategoriju</button>
-            <div class="button-group unselectable">
-            <button id="btn3" onclick="backToMain()">Nazad</button>
-            <button id="btn4" onclick="location.reload()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
-            <button id="btn3" onclick="searchList()">Pretrazi u listi</button>
-            </div>
-        </div>
-  
-        <!---  Notepad  --->
-        <div id="notepad" class="hidden">
-            <h2 class="unselectable">Notepad</h2>
-            <textarea id="notepadContent" placeholder="Piši ovde bilo šta..."></textarea>
-            <div class="button-group unselectable">
-                <button id="btn3" onclick="backToMain()">Nazad</button>
-                <button id="btn4" onclick="location.reload()"><ion-icon name="refresh-circle-outline"></ion-icon></button>
-                <button id="btn3" class="problem">Prijavi problem</button>
-            </div>
-        </div>
-    </section>
-
-</div>
+</main>
 
 </body>
 </html>
@@ -141,6 +145,22 @@ header .btn{
     align-items: center !important;
     width: 100%;
     height: 100%;
+}
+#suggestButton {
+    margin-bottom: 2%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+#suggestButton:hover {
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(0);
 }
 
 @media(max-width: 768px){

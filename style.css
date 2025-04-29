@@ -23,8 +23,11 @@ body {
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
 }
-.unselectable {
+.unselectable{
   user-select: none;
+}
+.selectable{
+  user-select: auto;
 }
 ::-webkit-scrollbar {
   width: 6px;
@@ -1865,7 +1868,7 @@ form {
   height: 100%;
   animation: slideInLeft 0.3s ease-out forwards;
 }
-#content .middle-section {
+#content .middle {
   flex: 1;
   display: flex;
   flex-direction: column;
