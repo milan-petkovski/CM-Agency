@@ -97,25 +97,21 @@ async function checkAuth() {
 
   if (user.username !== "luka" && user.username !== "milan") return true;
 
-  const motivationalQuotes = [
-    "Danas je dan kad tvoj biznis dobija krila - svaka poruka koju pošalješ je vetar koji ga diže, svaki sastanak je nebo koje osvajaš. Kreni sad i neka te svi vide!",
-    "Nema više sutra, danas je tvoj trenutak - zgrabi telefon, pusti glas da odjekne, idi na sastanke kao da si vlasnik sveta. Tvoj posao čeka tvoj potez!",
-    "Tvoj biznis je kao reka - ako staneš, usporava. Danas je dan da je pokreneš: šalji poruke, zakazuj susrete, budi struja koja sve nosi!",
-    "Svaki korak danas je pobeda - poruke koje šalješ su tvoje zastave, sastanci su tvoje bitke. Ustani i pokaži da si ti taj koji menja igru!",
-    "Danas nije običan dan, to je tvoj poziv za akciju - svaka reč koju izgovoriš, svaki sastanak na koji odeš gradi tvoj san. Ne čekaj, budi taj plamen!",
-    "Tvoj biznis je priča koju pišeš - danas je nova stranica. Pošalji poruke koje će se pamtiti, idi na susrete koji menjaju sve. Ti si autor, kreni!",
-    "Nema izgovora - tvoj posao je kao vatra koja čeka da plane. Danas je dan da je raspiriš: pozovi, piši, sastani se i neka gori!",
-    "Ti si snaga iza svog biznisa - svaka poruka koju pošalješ je korak napred, svaki sastanak je prilika da zablistaš. Danas je tvoj dan, uzmi ga!",
-    "Danas je tvoj maraton - ne moraš juriti, ali moraš krenuti. Pošalji prvu poruku, zakorači na prvi sastanak, tvoj cilj je bliži nego što misliš!",
-    "Tvoj biznis je kao mašina - ti si taj koji je pokreće. Danas pritisni gas: poruke, pozivi, sastanci - neka sve bruji od tvoje energije!",
-    "Svaki dan je nova šansa, ali danas je poseban - tvoj glas može da otvori vrata, tvoj korak može da pomeri planine. Piši, zovi, idi, sad je vreme!",
-    "Tvoj posao nije samo posao, to je tvoj pečat na svetu. Danas ga utisni: poruke koje šalješ su tvoj potpis, sastanci su tvoj dokaz. Kreni!",
-    "Danas je dan kad tvoj biznis diše punim plućima - svaka poruka je dah, svaki sastanak je otkucaj srca. Ne staj, budi taj ritam!",
-    "Ti si kapetan svog broda - danas je dan da zaploviš. Poruke su tvoj vetar, sastanci su tvoje luke. Diži sidro i kreni u osvajanje!",
-    "Nema malih koraka danas - svaka poruka koju pošalješ je skok, svaki sastanak je let. Tvoj biznis je nebo, a ti si zvezda, zasijaj!",
-    "Tvoj posao je kao ples - ti vodiš korake. Danas zapleši: pošalji poruke koje imaju ritam, idi na sastanke koji imaju strast. Pokaži ko si!",
-    "Danas je tvoj trenutak istine - svaka poruka koju napišeš je tvoj glas, svaki sastanak je tvoj dokaz. Tvoj biznis čeka heroja - to si ti, kreni!",
-  ];
+const motivationalQuotes = [
+    // Juni 2025.
+    "Danas je dan kad tvoj biznis dobija krila - svaka poruka koju pošalješ je vetar koji ga diže, svaki sastanak je nebo koje osvajaš. Kreni sad i neka te svi vide!", // 19. jun
+    "Tvoj um je najjači alat. Danas ga koristi da stvoriš rešenja, ne probleme. Svaka ideja koju razviješ je korak ka nečemu izvanrednom.", // 20. jun
+    "Ne čekaj savršen trenutak, stvori ga. Tvoja energija danas oblikuje sutra. Iskoristi je mudro i neka svaki tvoj potez bude nameran.", // 21. jun
+    "Tvoj rad nije samo posao, to je tvoja platforma za uticaj. Danas neka tvoje akcije govore glasnije od reči. Budi primer.", // 22. jun
+    "Odmori se, ali ne odustaj od svojih snova. Danas je dan za punjenje baterija, kako bi sutra krenuo još jače.", // 23. jun
+    "Svaki izazov je prilika da pokažeš svoju snagu. Danas ne beži od prepreka, već ih pretvori u stepenice ka uspehu.", // 24. jun
+    "Fokusiraj se na jedan po jedan zadatak. Kvalitet pre kvantiteta. Danas neka tvoj rad bude precizan i besprekoran.", // 25. jun
+    "Tvoja upornost je zarazna. Danas, budi inspiracija drugima kroz svoju istrajnost. Nikad ne znaš koga tvoj primer može pokrenuti.", // 26. jun
+    "Ne plaši se grešaka, one su tvoji najbolji učitelji. Danas izvuci pouku iz svakog neuspeha i transformiši ga u pobedu.", // 27. jun
+    "Tvoja vizija je tvoj kompas. Danas se seti zašto si počeo i neka te ta vizija vodi kroz svaki izazov.", // 28. jun
+    "Mali koraci vode ka velikim dostignućima. Danas proslavi svaki napredak, bez obzira koliko mali bio. Svaki je važan.", // 29. jun
+    "Završi mesec sa zahvalnošću. Danas prepoznaj sav trud koji si uložio i sve što si postigao. Zaslužio si to!" // 30. jun
+];
 
   const startDate = new Date("2025-04-22");
   const dateStr = localStorage.getItem("gotQuoteOfDay");
