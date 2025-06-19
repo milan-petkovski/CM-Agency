@@ -1,0 +1,95 @@
+.vscode
+.vercel
+node_modules/
+vercel.json
+
+# C#
+# Logs
+logs
+*.log
+npm-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Build results
+bin
+obj
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.orig
+*.sass-cache/
+*.class
+*.mode1v3
+*.mode2v3
+*.csv
+*.tgz
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Package dependencies
+*.nupkg
+*.snupkg
+
+# Dotnet tools
+.dotnet_tool/
+
+# Coverage files
+coverage/
+*.coverage
+*.coveragexml
+*.coverage.info
+
+# Publish output
+publish/
+wwwroot/
+
+# Runtime and debugger cache
+*.vs/
+.vs/
+
+# Database files
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# Generated files
+*.designer.cs
+Generated_Code/
+
+# NuGet packages
+*.nuget/
+*.nuspec
+.nuget/
+
+# Docker
+docker-compose.*.dcproj
+
+# Secrets
+secrets.json
+
+# Application insights
+*.config
+*.runtimeconfig.dev.json
+
+*.sln
