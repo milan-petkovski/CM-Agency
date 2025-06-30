@@ -97,23 +97,42 @@ async function checkAuth() {
 
   if (user.username !== "luka" && user.username !== "milan") return true;
 
-const motivationalQuotes = [
-    // Juni 2025.
-    "Danas je dan kad tvoj biznis dobija krila - svaka poruka koju pošalješ je vetar koji ga diže, svaki sastanak je nebo koje osvajaš. Kreni sad i neka te svi vide!", // 19. jun
-    "Tvoj um je najjači alat. Danas ga koristi da stvoriš rešenja, ne probleme. Svaka ideja koju razviješ je korak ka nečemu izvanrednom.", // 20. jun
-    "Ne čekaj savršen trenutak, stvori ga. Tvoja energija danas oblikuje sutra. Iskoristi je mudro i neka svaki tvoj potez bude nameran.", // 21. jun
-    "Tvoj rad nije samo posao, to je tvoja platforma za uticaj. Danas neka tvoje akcije govore glasnije od reči. Budi primer.", // 22. jun
-    "Odmori se, ali ne odustaj od svojih snova. Danas je dan za punjenje baterija, kako bi sutra krenuo još jače.", // 23. jun
-    "Svaki izazov je prilika da pokažeš svoju snagu. Danas ne beži od prepreka, već ih pretvori u stepenice ka uspehu.", // 24. jun
-    "Fokusiraj se na jedan po jedan zadatak. Kvalitet pre kvantiteta. Danas neka tvoj rad bude precizan i besprekoran.", // 25. jun
-    "Tvoja upornost je zarazna. Danas, budi inspiracija drugima kroz svoju istrajnost. Nikad ne znaš koga tvoj primer može pokrenuti.", // 26. jun
-    "Ne plaši se grešaka, one su tvoji najbolji učitelji. Danas izvuci pouku iz svakog neuspeha i transformiši ga u pobedu.", // 27. jun
-    "Tvoja vizija je tvoj kompas. Danas se seti zašto si počeo i neka te ta vizija vodi kroz svaki izazov.", // 28. jun
-    "Mali koraci vode ka velikim dostignućima. Danas proslavi svaki napredak, bez obzira koliko mali bio. Svaki je važan.", // 29. jun
-    "Završi mesec sa zahvalnošću. Danas prepoznaj sav trud koji si uložio i sve što si postigao. Zaslužio si to!" // 30. jun
-];
+  const motivationalQuotes = [
+  // Jul 2025.
+  "Jul počinje! Novi mesec, nova energija. Danas zacrtaj ciljeve koji te uzbuđuju i kreni ka njima bez oklevanja.",
+  "Uspeh ne dolazi slučajno. Danas uloži disciplinu u svaki korak i rezultati će te sami pronaći.",
+  "Ne traži motivaciju spolja – stvori je iznutra. Tvoja odlučnost danas otvara vrata sutrašnjeg rasta.",
+  "Svaki dan je šansa da budeš bolji lider, bolji kreator, bolji ti. Iskoristi današnji potencijal u potpunosti.",
+  "Kada deluješ sa strašću, klijenti to osećaju. Danas neka tvoj entuzijazam bude tvoj najjači alat.",
+  "I najmanji napredak je bolji od stajanja u mestu. Danas napravi bar jedan korak ka svom cilju.",
+  "Biznis je igra dugoročnog fokusa. Danas ne traži brze rezultate – gradi temelje koji traju.",
+  "Tvoje ideje vrede. Danas ih pretvori u konkretne ponude i pokaži svetu šta možeš.",
+  "Tvoje vreme je valuta – troši ga mudro. Danas eliminiši ono što ne doprinosi tvom cilju.",
+  "Dan bez akcije je izgubljena prilika. Pokreni nešto – makar malo, makar nesavršeno.",
+  "Sumnje su normalne, ali delovanje je ono što pravi razliku. Danas biraj akciju umesto sumnje.",
+  "Ako ne ti – ko? Ako ne sada – kada? Danas je tvoj trenutak. Pokaži inicijativu.",
+  "Sav trud do sada ima smisla samo ako danas nastaviš. Nema pauze – samo sledeći nivo.",
+  "Ne postoji loš dan – samo dan sa lekcijom. Iskoristi svaki izazov kao odskočnu dasku.",
+  "Danas radi kao da ceo svet gleda. I ako niko ne vidi – ti znaš da daješ maksimum.",
+  "Vizija bez akcije je san. Danas radi na tome da tvoja vizija postane tvoj život.",
+  "Umesto da se pitaš 'šta ako ne uspe?', danas se zapitaj 'šta ako uspe bolje nego što zamišljam?'",
+  "Tvoje ime može postati brend. Danas gradi poverenje, doslednost i vrednost.",
+  "Nije važno koliko puta padneš – važno je da danas ustaneš i probaš ponovo.",
+  "Niko ne dolazi da ti da dozvolu. Danas sebi daj dozvolu da uspeš.",
+  "Ne čekaj idealne uslove. Danas je dovoljno dobar dan da napraviš razliku.",
+  "Rad koji se ne vidi odmah, danas je seme koje sutra daje plodove. Nastavi da sadiš.",
+  "Tvoje granice su tamo gde ih ti postaviš. Danas ih pomeri bar za korak napred.",
+  "Ti nisi rezultat okolnosti – ti si kreator rezultata. Danas se ponašaj kao lider.",
+  "Svaka poruka, svaki dizajn, svaki mejl – sve to danas gradi tvoju reputaciju. Radi kvalitetno.",
+  "Ne traži inspiraciju – budi inspiracija. Danas tvoj rad može zapaliti nečiju iskru.",
+  "Jul je mesec kada se drugi uspavaju. Ti danas budi onaj koji grabi prilike.",
+  "Svakim danom si sve bliže onome što želiš. Danas je još jedan važan korak.",
+  "Danas pokaži profesionalnost čak i kad ti se ne radi. To je razlika između proseka i uspeha.",
+  "Zamisli sebe na kraju meseca ponosnog – pa danas radi kao taj budući ti.",
+  "Poslednji dan jula – pogledaj unazad sa zahvalnošću, ali gledaj napred sa ambicijom. Avgust te čeka – još jači!"
+  ];
 
-  const startDate = new Date("2025-04-22");
+  const startDate = new Date("2025-07-01");
   const dateStr = localStorage.getItem("gotQuoteOfDay");
 
   const today = new Date().toISOString().split("T")[0];
