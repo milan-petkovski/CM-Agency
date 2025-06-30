@@ -132,21 +132,22 @@ async function checkAuth() {
   "Poslednji dan jula – pogledaj unazad sa zahvalnošću, ali gledaj napred sa ambicijom. Avgust te čeka – još jači!"
   ];
 
-  const startDate = new Date("2025-07-01");
   const dateStr = localStorage.getItem("gotQuoteOfDay");
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayStr = today.toISOString().split("T")[0];
 
-  const today = new Date().toISOString().split("T")[0];
-  if (dateStr === today) return true;
+  if (dateStr === todayStr) return true;
 
-  localStorage.setItem("gotQuoteOfDay", today);
+  localStorage.setItem("gotQuoteOfDay", todayStr);
 
-  showNotification1(
-    motivationalQuotes[
-      Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24)) %
-        motivationalQuotes.length
-    ],
-    "neutral"
-  );
+  const startDate = new Date("2025-07-01");
+  startDate.setHours(0, 0, 0, 0);
+
+  const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+  const quote = motivationalQuotes[daysPassed] || "Danas je pravi dan da uradiš nešto za svoj uspeh.";
+
+  showNotification1(quote, "neutral");
 
   return true;
 }
