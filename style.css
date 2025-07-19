@@ -2115,176 +2115,133 @@ form {
   box-shadow: none;
 }
 
-/* PRIVACY */
-main {
+/* OSTALE STRANICE */
+/* Zajedničke vrednosti */
+:root {
+    --font-primary: "Source Sans Pro", sans-serif;
+    --font-secondary: "Poppins", sans-serif;
+}
+
+/* ----- Globalni Layout ----- */
+.content-container,
+.faq-page-content,
+.job-page-content {
+    margin: 0 auto;
+    max-width: 1200px;
+    color: var(--text);
+}
+
+.content-container {
     padding: 20px 150px;
     padding-top: 100px;
-    margin: 0 auto;
-    max-width: 1200px;
-    color: var(--text);
     line-height: 1.6;
 }
-main h1 {
+
+.faq-page-content {
+    padding: 20px 150px;
+    padding-top: 100px;
+    line-height: 1.6;
+}
+
+.job-page-content {
+    padding: 60px 100px 40px;
+    padding-top: 100px !important;
+    line-height: 1.7;
+}
+
+/* Naslovi */
+.content-container h1,
+.faq-page-content h1,
+.job-page-content h1 {
     font-size: 3.5em;
-    color: var(--text);
     margin-bottom: 30px;
     text-align: center;
-    font-family: "Source Sans Pro", sans-serif;
+    font-family: var(--font-primary);
     font-weight: 700;
-}
-main h2 {
-    font-size: 2.5em;
     color: var(--text);
+}
+
+.content-container h2,
+.faq-category h2,
+.job-openings h2,
+.job-application-form h2,
+.why-work-with-us h2 {
+    font-size: 2.5em;
     margin-top: 40px;
     margin-bottom: 20px;
-    font-family: "Source Sans Pro", sans-serif;
+    font-family: var(--font-primary);
     font-weight: 600;
-}
-main h3 {
-    font-size: 1.8em;
     color: var(--text);
+    text-align: center;
+}
+
+.content-container h3,
+.job-card h3,
+.benefit-item h3 {
+    font-size: 1.8em;
     margin-top: 25px;
     margin-bottom: 15px;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-secondary);
     font-weight: 500;
+    color: var(--text);
 }
-main p {
-    margin-bottom: 15px;
+
+/* Tekst */
+.content-container p,
+.content-container ul li,
+.content-container ol li,
+.faq-answer p,
+.job-description,
+.job-application-form p,
+.job-location,
+.job-responsibilities,
+.form-group label,
+.form-group input,
+.form-group select,
+.form-group textarea,
+.benefit-item p {
     font-size: 1.6rem;
 }
-main ul,
-main ol {
+
+.content-container ul,
+.content-container ol {
     margin-bottom: 15px;
     margin-left: 30px;
-    list-style-type: disc;
 }
-main ol {
+
+.content-container ol {
     list-style-type: decimal;
 }
-main ul li,
-main ol li {
+
+.content-container ul li,
+.content-container ol li {
     margin-bottom: 8px;
-    font-size: 1.6rem;
-}
-@media (max-width: 992px) {
-    main {
-        padding: 20px 50px;
-        padding-top: 90px;
-    }
-    main h1 {
-        font-size: 3em;
-    }
-    main h2 {
-        font-size: 2.2em;
-    }
-    main h3 {
-        font-size: 1.6em;
-    }
-}
-@media (max-width: 768px) {
-    main {
-        padding: 15px 20px;
-        padding-top: 80px;
-    }
-    main h1 {
-        font-size: 2.5em;
-        margin-bottom: 20px;
-    }
-    main h2 {
-        font-size: 2em;
-        margin-top: 30px;
-    }
-    main h3 {
-        font-size: 1.4em;
-        margin-top: 20px;
-    }
-    main p,
-    main ul li,
-    main ol li {
-        font-size: 1.5rem;
-    }
-    main ul,
-    main ol {
-        margin-left: 20px;
-    }
-}
-@media (max-width: 480px) {
-    main {
-        padding: 10px 15px;
-        padding-top: 70px;
-    }
-    main h1 {
-        font-size: 2em;
-        margin-bottom: 15px;
-    }
-    main h2 {
-        font-size: 1.6em;
-        margin-top: 25px;
-    }
-    main h3 {
-        font-size: 1.2em;
-        margin-top: 15px;
-    }
-    main p,
-    main ul li,
-    main ol li {
-        font-size: 1.4rem;
-    }
-    main ul,
-    main ol {
-        margin-left: 15px;
-    }
 }
 
-
-
-/* Stilovi za MAIN sekciju na FAQ stranici */
-.faq-page-content {
-    padding: 20px 150px; /* Isto padding kao header, ali gornji padding za sadržaj ispod fiksnog headera */
-    padding-top: 100px; /* Dovoljan razmak da sadržaj ne bude ispod fiksnog headera */
-    margin: 0 auto;
-    max-width: 1200px;
-    background-color: var(--pozadina);
-    color: var(--text);
-    line-height: 1.6;
-}
-
-.faq-page-content h1 {
-    font-size: 3.5em;
-    color: var(--text);
-    margin-bottom: 40px;
-    text-align: center;
-    font-family: "Source Sans Pro", sans-serif;
-    font-weight: 700;
-}
-
+/* FAQ */
 .faq-category {
     margin-bottom: 40px;
     display: block;
 }
 
 .faq-category h2 {
-    font-size: 2.5em;
-    color: var(--text);
-    margin-bottom: 25px;
-    font-family: "Source Sans Pro", sans-serif;
-    font-weight: 600;
-    border-bottom: 2px solid var(--crvena); /* Linija ispod kategorije */
+    border-bottom: 2px solid var(--crvena);
     padding-bottom: 10px;
+    margin-bottom: 25px;
 }
 
 .faq-item {
-    background-color: var(--pozadina-kartice); /* Nova varijabla za pozadinu FAQ stavke */
-    border: 1px solid var(--granica); /* Nova varijabla za granicu */
+    background-color: var(--pozadina-kartice);
+    border: 1px solid var(--granica);
     border-radius: 8px;
     margin-bottom: 15px;
-    overflow: hidden; /* Osigurava da se sadržaj lepo skriva */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Blaga senka */
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .faq-question {
     width: 100%;
-    background-color: var(--pozadina-dugmeta); /* Nova varijabla za pozadinu dugmeta */
+    background-color: var(--pozadina-dugmeta);
     color: var(--text);
     padding: 18px 25px;
     text-align: left;
@@ -2297,11 +2254,11 @@ main ol li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-secondary);
 }
 
 .faq-question::after {
-    content: '+'; /* Ikona za zatvoreno */
+    content: '+';
     font-size: 1.5em;
     font-weight: bold;
     color: var(--crvena);
@@ -2309,144 +2266,26 @@ main ol li {
 }
 
 .faq-question.active {
-    background-color: var(--pozadina-dugmeta-hover); /* Nova varijabla */
+    background-color: var(--pozadina-dugmeta-hover);
     color: var(--crvena);
 }
 
 .faq-question.active::after {
-    content: '-'; /* Ikona za otvoreno */
+    content: '-';
     transform: rotate(180deg);
 }
 
 .faq-answer {
     padding: 0 25px;
-    background-color: var(--pozadina-kartice-sadrzaj); /* Nova varijabla za sadržaj odgovora */
+    background-color: var(--pozadina-kartice-sadrzaj);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out, padding 0.3s ease-out;
 }
 
 .faq-answer.active {
-    max-height: 200px; /* Podesi maksimalnu visinu da bude veća od najdužeg odgovora */
+    max-height: 200px;
     padding: 15px 25px;
-}
-
-.faq-answer p {
-    margin-bottom: 0; /* Ukloni donju marginu za pasuse unutar odgovora */
-    font-size: 1.6rem;
-    color: var(--text);
-}
-
-
-/* ---- DARK MODE PRILAGODJAVANJE (dodaj/proveri u svom body.dark-mode bloku u style.css) ---- */
-body.dark-mode {
-    --pozadina: #1a1a1a;
-    --text: #f0f0f0;
-    --crna: #e0e0e0; /* Ovo je verovatno boja za footer ili druge elemente */
-    --granica: #3a3a3a; /* Tamnija granica za dark mode */
-    --pozadina-kartice: #2a2a2a; /* Tamnija pozadina FAQ stavke */
-    --pozadina-dugmeta: #2a2a2a; /* Tamnija pozadina dugmeta */
-    --pozadina-dugmeta-hover: #3a3a3a; /* Tamnija pozadina dugmeta na hover */
-    --pozadina-kartice-sadrzaj: #222222; /* Tamnija pozadina sadržaja odgovora */
-}
-
-/* ---- RESPOZNIVNI DIZAJN ZA FAQ ---- */
-@media (max-width: 992px) {
-    .faq-page-content {
-        padding: 20px 50px;
-        padding-top: 90px;
-    }
-    .faq-page-content h1 {
-        font-size: 3em;
-    }
-    .faq-category h2 {
-        font-size: 2.2em;
-    }
-    .faq-question {
-        font-size: 1.6em;
-        padding: 15px 20px;
-    }
-    .faq-answer.active {
-        padding: 10px 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .faq-page-content {
-        padding: 15px 20px;
-        padding-top: 80px;
-    }
-    .faq-page-content h1 {
-        font-size: 2.5em;
-        margin-bottom: 30px;
-    }
-    .faq-category h2 {
-        font-size: 2em;
-        margin-bottom: 20px;
-    }
-    .faq-question {
-        font-size: 1.4em;
-        padding: 12px 18px;
-    }
-    .faq-question::after {
-        font-size: 1.3em;
-    }
-    .faq-answer.active {
-        padding: 8px 18px;
-    }
-    .faq-answer p {
-        font-size: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .faq-page-content {
-        padding: 10px 15px;
-        padding-top: 70px;
-    }
-    .faq-page-content h1 {
-        font-size: 2em;
-        margin-bottom: 20px;
-    }
-    .faq-category h2 {
-        font-size: 1.6em;
-        margin-bottom: 15px;
-    }
-    .faq-question {
-        font-size: 1.2em;
-        padding: 10px 15px;
-    }
-    .faq-question::after {
-        font-size: 1.1em;
-    }
-    .faq-answer.active {
-        padding: 5px 15px;
-    }
-    .faq-answer p {
-        font-size: 1.4rem;
-    }
-}
-
-
-
-
-/* Stilovi za MAIN sekciju na stranici Posao */
-.job-page-content {
-    padding-top: 100px !important;
-    padding: 60px 100px 40px;
-    margin: 0 auto;
-    max-width: 1200px;
-    color: var(--text);
-    line-height: 1.7;
-}
-
-.job-page-content h1 {
-    font-size: 3em;
-    color: var(--text);
-    margin-bottom: 25px;
-    text-align: center;
-    font-family: "Source Sans Pro", sans-serif;
-    font-weight: 700;
 }
 
 .job-page-content .intro-text {
@@ -2455,6 +2294,10 @@ body.dark-mode {
     margin: 0 auto 50px;
     max-width: 750px;
     color: var(--text-secondary);
+}
+
+.job-page-content form{
+    width: auto;
 }
 
 .job-openings,
@@ -2466,19 +2309,6 @@ body.dark-mode {
     background-color: var(--pozadina-kartice);
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
-.job-page-content form{
-  width: auto;
-}
-.job-openings h2,
-.job-application-form h2,
-.why-work-with-us h2 {
-    font-size: 2.4em;
-    text-align: center;
-    color: var(--text);
-    margin-bottom: 25px;
-    font-family: "Source Sans Pro", sans-serif;
-    font-weight: 600;
 }
 
 .job-card {
@@ -2496,38 +2326,31 @@ body.dark-mode {
 }
 
 .job-card h3 {
-    font-size: 2em;
     color: var(--crvena);
-    margin-bottom: 12px;
-    font-family: "Poppins", sans-serif;
+    font-size: 2em;
     font-weight: 700;
 }
 
 .job-location {
-    font-size: 1.4rem;
     color: var(--text-secondary);
     margin-bottom: 15px;
     font-style: italic;
-}
-
-.job-description {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: var(--text);
+    font-size: 1.4rem;
 }
 
 .job-responsibilities {
     list-style: disc inside;
     margin-bottom: 20px;
-    font-size: 1.4rem;
     color: var(--text-secondary);
+    font-size: 1.4rem;
 }
 
 .job-responsibilities li {
     margin-bottom: 6px;
 }
 
-.apply-btn {
+.apply-btn,
+.submit-btn {
     display: inline-block;
     padding: 10px 28px;
     font-size: 1.4rem;
@@ -2540,16 +2363,17 @@ body.dark-mode {
     transition: 0.3s ease;
 }
 
-.apply-btn:hover {
+.apply-btn:hover,
+.submit-btn:hover {
     background-position: right;
     color: #fff;
 }
 
-.job-application-form p {
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.5rem;
-    color: var(--text-secondary);
+.submit-btn {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 36px;
+    font-size: 1.6rem;
 }
 
 .form-group {
@@ -2558,8 +2382,6 @@ body.dark-mode {
 
 .form-group label {
     display: block;
-    font-size: 1.4rem;
-    color: var(--text);
     margin-bottom: 6px;
     font-weight: 600;
 }
@@ -2587,24 +2409,6 @@ body.dark-mode {
 .form-group textarea {
     resize: vertical;
     min-height: 120px;
-}
-
-.submit-btn {
-    display: block;
-    margin: 30px auto 0;
-    padding: 12px 36px;
-    font-size: 1.6rem;
-    border-radius: 5px 25px;
-    font-weight: 600;
-    background-image: var(--gradient2);
-    background-size: 200%;
-    color: #fff;
-    cursor: pointer;
-    transition: background-position 0.3s ease;
-}
-
-.submit-btn:hover {
-    background-position: right;
 }
 
 .why-work-with-us {
@@ -2640,45 +2444,104 @@ body.dark-mode {
     margin-bottom: 12px;
 }
 
-.benefit-item h3 {
-    font-size: 1.7em;
-    color: var(--text);
-    margin-bottom: 10px;
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
+/* DARK MODE */
+body.dark-mode {
+    --pozadina: #1a1a1a;
+    --text: #f0f0f0;
+    --crna: #e0e0e0;
+    --granica: #3a3a3a;
+    --pozadina-kartice: #2a2a2a;
+    --pozadina-dugmeta: #2a2a2a;
+    --pozadina-dugmeta-hover: #3a3a3a;
+    --pozadina-kartice-sadrzaj: #222222;
 }
 
-.benefit-item p {
-    font-size: 1.4rem;
-    color: var(--text-secondary);
-}
-
-/* Responsivnost */
+/* RESPONSIVE */
 @media (max-width: 992px) {
+    .content-container,
+    .faq-page-content {
+        padding: 20px 50px;
+        padding-top: 90px;
+    }
+
     .job-page-content {
         padding: 40px 30px;
     }
+
+    .content-container h1,
+    .faq-page-content h1,
     .job-page-content h1 {
-        font-size: 2.6em;
+        font-size: 3em;
     }
+
+    .content-container h2,
+    .faq-category h2 {
+        font-size: 2.2em;
+    }
+
+    .faq-question {
+        font-size: 1.6em;
+        padding: 15px 20px;
+    }
+
+    .faq-answer.active {
+        padding: 10px 20px;
+    }
+
     .job-card h3 {
         font-size: 1.9em;
     }
 }
 
 @media (max-width: 768px) {
+    .content-container,
+    .faq-page-content {
+        padding: 15px 20px;
+        padding-top: 80px;
+    }
+
     .job-page-content {
         padding: 30px 20px;
     }
+
+    .content-container h1,
+    .faq-page-content h1,
     .job-page-content h1 {
-        font-size: 2.2em;
+        font-size: 2.5em;
+        margin-bottom: 20px;
     }
-    .job-card,
+
+    .content-container h2,
+    .faq-category h2 {
+        font-size: 2em;
+        margin-top: 30px;
+    }
+
+    .content-container h3 {
+        font-size: 1.4em;
+        margin-top: 20px;
+    }
+
+    .faq-question {
+        font-size: 1.4em;
+        padding: 12px 18px;
+    }
+
+    .faq-question::after {
+        font-size: 1.3em;
+    }
+
+    .faq-answer.active {
+        padding: 8px 18px;
+    }
+
+    .faq-answer p,
     .form-group input,
     .form-group select,
     .form-group textarea {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
     }
+
     .apply-btn,
     .submit-btn {
         font-size: 1.3rem;
@@ -2687,9 +2550,52 @@ body.dark-mode {
 }
 
 @media (max-width: 480px) {
+    .content-container,
+    .faq-page-content {
+        padding: 10px 15px;
+        padding-top: 70px;
+    }
+
+    .content-container h1,
+    .faq-page-content h1,
     .job-page-content h1 {
         font-size: 2em;
+        margin-bottom: 15px;
     }
+
+    .content-container h2,
+    .faq-category h2 {
+        font-size: 1.6em;
+        margin-top: 25px;
+    }
+
+    .content-container h3 {
+        font-size: 1.2em;
+        margin-top: 15px;
+    }
+
+    .faq-question {
+        font-size: 1.2em;
+        padding: 10px 15px;
+    }
+
+    .faq-question::after {
+        font-size: 1.1em;
+    }
+
+    .faq-answer.active {
+        padding: 5px 15px;
+    }
+
+    .faq-answer p {
+        font-size: 1.4rem;
+    }
+
+    .content-container ul,
+    .content-container ol {
+        margin-left: 15px;
+    }
+
     .benefits-grid {
         grid-template-columns: 1fr;
     }
