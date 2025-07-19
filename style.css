@@ -2114,3 +2114,124 @@ form {
   transform: translateY(0) !important;
   box-shadow: none;
 }
+
+/* PRIVACY */
+main {
+    padding: 20px 150px;
+    padding-top: 100px;
+    margin: 0 auto;
+    max-width: 1200px;
+    color: var(--text);
+    line-height: 1.6;
+}
+main h1 {
+    font-size: 3.5em;
+    color: var(--text);
+    margin-bottom: 30px;
+    text-align: center;
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 700;
+}
+main h2 {
+    font-size: 2.5em;
+    color: var(--text);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 600;
+}
+main h3 {
+    font-size: 1.8em;
+    color: var(--text);
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+}
+main p {
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+}
+main ul,
+main ol {
+    margin-bottom: 15px;
+    margin-left: 30px;
+    list-style-type: disc;
+}
+main ol {
+    list-style-type: decimal;
+}
+main ul li,
+main ol li {
+    margin-bottom: 8px;
+    font-size: 1.6rem;
+}
+@media (max-width: 992px) {
+    main {
+        padding: 20px 50px;
+        padding-top: 90px;
+    }
+    main h1 {
+        font-size: 3em;
+    }
+    main h2 {
+        font-size: 2.2em;
+    }
+    main h3 {
+        font-size: 1.6em;
+    }
+}
+@media (max-width: 768px) {
+    main {
+        padding: 15px 20px;
+        padding-top: 80px;
+    }
+    main h1 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+    }
+    main h2 {
+        font-size: 2em;
+        margin-top: 30px;
+    }
+    main h3 {
+        font-size: 1.4em;
+        margin-top: 20px;
+    }
+    main p,
+    main ul li,
+    main ol li {
+        font-size: 1.5rem;
+    }
+    main ul,
+    main ol {
+        margin-left: 20px;
+    }
+}
+@media (max-width: 480px) {
+    main {
+        padding: 10px 15px;
+        padding-top: 70px;
+    }
+    main h1 {
+        font-size: 2em;
+        margin-bottom: 15px;
+    }
+    main h2 {
+        font-size: 1.6em;
+        margin-top: 25px;
+    }
+    main h3 {
+        font-size: 1.2em;
+        margin-top: 15px;
+    }
+    main p,
+    main ul li,
+    main ol li {
+        font-size: 1.4rem;
+    }
+    main ul,
+    main ol {
+        margin-left: 15px;
+    }
+}

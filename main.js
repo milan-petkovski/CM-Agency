@@ -290,6 +290,7 @@ setInterval(() => {
 // #endregion
 
 //#region - RADOVI
+if (/index|\/$/.test(window.location.href)) {
 const videoContainer = document.querySelector('.video-container');
 const prevVideoBtn = document.getElementById('prevVideo');
 const nextVideoBtn = document.getElementById('nextVideo');
@@ -382,7 +383,7 @@ function toggleMute(button) {
     video.muted = !video.muted;
     button.innerHTML = video.muted ? '<ion-icon name="volume-mute-outline"></ion-icon>' : '<ion-icon name="volume-high-outline"></ion-icon>';
 }
-
+}
 //#endregion
 
 //#region - DARK MODE
