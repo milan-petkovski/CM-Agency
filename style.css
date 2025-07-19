@@ -2235,3 +2235,462 @@ main ol li {
         margin-left: 15px;
     }
 }
+
+
+
+/* Stilovi za MAIN sekciju na FAQ stranici */
+.faq-page-content {
+    padding: 20px 150px; /* Isto padding kao header, ali gornji padding za sadržaj ispod fiksnog headera */
+    padding-top: 100px; /* Dovoljan razmak da sadržaj ne bude ispod fiksnog headera */
+    margin: 0 auto;
+    max-width: 1200px;
+    background-color: var(--pozadina);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.faq-page-content h1 {
+    font-size: 3.5em;
+    color: var(--text);
+    margin-bottom: 40px;
+    text-align: center;
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 700;
+}
+
+.faq-category {
+    margin-bottom: 40px;
+    display: block;
+}
+
+.faq-category h2 {
+    font-size: 2.5em;
+    color: var(--text);
+    margin-bottom: 25px;
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 600;
+    border-bottom: 2px solid var(--crvena); /* Linija ispod kategorije */
+    padding-bottom: 10px;
+}
+
+.faq-item {
+    background-color: var(--pozadina-kartice); /* Nova varijabla za pozadinu FAQ stavke */
+    border: 1px solid var(--granica); /* Nova varijabla za granicu */
+    border-radius: 8px;
+    margin-bottom: 15px;
+    overflow: hidden; /* Osigurava da se sadržaj lepo skriva */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Blaga senka */
+}
+
+.faq-question {
+    width: 100%;
+    background-color: var(--pozadina-dugmeta); /* Nova varijabla za pozadinu dugmeta */
+    color: var(--text);
+    padding: 18px 25px;
+    text-align: left;
+    font-size: 1.8em;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Poppins", sans-serif;
+}
+
+.faq-question::after {
+    content: '+'; /* Ikona za zatvoreno */
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--crvena);
+    transition: transform 0.3s ease;
+}
+
+.faq-question.active {
+    background-color: var(--pozadina-dugmeta-hover); /* Nova varijabla */
+    color: var(--crvena);
+}
+
+.faq-question.active::after {
+    content: '-'; /* Ikona za otvoreno */
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    padding: 0 25px;
+    background-color: var(--pozadina-kartice-sadrzaj); /* Nova varijabla za sadržaj odgovora */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+.faq-answer.active {
+    max-height: 200px; /* Podesi maksimalnu visinu da bude veća od najdužeg odgovora */
+    padding: 15px 25px;
+}
+
+.faq-answer p {
+    margin-bottom: 0; /* Ukloni donju marginu za pasuse unutar odgovora */
+    font-size: 1.6rem;
+    color: var(--text);
+}
+
+
+/* ---- DARK MODE PRILAGODJAVANJE (dodaj/proveri u svom body.dark-mode bloku u style.css) ---- */
+body.dark-mode {
+    --pozadina: #1a1a1a;
+    --text: #f0f0f0;
+    --crna: #e0e0e0; /* Ovo je verovatno boja za footer ili druge elemente */
+    --granica: #3a3a3a; /* Tamnija granica za dark mode */
+    --pozadina-kartice: #2a2a2a; /* Tamnija pozadina FAQ stavke */
+    --pozadina-dugmeta: #2a2a2a; /* Tamnija pozadina dugmeta */
+    --pozadina-dugmeta-hover: #3a3a3a; /* Tamnija pozadina dugmeta na hover */
+    --pozadina-kartice-sadrzaj: #222222; /* Tamnija pozadina sadržaja odgovora */
+}
+
+/* ---- RESPOZNIVNI DIZAJN ZA FAQ ---- */
+@media (max-width: 992px) {
+    .faq-page-content {
+        padding: 20px 50px;
+        padding-top: 90px;
+    }
+    .faq-page-content h1 {
+        font-size: 3em;
+    }
+    .faq-category h2 {
+        font-size: 2.2em;
+    }
+    .faq-question {
+        font-size: 1.6em;
+        padding: 15px 20px;
+    }
+    .faq-answer.active {
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .faq-page-content {
+        padding: 15px 20px;
+        padding-top: 80px;
+    }
+    .faq-page-content h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+    }
+    .faq-category h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+    .faq-question {
+        font-size: 1.4em;
+        padding: 12px 18px;
+    }
+    .faq-question::after {
+        font-size: 1.3em;
+    }
+    .faq-answer.active {
+        padding: 8px 18px;
+    }
+    .faq-answer p {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .faq-page-content {
+        padding: 10px 15px;
+        padding-top: 70px;
+    }
+    .faq-page-content h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+    .faq-category h2 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
+    .faq-question {
+        font-size: 1.2em;
+        padding: 10px 15px;
+    }
+    .faq-question::after {
+        font-size: 1.1em;
+    }
+    .faq-answer.active {
+        padding: 5px 15px;
+    }
+    .faq-answer p {
+        font-size: 1.4rem;
+    }
+}
+
+
+
+
+/* Stilovi za MAIN sekciju na stranici Posao */
+.job-page-content {
+    padding-top: 100px !important;
+    padding: 60px 100px 40px;
+    margin: 0 auto;
+    max-width: 1200px;
+    color: var(--text);
+    line-height: 1.7;
+}
+
+.job-page-content h1 {
+    font-size: 3em;
+    color: var(--text);
+    margin-bottom: 25px;
+    text-align: center;
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 700;
+}
+
+.job-page-content .intro-text {
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 0 auto 50px;
+    max-width: 750px;
+    color: var(--text-secondary);
+}
+
+.job-openings,
+.job-application-form,
+.why-work-with-us {
+    display: block;
+    margin-bottom: 60px;
+    padding: 35px;
+    background-color: var(--pozadina-kartice);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.job-page-content form{
+  width: auto;
+}
+.job-openings h2,
+.job-application-form h2,
+.why-work-with-us h2 {
+    font-size: 2.4em;
+    text-align: center;
+    color: var(--text);
+    margin-bottom: 25px;
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 600;
+}
+
+.job-card {
+    background-color: var(--pozadina-dugmeta);
+    border: 1px solid var(--granica);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.job-card h3 {
+    font-size: 2em;
+    color: var(--crvena);
+    margin-bottom: 12px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+}
+
+.job-location {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.job-description {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--text);
+}
+
+.job-responsibilities {
+    list-style: disc inside;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+}
+
+.job-responsibilities li {
+    margin-bottom: 6px;
+}
+
+.apply-btn {
+    display: inline-block;
+    padding: 10px 28px;
+    font-size: 1.4rem;
+    border-radius: 5px 20px;
+    background-image: var(--gradient2);
+    background-size: 200%;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.apply-btn:hover {
+    background-position: right;
+    color: #fff;
+}
+
+.job-application-form p {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.4rem;
+    color: var(--text);
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--granica);
+    border-radius: 6px;
+    background-color: var(--pozadina-input);
+    color: var(--text);
+    font-size: 1.5rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--crvena);
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submit-btn {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 36px;
+    font-size: 1.6rem;
+    border-radius: 5px 25px;
+    font-weight: 600;
+    background-image: var(--gradient2);
+    background-size: 200%;
+    color: #fff;
+    cursor: pointer;
+    transition: background-position 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-position: right;
+}
+
+.why-work-with-us {
+    text-align: center;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.benefit-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--pozadina-dugmeta);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: 0.3s ease;
+}
+
+.benefit-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.benefit-item ion-icon {
+    font-size: 3.8em;
+    color: var(--crvena);
+    margin-bottom: 12px;
+}
+
+.benefit-item h3 {
+    font-size: 1.7em;
+    color: var(--text);
+    margin-bottom: 10px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+}
+
+.benefit-item p {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+}
+
+/* Responsivnost */
+@media (max-width: 992px) {
+    .job-page-content {
+        padding: 40px 30px;
+    }
+    .job-page-content h1 {
+        font-size: 2.6em;
+    }
+    .job-card h3 {
+        font-size: 1.9em;
+    }
+}
+
+@media (max-width: 768px) {
+    .job-page-content {
+        padding: 30px 20px;
+    }
+    .job-page-content h1 {
+        font-size: 2.2em;
+    }
+    .job-card,
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 1.4rem;
+    }
+    .apply-btn,
+    .submit-btn {
+        font-size: 1.3rem;
+        padding: 10px 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .job-page-content h1 {
+        font-size: 2em;
+    }
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+}

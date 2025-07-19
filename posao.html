@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="#f5f4f2">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CM Agency - FAQ</title>
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Source+Sans+Pro:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="unselectable">
+
+<header>
+    <a href="index.html" class="logo" style="color: var(--crna)"><img src="images/logo.png" alt="Logo">CM Agency</a>
+    <ul>
+        <li><a href="portal.html" class="btn">Prijavi se <ion-icon name="log-in-outline"></ion-icon></a></li>
+        <li><button id="theme-toggle">🌙</button></li>
+    </ul>
+</header>
+
+<main class="job-page-content">
+    <h1>Pridružite se CM Agency timu!</h1>
+    <p class="intro-text">Tražimo talentovane i strastvene pojedince da se pridruže našoj agenciji. Ako ste spremni za izazove i želite da rastete u dinamičnom okruženju, pogledajte naše otvorene pozicije.</p>
+
+    <section class="job-openings">
+    <h2>Otvorene pozicije</h2>
+
+    <div class="job-card">
+        <h3>Web dizajner (Junior/Mid)</h3>
+        <p class="job-location">Beograd / Rad na daljinu</p>
+        <p class="job-description">Tražimo dizajnera sa okom za detalje i iskustvom u UI/UX. Ako voliš da kreiraš moderna digitalna rešenja – ovo je za tebe.</p>
+        <ul class="job-responsibilities">
+            <li>Izrada responzivnih dizajnova za web sajtove i aplikacije</li>
+            <li>Korišćenje alata poput Figma, Adobe XD, Sketch</li>
+            <li>Saradnja sa developerima i klijentima</li>
+        </ul>
+        <a href="#apply-form" class="btn apply-btn">Prijavi se</a>
+    </div>
+
+    <div class="job-card">
+        <h3>Front-end developer (Mid/Senior)</h3>
+        <p class="job-location">Beograd / Hibridno</p>
+        <p class="job-description">Potrebni su nam front-end developeri koji znaju da pretvore dizajn u funkcionalno i brzo korisničko iskustvo.</p>
+        <ul class="job-responsibilities">
+            <li>Razvoj modernih interfejsa u React, Vue ili Angular</li>
+            <li>Rad sa REST API i alatima za optimizaciju</li>
+            <li>Verziona kontrola pomoću Git-a</li>
+        </ul>
+        <a href="#apply-form" class="btn apply-btn">Prijavi se</a>
+    </div>
+
+    <div class="job-card">
+        <h3>SEO specijalista</h3>
+        <p class="job-location">Beograd / Remote opcija</p>
+        <p class="job-description">Ako znaš kako da sajt dovedeš na vrh Google pretrage i pratiš najnovije SEO trendove – pridruži nam se!</p>
+        <ul class="job-responsibilities">
+            <li>Razrada i sprovođenje SEO strategija</li>
+            <li>On-page i off-page optimizacija</li>
+            <li>Rad sa alatima kao što su Ahrefs, GA, GSC</li>
+        </ul>
+        <a href="#apply-form" class="btn apply-btn">Prijavi se</a>
+    </div>
+
+    <div class="job-card">
+        <h3>Digital marketing menadžer</h3>
+        <p class="job-location">Beograd / Fleksibilno</p>
+        <p class="job-description">Tražimo osobu koja zna kako da postigne rezultate kroz digitalne kampanje i zna da vodi tim.</p>
+        <ul class="job-responsibilities">
+            <li>Kreiranje i vođenje kampanja (Google, Meta, TikTok)</li>
+            <li>Praćenje performansi i prilagođavanje strategije</li>
+            <li>Organizacija budžeta i izveštavanje</li>
+        </ul>
+        <a href="#apply-form" class="btn apply-btn">Prijavi se</a>
+    </div>
+    </section>
+
+    <section class="job-application-form" id="apply-form">
+        <h2>Prijava za posao</h2>
+        <p>Želiš da postaneš deo našeg tima? Popuni formu ispod i pošalji svoju prijavu.</p>
+        <form action="#" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Ime i prezime *</label>
+            <input type="text" id="name" name="name" placeholder="Unesite vaše puno ime" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email adresa *</label>
+            <input type="email" id="email" name="email" placeholder="npr. vaseime@email.com" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Kontakt telefon</label>
+            <input type="tel" id="phone" name="phone" placeholder="npr. 060 123 4567">
+        </div>
+        <div class="form-group">
+            <label for="position">Pozicija *</label>
+            <select id="position" name="position" required>
+                <option value="">-- Izaberite poziciju --</option>
+                <option value="web-designer">Web dizajner</option>
+                <option value="front-end-developer">Front-end developer</option>
+                <option value="seo-specialist">SEO specijalista</option>
+                <option value="digital-marketing-manager">Digital marketing menadžer</option>
+                <option value="other">Drugo (navedite u poruci)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="cv">CV (PDF, DOC, DOCX) *</label>
+            <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+        </div>
+        <div class="form-group">
+            <label for="message">Poruka ili motivaciono pismo</label>
+            <textarea id="message" name="message" rows="5" placeholder="Napišite nešto o sebi, iskustvu i motivaciji..."></textarea>
+        </div>
+        <button type="submit" class="btn submit-btn">Pošalji prijavu</button>
+        </form>
+    </section>
+
+    <section class="why-work-with-us">
+        <h2>Zašto raditi sa nama?</h2>
+        <div class="benefits-grid">
+        <div class="benefit-item">
+            <ion-icon name="rocket-outline"></ion-icon>
+            <h3>Brz rast i razvoj</h3>
+            <p>Brzo napredujte kroz izazovne projekte i mentorstvo stručnjaka.</p>
+        </div>
+        <div class="benefit-item">
+            <ion-icon name="cafe-outline"></ion-icon>
+            <h3>Prijateljska atmosfera</h3>
+            <p>Neformalno okruženje gde se rad ceni, a tim funkcioniše kao porodica.</p>
+        </div>
+        <div class="benefit-item">
+            <ion-icon name="sync-outline"></ion-icon>
+            <h3>Fleksibilan način rada</h3>
+            <p>Rad iz kancelarije ili na daljinu – prilagodljivo vašem ritmu života.</p>
+        </div>
+        <div class="benefit-item">
+            <ion-icon name="bulb-outline"></ion-icon>
+            <h3>Kreativna sloboda</h3>
+            <p>Vaše ideje su bitne – podstičemo inicijativu i inovaciju.</p>
+        </div>
+        <div class="benefit-item">
+            <ion-icon name="cash-outline"></ion-icon>
+            <h3>Poštena i redovna zarada</h3>
+            <p>Transparentno nagrađivanje i mogućnosti za bonuse.</p>
+        </div>
+        <div class="benefit-item">
+            <ion-icon name="star-outline"></ion-icon>
+            <h3>Radi ono što voliš</h3>
+            <p>Uključujemo vas u projekte koji vas inspirišu i pokreću.</p>
+        </div>
+        </div>
+    </section>
+
+</section>
+</main>
+
+<section class="footer">
+    <div class="footer-top">
+    <div class="container">
+
+        <div class="footer-logo">
+            <a href="#" class="logo"><img src="images/logo.png">CM Agency</a>
+            <p>Helping businesses grow through web design, development, and digital marketing.</p>
+            <div class="social-icons">
+                <a href="https://instagram.com/cmagency.marketing">
+                    <ion-icon name="logo-instagram"></ion-icon></a>
+                <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+                <a href="#"><ion-icon name="logo-tiktok"></ion-icon></a>
+            </div>
+        </div>
+
+        <div class="column">
+            <h4>Osnovni linkovi</h4>
+            <ul>
+                <li><a href="#about">O nama</a></li>
+                <li><a href="#usluge">Usluge</a></li>
+                <li><a href="#radovi">Radovi</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>        
+                <li><a href="#blog">Blog</a></li>
+            </ul>
+        </div>
+
+        <div class="column">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="posao.html">Posao</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+
+        <div class="contact">
+            <h4>Contact Us</h4>
+            <a href="mailto: lukamax96@gmail.com"><ion-icon name="mail"></ion-icon> lukamax96@gmail.com</a>
+            <a href="mailto: lukamaxx96@gmail.com"><ion-icon name="mail"></ion-icon> lukamaxx96@gmail.com</a>
+            <a href="mailto: contact@milanwebportal.com"><ion-icon name="mail"></ion-icon> contact@milanwebportal.com</a>
+            <p><ion-icon name="time"></ion-icon> Mon - Sun: 09h - 23h</p>
+        </div>
+        </div>
+    </div>
+
+    <p class="copyright">&copy; Copyright 2025. <a href="https://milanwebportal.com" class="link" target="_blank">Milan Web Portal</a>. All Rights Reserved.</p>
+
+    <div id="back-to-top">
+        <svg id="progress" width="60" height="60">
+            <circle cx="30" cy="30" r="25" stroke-width="5" fill="none" />
+        </svg>
+        <button id="backToTop" aria-label="Back to top"><ion-icon name="caret-up-outline"></ion-icon></button>
+    </div>
+</section>
+
+</body>
+</html>
+
+<script src="main.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>

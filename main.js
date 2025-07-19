@@ -400,3 +400,25 @@ if (localStorage.getItem('theme') === 'dark') {
 }
 
 //#endregion
+
+
+// --- FAQ Akordeon Logika ---
+    const faqQuestions = document.querySelectorAll('.faq-question');
+
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling; // Dobija sledeći element (faq-answer)
+
+            // Zatvori sve ostale otvorene odgovore
+            faqQuestions.forEach(otherQuestion => {
+                if (otherQuestion !== question && otherQuestion.classList.contains('active')) {
+                    otherQuestion.classList.remove('active');
+                    otherQuestion.nextElementSibling.classList.remove('active');
+                }
+            });
+
+            // Otvori/zatvori kliknuti odgovor
+            question.classList.toggle('active');
+            answer.classList.toggle('active');
+        });
+    });
