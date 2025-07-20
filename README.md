@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://cm-agency.netlify.app">
+  <a href="https://cmagency.netlify.app">
     <img src="https://img.shields.io/badge/Visit-Website-bc201d?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website Badge">
   </a>
 </p>
@@ -28,7 +28,7 @@
 | Key Detail       | Info                                                    |
 |------------------|---------------------------------------------------------|
 | **Project Name** | CM Agency                                               |
-| **Live URL**     | [cm-agency.netlify.app](https://cm-agency.netlify.app)  |
+| **Live URL**     | [cmagency.netlify.app](https://cmagency.netlify.app)  |
 | **Type**         | Digital Marketing Agency                                |
 | **Launch Date**  | 1. March 2025.                                          |
 | **Author**       | [Milan Petkovski](https://milanwebportal.com)           |
