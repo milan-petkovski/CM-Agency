@@ -2202,7 +2202,11 @@ form {
 .benefit-item p {
     font-size: 1.6rem;
 }
-
+.faq-answer li {
+    list-style-type: disc; 
+    margin-left: 25px;
+    color: #d3d3d3;
+}
 .content-container ul,
 .content-container ol {
     margin-bottom: 15px;
@@ -2284,7 +2288,7 @@ form {
 }
 
 .faq-answer.active {
-    max-height: 200px;
+    max-height: fit-content;
     padding: 15px 25px;
 }
 
