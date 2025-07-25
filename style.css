@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -7,7 +9,7 @@
     text-shadow 0.3s ease, border-color 0.3s ease;
 }
 html {
-  font-family: "Poppins", sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 10px;
   scroll-behavior: smooth;
 }
@@ -55,6 +57,9 @@ body {
   --hero: linear-gradient(135deg, #1c1c1c, #383838);
   --gradient: linear-gradient(135deg, #de201d, #86201e);
   --gradient2: linear-gradient(135deg, #de201d, #86201e, #000000);
+
+  --font-primary: "Source Sans Pro", sans-serif;
+  --font-secondary: "DM Sans", sans-serif;
 }
 body.dark-mode {
   transition: none;
@@ -105,7 +110,7 @@ button {
 }
 .h2,
 .h3 {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-primary);
 }
 .w-100 {
   width: 100%;
@@ -137,7 +142,7 @@ section {
   margin-block-end: 60px;
   max-width: max-content;
   margin-inline: auto;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-primary);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -239,8 +244,8 @@ header .btn:is(:hover, :focus) {
 .logo {
   display: flex;
   align-items: center;
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: 3rem;
+  font-family: var(--font-secondary);
+  font-size: 2.5rem;
   font-weight: 700;
   color: #fff;
   transition: 0.3s;
@@ -388,12 +393,14 @@ header.active .hamburger {
 }
 .hero p {
   color: #ffa90a;
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: 1.8rem;
+  font-family: var(--font-secondary);
+  font-weight: bold;
+  font-size: 1.6rem;
   margin-block-end: 15px;
 }
 .hero h1 {
   color: #fff;
+  font-family: var(--font-primary);
   font-size: 3.6rem;
   line-height: 45px;
   margin-block-end: 20px;
@@ -562,6 +569,7 @@ header.active .hamburger {
   font-size: 3.8rem;
   font-weight: 700;
   color: var(--crvena);
+  font-family: var(--font-primary);
 }
 .about ul li p {
   margin-bottom: 10px;
@@ -680,6 +688,7 @@ header.active .hamburger {
   display: flex;
   align-items: center;
   text-transform: uppercase;
+  font-family: var(--font-primary);
   color: var(--crvena);
   font-size: 20px;
   font-weight: bold;
@@ -692,7 +701,7 @@ header.active .hamburger {
   color: var(--crvena);
   text-decoration: none;
   display: flex;
-  font-weight: 500;
+  font-weight: bold;
   align-items: center;
   transition: color 0.3s;
 }
@@ -979,9 +988,11 @@ header.active .hamburger {
   margin-right: 10px;
   width: 50px;
   height: 50px;
+  border-radius: 50%;
 }
 .testimonial-title {
   color: var(--text);
+  font-family: var(--font-primary);
   font-weight: bold;
   font-size: 20px;
 }
@@ -1175,6 +1186,7 @@ form {
 }
 .contact-form .form-group label {
   color: var(--text);
+  font-family: var(--font-primary);
   display: block;
   font-weight: 600;
 }
@@ -1187,7 +1199,6 @@ form {
 .contact-form .radio-group label {
   display: flex;
   align-items: center;
-  color: var(--text4);
   gap: 10px;
   font-weight: 300;
   cursor: pointer;
@@ -1207,6 +1218,7 @@ form {
   background-image: var(--gradient);
   background-size: 200%;
   color: #fff;
+  font-family: var(--font-secondary);
   padding: 12px 35px;
   font-weight: 700;
   border-radius: 5px 25px;
@@ -1309,6 +1321,7 @@ form {
 }
 .blog-card a {
   color: var(--crvena);
+  font-family: var(--font-primary);
   font-size: 20px;
   font-weight: 800;
   line-height: 1.2;
@@ -1344,6 +1357,7 @@ form {
   background-size: 200%;
   color: #fff;
   margin: 2% auto;
+  font-family: var(--font-secondary);
   font-weight: 700;
   padding: 12px 35px;
   box-shadow: 0 6px 25px 2px rgba(0, 0, 0, 0.1);
@@ -1483,6 +1497,7 @@ form {
   min-width: 150px;
 }
 .column h4 {
+  font-family: var(--font-primary);
   font-size: 1.8rem;
   margin-bottom: 15px;
 }
@@ -1633,6 +1648,7 @@ form {
   align-items: center !important;
   position: relative;
   overflow: hidden;
+  font-family: var(--font-primary);
 }
 /* LOGIN */
 #log {
@@ -1654,6 +1670,7 @@ form {
   z-index: 2000; 
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
+  font-family: var(--font-primary);
 }
 #log.hidden {
   opacity: 0;
@@ -1662,6 +1679,13 @@ form {
 .obavestenje {
   transition: opacity 0.5s ease-in-out;
   animation: fadeIn 0.3s ease-out forwards;
+}
+.obavestenje h2{
+  color: var(--crvena);
+}
+.obavestenje p{
+  font-family: var(--font-secondary);
+  margin: 10px 0 15px 0;
 }
 .obavestenje a {
   color: var(--crvena);
@@ -1709,6 +1733,7 @@ form {
   font-size: 25px;
 }
 #log h2 {
+  font-size: 32px;
   margin: 0 0 2% 0;
 }
 #kategorije h2, #notepad h2{
@@ -1719,7 +1744,7 @@ form {
 }
 .portal p,
 .portal .gore a {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--border);
   margin: 5px 0;
 }
@@ -1727,7 +1752,7 @@ form {
   margin: 0 0 5px 0;
 }
 .portal a {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--bela);
 }
 .portal a:hover {
@@ -1753,7 +1778,7 @@ form {
   padding: 8px 10px;
   background: linear-gradient(135deg, var(--crvena), #c20d0d);
   color: white;
-  font-size: 16px;
+  font-size: 15px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -1839,20 +1864,44 @@ form {
   transform: scale(1);
   background: #b80c0c;
 }
-
 #ctgroup {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
+.gore {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+#current-time {
+  display: inline-block;
+  width: 70px;
+  font-size: 16px;
+}
+#current-temp{
+  font-size: 16px;
+}
+#weather-container {
+  display: flex;
+  align-items: center;
+}
+#weather-icon {
+  width: 30px;
+  height: 30px;
+}
 #languageBtn {
   width: 15%;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-primary);
   padding: 10px;
   margin-bottom: 2%;
   font-size: 12px;
   font-weight: 600;
+}
+#languageBtn:hover {
+  transform: translateY(0) !important;
+  box-shadow: none;
 }
 
 /* POCETNA */
@@ -2079,48 +2128,9 @@ form {
 }
 
 
-.gore {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-#current-time {
-  display: inline-block;
-  width: 70px;
-  font-size: 16px;
-}
-#current-temp{
-  font-size: 16px;
-}
-#weather-container {
-  display: flex;
-  align-items: center;
-}
-#weather-icon {
-  width: 30px;
-  height: 30px;
-}
-
-
-.obavestenje h2{
-  color: var(--crvena);
-  margin: 0 !important;
-}
-.obavestenje p{
-  margin-bottom: 10px;
-}
-#languageBtn:hover {
-  transform: translateY(0) !important;
-  box-shadow: none;
-}
 
 /* OSTALE STRANICE */
 /* Zajedničke vrednosti */
-:root {
-    --font-primary: "Source Sans Pro", sans-serif;
-    --font-secondary: "Poppins", sans-serif;
-}
 
 /* ----- Globalni Layout ----- */
 .content-container,
@@ -2205,7 +2215,7 @@ form {
 .faq-answer li {
     list-style-type: disc; 
     margin-left: 25px;
-    color: #d3d3d3;
+    color: var(--text3)
 }
 .content-container ul,
 .content-container ol {
