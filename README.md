@@ -3,7 +3,7 @@
 </p>
 
 <div align="center">
-  <img src="https://i.postimg.cc/9M3Lzv0L/cmagency.png" width="500px" alt="CM Agency Screenshot">
+  <img src="https://i.postimg.cc/qMjCKkRd/cmagency.png" width="500px" alt="CM Agency Screenshot">
 </div>  
 <br>
 
