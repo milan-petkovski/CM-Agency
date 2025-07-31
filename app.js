@@ -66,6 +66,13 @@ async function sendApiRequest(urlExtension, method, data) {
 }
 
 async function init() {
+  document.getElementById("password").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    login();
+  }
+  });
+  
   showCompletedState = true;
   await Promise.all([
     loadCategories().then(toggleShowCompleted),
