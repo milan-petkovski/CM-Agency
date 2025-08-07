@@ -173,44 +173,6 @@ const sharePost = () => {
 
 //#region - RADOVI
 if (isHomePage) {
-document.addEventListener('DOMContentLoaded', () => {
-  function adjustTestimonialHeight() {
-    const items = document.querySelectorAll('.testimonial-item');
-
-    items.forEach(item => {
-      item.style.minHeight = 'initial';
-    });
-
-    if (window.innerWidth <= 1024) {
-      let maxHeight = 0;
-
-      items.forEach(item => {
-        const previousDisplay = item.style.display;
-        const previousPosition = item.style.position;
-        const previousVisibility = item.style.visibility;
-
-        item.style.display = 'block';
-        item.style.position = 'absolute';
-        item.style.visibility = 'hidden';
-
-        const height = item.offsetHeight;
-        if (height > maxHeight) maxHeight = height;
-
-        item.style.display = previousDisplay;
-        item.style.position = previousPosition;
-        item.style.visibility = previousVisibility;
-      });
-
-      items.forEach(item => {
-        item.style.minHeight = maxHeight + 'px';
-      });
-    }
-  }
-
-  adjustTestimonialHeight();
-  window.addEventListener('resize', adjustTestimonialHeight);
-});
-
     document.addEventListener('DOMContentLoaded', function() {
         const videoContainer = document.querySelector('.video-container');
         const prevVideoBtn = document.getElementById('prevVideo');
@@ -313,39 +275,85 @@ document.addEventListener('DOMContentLoaded', () => {
 //#endregion
 
 //#region - TESTIMONIAL
+document.addEventListener('DOMContentLoaded', () => {
+  function adjustTestimonialHeight() {
+    const items = document.querySelectorAll('.testimonial-item');
+
+    items.forEach(item => {
+      item.style.minHeight = 'initial';
+    });
+
+    if (window.innerWidth <= 1024) {
+      let maxHeight = 0;
+
+      items.forEach(item => {
+        const prevDisplay = item.style.display;
+        const prevPosition = item.style.position;
+        const prevVisibility = item.style.visibility;
+
+        item.style.display = 'block';
+        item.style.position = 'absolute';
+        item.style.visibility = 'hidden';
+
+        const height = item.offsetHeight;
+        if (height > maxHeight) maxHeight = height;
+
+        item.style.display = prevDisplay;
+        item.style.position = prevPosition;
+        item.style.visibility = prevVisibility;
+      });
+
+      items.forEach(item => {
+        item.style.minHeight = maxHeight + 'px';
+      });
+    }
+  }
+
+  adjustTestimonialHeight();
+  window.addEventListener('resize', adjustTestimonialHeight);
+});
+
 const testimonials = document.querySelectorAll('.testimonial-item');
+
 if (testimonials.length) {
-    let currentTestimonialIndex = 0;
-    let testimonialInterval;
+  let currentTestimonialIndex = 0;
+  let testimonialInterval;
 
-    const showTestimonial = (index) => {
-        testimonials.forEach((item, i) => item.classList.toggle('active', i === index));
-    };
-    const nextTestimonial = () => {
-        currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
-        showTestimonial(currentTestimonialIndex);
-    };
-    const prevTestimonial = () => {
-        currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonials.length) % testimonials.length;
-        showTestimonial(currentTestimonialIndex);
-    };
-    const resetTestimonialInterval = () => {
-        clearInterval(testimonialInterval);
-        testimonialInterval = setInterval(nextTestimonial, 10000);
-    };
-
-    document.getElementById('prevTestimonial')?.addEventListener('click', () => {
-        prevTestimonial();
-        resetTestimonialInterval();
+  const showTestimonial = index => {
+    testimonials.forEach((item, i) => {
+      item.classList.toggle('active', i === index);
     });
-    document.getElementById('nextTestimonial')?.addEventListener('click', () => {
-        nextTestimonial();
-        resetTestimonialInterval();
-    });
+  };
 
+  const nextTestimonial = () => {
+    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
     showTestimonial(currentTestimonialIndex);
+  };
+
+  const prevTestimonial = () => {
+    currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonials.length) % testimonials.length;
+    showTestimonial(currentTestimonialIndex);
+  };
+
+  const resetTestimonialInterval = () => {
+    clearInterval(testimonialInterval);
     testimonialInterval = setInterval(nextTestimonial, 10000);
+  };
+
+  document.getElementById('prevTestimonial')?.addEventListener('click', () => {
+    prevTestimonial();
+    resetTestimonialInterval();
+  });
+
+  document.getElementById('nextTestimonial')?.addEventListener('click', () => {
+    nextTestimonial();
+    resetTestimonialInterval();
+  });
+
+  showTestimonial(currentTestimonialIndex);
+  testimonialInterval = setInterval(nextTestimonial, 10000);
 }
+
 // #endregion
 
 //#region - DARK MODE
