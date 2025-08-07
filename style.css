@@ -813,7 +813,7 @@ header.active .hamburger {
   overflow: hidden;
   transition: 0.3s ease;
   scroll-snap-align: start;
-  filter: brightness(0.9);
+  filter: brightness(1);
 }
 .video-card:hover {
   filter: brightness(1.1);
