@@ -139,7 +139,7 @@ section {
 .naslov {
   color: var(--text);
   font-size: 44px;
-  margin-block-end: 60px;
+  margin-block-end: 30px;
   max-width: max-content;
   margin-inline: auto;
   font-family: var(--font-primary);
@@ -165,6 +165,29 @@ section {
   background-image: var(--gradient);
   border-radius: 10px;
 }
+.naslov-tekst {
+  max-width: 500px;
+  margin-bottom: 30px;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--text2);
+  text-align: center;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+}
+.kraci-tekst {
+  max-width: 800px;
+  margin-bottom: 30px;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 18px;
+  color: var(--text2);
+  text-align: center;
+  line-height: 1.5;
+  letter-spacing: 0.4px;
+}
+
 @media (max-width: 768px) {
   body {
     scroll-snap-type: none;
@@ -176,6 +199,9 @@ section {
   .naslov {
     font-size: 32px;
     margin-block-end: 40px;
+  }
+  .naslov-tekst, .kraci-tekst{
+    display: none;
   }
 }
 @media (max-width: 480px) {
@@ -885,35 +911,58 @@ header.active .hamburger {
 }
 @media (max-width: 768px) {
   .video-wrapper {
-    padding: 0 10px;
+    padding: 0; /* IZMENA: Uklonjen padding da bi zauzeo punu širinu */
+    position: relative;
   }
-  .video-container{
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: 25px;
-    overflow-x: hidden;
+  .video-container {
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     width: 100%;
+    gap: 25px;
+  }
+  .video-container::-webkit-scrollbar {
+    display: none;
   }
   .video-card {
-    flex: 0 0 calc(100% - 10px);
-    max-width: calc(100% - 10px);
+    flex: 0 0 100%;
+    max-width: 100%;
+    scroll-snap-align: center;
   }
-  .video-nav-left, .video-nav-right {
-    display: none;
+  .testimonial-nav-left,
+  .testimonial-nav-right {
+    font-size: 24px;
+    padding: 0.4rem;
+  }
+  .video-nav-left {
+    left: 10px;
+    transform: translateY(-50%);
+  }
+  .video-nav-right {
+    right: 10px;
+    transform: translateY(-50%);
   }
 }
 @media (max-width: 480px) {
   .radovi {
     padding-block: 30px;
   }
+  .video-wrapper {
+    padding: 0;
+  }
   .video-card {
-    flex: 0 0 calc(100% - 10px);
-    max-width: calc(100% - 10px);
+    flex: 0 0 100%;
+    max-width: 100%;
   }
   .video-title {
     font-size: 1rem;
     padding: 4px 12px;
+  }
+  .video-nav-left,
+  .video-nav-right {
+    font-size: 20px;
+    padding: 0.3rem;
   }
 }
 
@@ -1085,7 +1134,6 @@ header.active .hamburger {
   .testimonial-video {
     flex: 0 0 auto;
     width: 100%;
-    max-width: 500px;
     height: 300px;
     margin-bottom: 20px;
   }
@@ -1115,7 +1163,7 @@ header.active .hamburger {
     padding: 10px;
   }
   .testimonial-video {
-    height: 200px;
+    height: 300px;
   }
   .testimonial-title {
     font-size: 18px;
@@ -1134,7 +1182,9 @@ header.active .hamburger {
     height: 40px;
   }
 }
-
+.testimonial-item {
+  min-height: 300px; /* Ovo ćemo podesiti kroz JS */
+}
 /*--------------CONTACT---------------*/
 .contact-form {
   display: flex;

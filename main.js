@@ -173,6 +173,44 @@ const sharePost = () => {
 
 //#region - RADOVI
 if (isHomePage) {
+document.addEventListener('DOMContentLoaded', () => {
+  function adjustTestimonialHeight() {
+    const items = document.querySelectorAll('.testimonial-item');
+
+    items.forEach(item => {
+      item.style.minHeight = 'initial';
+    });
+
+    if (window.innerWidth <= 1024) {
+      let maxHeight = 0;
+
+      items.forEach(item => {
+        const previousDisplay = item.style.display;
+        const previousPosition = item.style.position;
+        const previousVisibility = item.style.visibility;
+
+        item.style.display = 'block';
+        item.style.position = 'absolute';
+        item.style.visibility = 'hidden';
+
+        const height = item.offsetHeight;
+        if (height > maxHeight) maxHeight = height;
+
+        item.style.display = previousDisplay;
+        item.style.position = previousPosition;
+        item.style.visibility = previousVisibility;
+      });
+
+      items.forEach(item => {
+        item.style.minHeight = maxHeight + 'px';
+      });
+    }
+  }
+
+  adjustTestimonialHeight();
+  window.addEventListener('resize', adjustTestimonialHeight);
+});
+
     document.addEventListener('DOMContentLoaded', function() {
         const videoContainer = document.querySelector('.video-container');
         const prevVideoBtn = document.getElementById('prevVideo');
