@@ -233,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             videos.forEach(video => {
+                video.volume = 0.3;
                 observer.observe(video);
             });
 
