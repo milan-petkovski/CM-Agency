@@ -911,7 +911,7 @@ header.active .hamburger {
 }
 @media (max-width: 768px) {
   .video-wrapper {
-    padding: 0; /* IZMENA: Uklonjen padding da bi zauzeo punu širinu */
+    padding: 0;
     position: relative;
   }
   .video-container {

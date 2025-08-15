@@ -173,112 +173,85 @@ const sharePost = () => {
 
 //#region - RADOVI
 if (isHomePage) {
-    document.addEventListener('DOMContentLoaded', function() {
-        const videoContainer = document.querySelector('.video-container');
-        const prevVideoBtn = document.getElementById('prevVideo');
-        const nextVideoBtn = document.getElementById('nextVideo');
-        const videos = document.querySelectorAll('.video-card video');
+    window.addEventListener('load', function() {
+        const container = document.querySelector('.video-container');
+        const prevBtn = document.getElementById('prevVideo');
+        const nextBtn = document.getElementById('nextVideo');
+        const cards = document.querySelectorAll('.video-card');
 
-            if (videoContainer && prevVideoBtn && nextVideoBtn && videos.length) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                    const video = entry.target;
+        if (!container || !prevBtn || !nextBtn || !cards.length) return;
 
-                    if (entry.isIntersecting) {
-                        if (!video.src) {
-                            const src = video.getAttribute('data-src');
-                        if (src) {
-                        video.src = src;
-                        video.load();
+        const getCardWidth = () => cards[0].offsetWidth + 25;
+
+        // Lazy load + autoplay
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    if (!video.src) {
+                        const src = video.dataset.src;
+                        if (src) { video.src = src; video.load(); }
                     }
+                    video.play().catch(err => { if (err.name !== "AbortError") console.error(err); });
+                } else {
+                    if (!video.paused) { video.pause(); video.currentTime = 0; }
                 }
-                video.play();
-        } else {
-            video.pause();
-            video.currentTime = 0;
-        }
-    });
-}, {
-    threshold: 0.5
-});
-
-
-            videos.forEach(video => {
-                video.volume = 0.3;
-                observer.observe(video);
             });
+        }, { threshold: 0.5 });
 
-            const scrollVideos = (direction) => {
-                const cardWidth = document.querySelector('.video-card').offsetWidth + 25;
-                const scrollAmount = cardWidth * 1;
-                const currentScroll = videoContainer.scrollLeft;
-                const maxScroll = videoContainer.scrollWidth - videoContainer.clientWidth;
+        cards.forEach(card => {
+            const video = card.querySelector('video');
+            video.volume = 0.3;
+            observer.observe(video);
+        });
 
-                let newScrollPosition;
-                if (direction === 'next') {
-                    newScrollPosition = currentScroll + scrollAmount;
-                    if (newScrollPosition > maxScroll) {
-                        newScrollPosition = maxScroll;
-                    }
-                } else if (direction === 'prev') {
-                    newScrollPosition = currentScroll - scrollAmount;
-                    if (newScrollPosition < 0) {
-                        newScrollPosition = 0;
-                    }
-                }
+        // Scroll funkcija
+        const scroll = (dir) => {
+            const scrollAmount = getCardWidth();
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            let newScroll;
 
-                newScrollPosition = Math.round(newScrollPosition / cardWidth) * cardWidth;
+            if (dir === 'next') newScroll = Math.min(container.scrollLeft + scrollAmount, maxScroll);
+            else newScroll = Math.max(container.scrollLeft - scrollAmount, 0);
 
-                videoContainer.scrollTo({
-                    left: newScrollPosition,
-                    behavior: 'smooth'
-                });
+            container.scrollTo({ left: newScroll, behavior: 'smooth' });
+        };
 
-                setTimeout(updateButtonStates, 300);
-            };
+        // Update strelica
+        const updateButtons = () => {
+            const tolerance = 1;
+            const firstCardLeft = cards[0].getBoundingClientRect().left;
+            const lastCardRight = cards[cards.length - 1].getBoundingClientRect().right;
+            const containerRect = container.getBoundingClientRect();
 
-            const updateButtonStates = () => {
-                const maxScroll = videoContainer.scrollWidth - videoContainer.clientWidth;
-                const currentScroll = videoContainer.scrollLeft;
+            prevBtn.style.visibility = firstCardLeft >= containerRect.left - tolerance ? 'hidden' : 'visible';
+            prevBtn.style.opacity = firstCardLeft >= containerRect.left - tolerance ? '0' : '1';
 
-                if (currentScroll <= 0) {
-                    prevVideoBtn.style.visibility = 'hidden';
-                    prevVideoBtn.style.opacity = '0';
-                } else {
-                    prevVideoBtn.style.visibility = 'visible';
-                    prevVideoBtn.style.opacity = '1';
-                }
+            nextBtn.style.visibility = lastCardRight <= containerRect.right + tolerance ? 'hidden' : 'visible';
+            nextBtn.style.opacity = lastCardRight <= containerRect.right + tolerance ? '0' : '1';
+        };
 
-                if (currentScroll >= maxScroll - 1) { // -1 za malu toleranciju
-                    nextVideoBtn.style.visibility = 'hidden';
-                    nextVideoBtn.style.opacity = '0';
-                } else {
-                    nextVideoBtn.style.visibility = 'visible';
-                    nextVideoBtn.style.opacity = '1';
-                }
-            };
+        prevBtn.addEventListener('click', () => { scroll('prev'); setTimeout(updateButtons, 300); });
+        nextBtn.addEventListener('click', () => { scroll('next'); setTimeout(updateButtons, 300); });
+        container.addEventListener('scroll', updateButtons);
+        window.addEventListener('resize', updateButtons);
 
-            updateButtonStates();
-            prevVideoBtn.addEventListener('click', () => scrollVideos('prev'));
-            nextVideoBtn.addEventListener('click', () => scrollVideos('next'));
+        updateButtons();
+        setTimeout(updateButtons, 200);
 
-            // Funkcije za kontrolu play/mute (možda ih treba dodeliti dugmadima u HTML-u)
-            window.togglePlay = (button) => {
-                let video = button.parentElement.querySelector('video');
-                if (video.paused) {
-                    video.play();
-                    button.innerHTML = '<ion-icon name="pause-outline"></ion-icon>';
-                } else {
-                    video.pause();
-                    button.innerHTML = '<ion-icon name="play-outline"></ion-icon>';
-                }
-            };
-            window.toggleMute = (button) => {
-                let video = button.parentElement.querySelector('video');
-                video.muted = !video.muted;
-                button.innerHTML = video.muted ? '<ion-icon name="volume-mute-outline"></ion-icon>' : '<ion-icon name="volume-high-outline"></ion-icon>';
-            };
-        }
+        // Play / Pause dugme
+        window.togglePlay = (btn) => {
+            const video = btn.parentElement.querySelector('video');
+            if (video.paused) { video.play().catch(err => { if (err.name !== "AbortError") console.error(err); }); btn.innerHTML = '<ion-icon name="pause-outline"></ion-icon>'; }
+            else { video.pause(); btn.innerHTML = '<ion-icon name="play-outline"></ion-icon>'; }
+        };
+
+        // Mute dugme
+        window.toggleMute = (btn) => {
+            const video = btn.parentElement.querySelector('video');
+            video.muted = !video.muted;
+            btn.innerHTML = video.muted ? '<ion-icon name="volume-mute-outline"></ion-icon>' : '<ion-icon name="volume-high-outline"></ion-icon>';
+        };
     });
 }
 //#endregion
